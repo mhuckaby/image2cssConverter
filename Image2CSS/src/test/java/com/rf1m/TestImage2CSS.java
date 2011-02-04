@@ -156,7 +156,7 @@ public class TestImage2CSS {
 	
 	@Test
 	public void testExecuteExample4() throws Exception{
-		// Convert PNG-images in directory to data URI and output to output to CSS file :
+		// Convert PNG-images in directory to data URI and output to CSS file :
 		Set<SupportedImageTypes> types = new HashSet<SupportedImageTypes>();
 		types.add(SupportedImageTypes.png);
 		
@@ -168,18 +168,18 @@ public class TestImage2CSS {
 			cssFile, 
 			null, 
 			types, 
-			true
+			false
 		);
 
 		new Image2CSS().execute(parameters);
 
 		assertFalse(htmlFile.exists());
-		assertFalse(cssFile.exists());
+		assertTrue(cssFile.exists());
 	}
 	
 	@Test
 	public void testExecuteExample5() throws Exception{
-		// Convert GIF & JPG images in directory to data URI and output to output to CSS file :
+		// Convert GIF & JPG images in directory to data URI and output to CSS file :
 		Set<SupportedImageTypes> types = new HashSet<SupportedImageTypes>();
 		types.add(SupportedImageTypes.png);
 		types.add(SupportedImageTypes.gif);
@@ -192,12 +192,36 @@ public class TestImage2CSS {
 			cssFile, 
 			null, 
 			types, 
-			true
+			false
 		);
 
 		new Image2CSS().execute(parameters);
 
 		assertFalse(htmlFile.exists());
+		assertTrue(cssFile.exists());
+	}
+	
+	@Test
+	public void testExecuteExample6() throws Exception{
+		// Convert GIF & JPG images in directory to data URI and output to CSS and HTML files 
+		Set<SupportedImageTypes> types = new HashSet<SupportedImageTypes>();
+		types.add(SupportedImageTypes.jpg);
+		types.add(SupportedImageTypes.gif);
+		
+		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
+		
+		Parameters parameters = new ParametersImpl(
+			imageDir, 
+			cssFile, 
+			htmlFile,
+			types, 
+			false
+		);
+
+		new Image2CSS().execute(parameters);
+
+		assertTrue(htmlFile.exists());
+		assertTrue(cssFile.exists());
 	}
 }

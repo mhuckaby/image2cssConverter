@@ -49,6 +49,9 @@ public class Image2CSS implements ContentTemplates {
 		validateParameters(parameters);
 		List<String> cssEntries = new ArrayList<String>();
 		FileWriter cssWriter = null;
+		if(null != parameters.getCssFile()){
+			cssWriter = new FileWriter(parameters.getCssFile());;
+		}
 		File[] imagesForConversion = 
 			FileUtils.getImagesForConversion(
 				parameters.getImageFile(), 
@@ -72,13 +75,12 @@ public class Image2CSS implements ContentTemplates {
 			
 			if(parameters.isOutputToScreen()){
 				System.out.println(cssEntry);
-			}else{
-				if(null == cssWriter){
-					cssWriter = new FileWriter(parameters.getCssFile());
-				}
+			}
+			if(null != cssWriter){
 				cssWriter.write(cssEntry);
 				cssWriter.write(Utils.NL);
 			}
+			
 			
 			// Track CSS classes for count and/or HTML output
 			cssEntries.add(cssClassName);

@@ -49,7 +49,7 @@ Convert PNG-image (ie: boy_with_book.png) to data URI and output to console :
 	Windows
 	image2css.bat -f boy_with_book.png -syso
 	
-Convert PNG-images in directory to data URI and output to output to CSS file :
+Convert PNG-images in directory to data URI and output to CSS file :
 
 	Linux
 	./image2css.sh -f ./ -i png -o result.css
@@ -57,13 +57,21 @@ Convert PNG-images in directory to data URI and output to output to CSS file :
 	Windows
 	image2css.bat -f / -i png -o result.css
 	
-Convert GIF & JPG images in directory to data URI and output to output to CSS file :
+Convert GIF & JPG images in directory to data URI and output to CSS file :
 
 	Linux
 	./image2css.sh -f ./ -i gif jpg -o result.css
 	
 	Windows
 	image2css.bat -f / -i gif jpg -o result.css
+
+Convert GIF & JPG images in directory to data URI and output to CSS and HTML files :
+	
+	Linux
+	./image2css.sh -f ./ -i gif jpg -o result.css -h result.html
+	
+	Windows
+	image2css.bat -f / -i gif jpg -o result.css -h result.html
 
 ------------------------------------------------------------------------------------	
 This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
