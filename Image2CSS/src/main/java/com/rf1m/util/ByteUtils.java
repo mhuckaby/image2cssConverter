@@ -16,7 +16,7 @@ public class ByteUtils extends Utils{
 	 * @return
 	 * @throws Exception
 	 */
-	public static String base64EncodeBytes(byte[] bytes) throws Exception{
+	public static String base64EncodeBytes(byte[] bytes) {
 		String encoded = new String(Base64.encodeBase64(bytes, false));
 		encoded = encoded.replaceAll(NL, EMPTY);
 		return encoded;

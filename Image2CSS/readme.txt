@@ -11,6 +11,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
 ------------------------------------------------------------------------------------
 The purpose of Image2CSS is stream-line the process of generating data URI 
 for use in CSS files.
@@ -72,6 +74,3 @@ Convert GIF & JPG images in directory to data URI and output to CSS and HTML fil
 	
 	Windows
 	image2css.bat -f / -i gif jpg -o result.css -h result.html
-
-------------------------------------------------------------------------------------	
-This product includes software developed by The Apache Software Foundation (http://www.apache.org/).

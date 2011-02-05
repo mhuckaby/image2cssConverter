@@ -2,6 +2,7 @@ package com.rf1m.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class FileUtils{
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] getFileBytes(File image) throws Exception{
+	public static byte[] getFileBytes(File image) throws IOException{
 		FileInputStream fis = new FileInputStream(image); 
 		byte[] bytes = new byte[(int) image.length()];
 		fis.read(bytes);
@@ -48,7 +49,7 @@ public class FileUtils{
 	 * @return
 	 * @throws Exception
 	 */
-	public static File[] getImagesForConversion(File imageFile, Set<SupportedImageTypes> supportedTypes) throws Exception{
+	public static File[] getImagesForConversion(File imageFile, Set<SupportedImageTypes> supportedTypes) throws IOException{
 		File[] imagesForConversion;
 		if(imageFile.isDirectory()){
 			// If none are specified all are indicated
