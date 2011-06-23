@@ -1,10 +1,9 @@
 package com.rf1m.util;
 
-import java.awt.Dimension;
-
-import javax.swing.ImageIcon;
-
 import org.apache.commons.codec.binary.Base64;
+
+import javax.swing.*;
+import java.awt.*;
 
 //import com.sun.org.apache.xml.internal.security.utils.Base64;
 
@@ -12,7 +11,7 @@ public class ByteUtils extends Utils{
 	
 	/**
 	 * Returns a Base64 encoded as single line string.
-	 * @param image
+	 * @param image as bytes as one long string with 'new line' characters removed
 	 * @return
 	 * @throws Exception
 	 */
