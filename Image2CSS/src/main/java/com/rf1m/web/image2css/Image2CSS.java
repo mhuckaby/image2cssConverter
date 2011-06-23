@@ -1,15 +1,16 @@
 package com.rf1m.web.image2css;
 
-import java.awt.Dimension;
+import com.rf1m.util.ByteUtils;
+import com.rf1m.util.FileUtils;
+import com.rf1m.util.PropertiesUtils;
+import com.rf1m.util.Utils;
+
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.rf1m.util.ByteUtils;
-import com.rf1m.util.FileUtils;
-import com.rf1m.util.Utils;
 
 /**
  * Image2CSS converts image files into Base64 text-based CSS classes using 
@@ -26,12 +27,8 @@ import com.rf1m.util.Utils;
  * @author Matthew D. Huckaby
  */
 public class Image2CSS implements ContentTemplates {
-	private final static String ABOUT = "Image2CSS 1.0, Matthew D. Huckaby, 2011";
-	private final static String REPORT_CSS_TOTAL 	= "Generated [%1$s] CSS entries";
-	private final static String REPORT_CSS_FILE 	= "Created CSS file, %1$s";
-	private final static String REPORT_HTML_FILE 	= "Created HTML file, %1$s";
-	
-	/**
+
+    /**
 	 * Entry point for command line use.
 	 * @param args
 	 * @throws Exception
@@ -110,7 +107,7 @@ public class Image2CSS implements ContentTemplates {
 			// Build the CSS class
 			cssClass.setBody(
 				String.format(
-					CSS_TEMPLATE, 
+                    PropertiesUtils.getProperty(TEMPLATE.CSS_CLASS),
 					cssClass.getName(),
 					FileUtils.getExtension(imageFile.getName()),
 					ByteUtils.base64EncodeBytes(bytes),
@@ -166,7 +163,10 @@ public class Image2CSS implements ContentTemplates {
 			
 			for(CSSClass cssClass : cssClasses){
 				htmlBuffer.append(
-					String.format(HTML_CSS_ENTRY_TEMPLATE, cssClass.getName())
+					String.format(
+                        PropertiesUtils.getProperty(TEMPLATE.HTML_CSS_ENTRY),
+                        cssClass.getName()
+                    )
 				);
 			}
 
@@ -174,7 +174,7 @@ public class Image2CSS implements ContentTemplates {
 			htmlWriter.write(
 				String
 					.format(
-						HTML_INDEX_TEMPLATE,
+						PropertiesUtils.getProperty(TEMPLATE.HTML_INDEX),
 						parameters.getCssFile().getName(),
 						htmlBuffer.toString()
 					)

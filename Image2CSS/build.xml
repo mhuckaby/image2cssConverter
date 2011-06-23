@@ -4,6 +4,7 @@
 	<property name="classes" location="${build}/classes" />
 	<property name="src" location="src/main/java" />
 	<property name="scripts" location="src/main/resources/scripts" />
+	<property name="properties" location="src/main/resources" />
 	<property name="lib" location="lib" />
 	<property name="jar-name" location="${build}/image2css.jar" />
 	<property name="manifest-name" location="${build}/MANIFEST.MF" />
@@ -11,11 +12,7 @@
 	<property name="etc.list" value="LICENSE,NOTICE,readme.txt" />
 	<property name="zipfile" value="${dist}/image2css-1.0.zip"/>
 	
-	<target name="post-build-clean" depends="dist" description="clean up build dir">
-		<delete dir="${build}" />
-	</target>
-	
-	<target name="dist" depends="create-jar">
+    <target name="dist" depends="pre-clean, compile, create-jar, create-jar">
 		<move file="${jar-name}" todir="${dist}" />
 		<copy todir="${dist}" >
 			<fileset dir="${lib}" includes="${dist.dependency.list}" />
@@ -33,7 +30,7 @@
 		/>
 	</target>
 
-	<target name="create-jar" depends="compile" description="create jar file">
+	<target name="create-jar" description="create jar file">
 		<tstamp>
 			<format property="build-time" pattern="dd-MMM-yyyy hh:mm:ss"/>
 		</tstamp>
@@ -45,7 +42,7 @@
 		</jar>
 	</target>
 				
-	<target name="compile" depends="pre-clean" description="compile java classes">
+	<target name="compile" description="compile java classes">
 		<javac srcdir="${src}" destdir="${classes}" >
 			<classpath>
 				<pathelement path="${classpath}"/>
@@ -55,6 +52,9 @@
 			</classpath>
 			<include name="**/*.java" />
 		</javac>
+        <copy todir="${classes}" >
+			<fileset dir="${properties}" includes="**" />
+		</copy>
 	</target>
 	
 	<target name="pre-clean" description="clear build directory">
@@ -65,4 +65,8 @@
 		<delete dir="${classes}" />
 		<mkdir dir="${classes}" />
 	</target>
+
+    <target name="post-build-clean" description="clean up build dir" depends="dist">
+        <delete dir="${build}" />
+    </target>
 </project>
