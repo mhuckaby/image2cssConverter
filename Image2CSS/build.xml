@@ -1,0 +1,72 @@
+<project name="image2css" basedir="." default="post-build-clean">
+	<property name="dist" location="dist" />
+	<property name="build" location="build" />
+	<property name="classes" location="${build}/classes" />
+	<property name="src" location="src/main/java" />
+	<property name="scripts" location="src/main/resources/scripts" />
+	<property name="properties" location="src/main/resources" />
+	<property name="lib" location="lib" />
+	<property name="jar-name" location="${build}/image2css.jar" />
+	<property name="manifest-name" location="${build}/MANIFEST.MF" />
+	<property name="dist.dependency.list" value="commons-codec-1.4.jar" />
+	<property name="etc.list" value="LICENSE,NOTICE,readme.txt" />
+	<property name="zipfile" value="${dist}/image2css-1.0.zip"/>
+	
+    <target name="dist" depends="pre-clean, compile, create-jar, create-jar">
+		<move file="${jar-name}" todir="${dist}" />
+		<copy todir="${dist}" >
+			<fileset dir="${lib}" includes="${dist.dependency.list}" />
+		</copy>
+		<copy todir="${dist}" >
+			<fileset dir="${scripts}" includes="**" />
+		</copy>
+		<copy todir="${dist}" >
+			<fileset dir="." includes="${etc.list}" />
+		</copy>
+		<zip 
+			destfile="${zipfile}"
+			basedir="${dist}"
+			update="true"
+		/>
+	</target>
+
+	<target name="create-jar" description="create jar file">
+		<tstamp>
+			<format property="build-time" pattern="dd-MMM-yyyy hh:mm:ss"/>
+		</tstamp>
+        <manifest file="${manifest-name}">
+            <attribute name="Built-Date" value="${build-time}" />
+        </manifest>
+		<jar destfile="${jar-name}" manifest="${manifest-name}">
+			<fileset dir="${classes}"  />
+		</jar>
+	</target>
+				
+	<target name="compile" description="compile java classes">
+		<javac srcdir="${src}" destdir="${classes}" >
+			<classpath>
+				<pathelement path="${classpath}"/>
+				<fileset dir="lib">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+			<include name="**/*.java" />
+		</javac>
+        <copy todir="${classes}" >
+			<fileset dir="${properties}" includes="**" />
+		</copy>
+	</target>
+	
+	<target name="pre-clean" description="clear build directory">
+		<delete dir="${dist}" />
+		<mkdir dir="${dist}" />
+		<delete dir="${build}" />
+		<mkdir dir="${build}" />
+		<delete dir="${classes}" />
+		<mkdir dir="${classes}" />
+	</target>
+
+    <target name="post-build-clean" description="clean up build dir" depends="dist">
+        <delete dir="${build}" />
+    </target>
+</project>
