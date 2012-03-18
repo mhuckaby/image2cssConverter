@@ -74,3 +74,10 @@ Convert GIF & JPG images in directory to data URI and output to CSS and HTML fil
 	
 	Windows
 	image2css.bat -f / -i gif jpg -o result.css -h result.html
+----
+
+To build with maven:
+
+mvn assembly:single
+
+
