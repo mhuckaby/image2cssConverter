@@ -1,4 +1,4 @@
-package com.rf1m.web.image2css;
+package com.rf1m.web.image2css.cli;
 
 import java.io.File;
 import java.util.Set;
@@ -9,40 +9,33 @@ import java.util.Set;
  *
  */
 public interface Parameters{
-	public enum SupportedImageTypes{
-		gif,
-		jpg,
-		jpeg,
-		png
-	}
-
 	/**
 	 * Method to indicate to execution whether output should be displayed on the console.s
 	 * @return boolean, 
 	 */
-	public boolean isOutputToScreen();
+	boolean isOutputToScreen();
 	
 	/**
 	 * Directory of image-files or single image file to be converted to a single CSS class file.
 	 * @return
 	 */
-	public File getImageFile();
+	File getImageFile();
 	
 	/**
 	 * CSS file where the image data will be written as CSS classes.
 	 * @return
 	 */
-	public File getCssFile();
-	
+	File getCssFile();
+
 	/**
 	 * HTML file where the generated CSS classes are demonstrated.
 	 * @return
 	 */
-	public File getHtmlFile();
-	
+	File getHtmlFile();
+
 	/**
 	 * Image types that will be included in filter when image-file is a directory.
 	 * @return
 	 */
-	public Set<SupportedImageTypes> getSupportedTypes();
+	Set<SupportedImageTypes> getSupportedTypes();
 }

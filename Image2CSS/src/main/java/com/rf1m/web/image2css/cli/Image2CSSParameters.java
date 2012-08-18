@@ -1,19 +1,17 @@
-package com.rf1m.web.image2css;
+package com.rf1m.web.image2css.cli;
 
 import java.io.File;
 import java.util.Set;
 
-public class ParametersImpl implements Parameters{
+public class Image2CSSParameters implements Parameters{
 	protected File imageFile 	= null;
 	protected File cssFile		= null;
 	protected File htmlFile		= null;
 	protected Set<SupportedImageTypes> supportedTypes = null;
 	protected boolean outputToScreen = false;
 	
-	protected ParametersImpl(){ }
-	public ParametersImpl(File imageFile, File cssFile, File htmlFile,
-			Set<SupportedImageTypes> supportedTypes, boolean outputToScreen) {
-		super();
+	protected Image2CSSParameters(){ }
+	public Image2CSSParameters(File imageFile, File cssFile, File htmlFile, Set<SupportedImageTypes> supportedTypes, boolean outputToScreen) {
 		this.imageFile = imageFile;
 		this.cssFile = cssFile;
 		this.htmlFile = htmlFile;

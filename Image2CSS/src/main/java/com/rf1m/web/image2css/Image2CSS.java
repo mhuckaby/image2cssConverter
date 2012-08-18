@@ -1,16 +1,25 @@
 package com.rf1m.web.image2css;
 
-import com.rf1m.util.ByteUtils;
-import com.rf1m.util.FileUtils;
-import com.rf1m.util.PropertiesUtils;
-import com.rf1m.util.Utils;
+import com.rf1m.util.bin.Base64Encoder;
+import com.rf1m.util.file.FileUtils;
+import com.rf1m.util.file.Image2CssConversionFilenameFilter;
+import com.rf1m.web.image2css.cli.Parameters;
+import com.rf1m.web.image2css.cli.SupportedImageTypes;
+import com.rf1m.web.image2css.domain.CSSClass;
+import com.rf1m.web.image2css.out.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static com.rf1m.util.PropertiesUtils.getProperty;
+import static com.rf1m.web.image2css.ContentTemplates.TEMPLATE.CSS_CLASS;
+import static java.lang.String.format;
 
 /**
  * Image2CSS converts image files into Base64 text-based CSS classes using 
@@ -26,29 +35,58 @@ import java.util.List;
  * 
  * @author Matthew D. Huckaby
  */
-public class Image2CSS implements ContentTemplates {
+public class Image2CSS {
+    protected Base64Encoder base64Encoder;
+    protected FileUtils fileUtils;
 
-    /**
-	 * Entry point for command line use.
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String args[]) throws Exception{
-		System.out.println(ABOUT);
-		if(0==args.length){
-			System.out.println(CommandLineParameters.HELP);
-		}else{
-			try{
-				new Image2CSS().execute(new CommandLineParameters(args));
-			}catch(ArrayIndexOutOfBoundsException e){
-				System.out.println(CommandLineParameters.HELP);
-			}catch(IllegalArgumentException e){
-				System.out.println(e.getMessage());
-				System.out.println(CommandLineParameters.HELP);
-			}
-		}
-	}
-	
+    protected Output consoleOutput;
+    protected Output cssOutput;
+    protected Output htmlOutput;
+
+    protected ReportOutput reportOutput;
+
+    protected ArrayListFactory arrayListFactory;
+    protected CSSClassFactory cssClassFactory;
+    protected DimensionFactory dimensionFactory;
+    protected ImageIconFactory imageIconFactory;
+
+    class ArrayListFactory{
+        public ArrayList newArrayList(){
+            return new ArrayList();
+        }
+    }
+
+    class CSSClassFactory{
+        public CSSClass newCSSClass(String name, String body){
+            return new CSSClass(name, body);
+        }
+    }
+
+    class DimensionFactory{
+        public Dimension newDimension(int w, int h){
+            return new Dimension(w, h);
+        }
+    }
+
+    class ImageIconFactory{
+        public ImageIcon newImageIcon(byte[] bytes){
+            return new ImageIcon(bytes);
+        }
+    }
+
+    public Image2CSS(){
+        this.cssClassFactory = new CSSClassFactory();
+        this.arrayListFactory = new ArrayListFactory();
+        this.dimensionFactory = new DimensionFactory();
+        this.imageIconFactory = new ImageIconFactory();
+        this.base64Encoder = new Base64Encoder();
+        this.fileUtils = new FileUtils();
+        this.consoleOutput = new ConsoleOutput();
+        this.cssOutput = new CSSOutput();
+        this.htmlOutput = new HTMLOutput();
+        this.reportOutput = (ReportOutput)consoleOutput;
+    }
+
 	/**
 	 * Begins conversion of image file(s) to CSS classes.
 	 * @param parameters
@@ -56,11 +94,17 @@ public class Image2CSS implements ContentTemplates {
 	 */
 	public void execute(Parameters parameters) throws Exception{
 		validateParameters(parameters);
-		List<CSSClass> cssClasses = generateCSSEntries(parameters);
-		generateConsoleOutput(parameters, cssClasses);
-		generateCssFileOutput(parameters, cssClasses);
-		generateHtmlOutput(parameters, cssClasses);
-		generateReportOutput(parameters, cssClasses);
+
+        File[] imageFiles = getImagesForConversion(parameters.getImageFile(), parameters.getSupportedTypes());
+        List<CSSClass> cssClasses = generateCSSEntries(parameters, imageFiles);
+
+        if(parameters.isOutputToScreen()) consoleOutput.out(parameters, cssClasses);
+
+        if(null != parameters.getCssFile()) cssOutput.out(parameters, cssClasses);
+
+        if(null != parameters.getHtmlFile()) htmlOutput.out(parameters, cssClasses);
+
+        if(parameters.isOutputToScreen()) reportOutput.generateReportOutput(parameters, cssClasses);
 	}
 	
 	/**
@@ -71,130 +115,83 @@ public class Image2CSS implements ContentTemplates {
 	protected void validateParameters(Parameters parameters) throws Exception{
 		if(null == parameters){
 			throw new IllegalArgumentException("Parameteres cannot be null");
-		}
-		if(null == parameters.getImageFile()){
+		}else if(null == parameters.getImageFile()){
 			throw new IllegalArgumentException("Image input file or directory must be specified");
-		}
-		if(null == parameters.getCssFile() && !parameters.isOutputToScreen()){
+		}else if(!parameters.getImageFile().exists()){
+			throw new IllegalArgumentException("Image input file or directory not found");
+		}else if(null == parameters.getCssFile() && !parameters.isOutputToScreen()){
 			throw new IllegalArgumentException("CSS output to file or screen must be specified");
 		}
-		if(!parameters.getImageFile().exists()){
-			throw new IllegalArgumentException("Image input file or directory not found");
-		}
 	}
-	
+
 	/**
 	 * Builds CSS class entries. CSS class name is the image-filename with all periods replaced by underscores.
 	 * @param parameters
 	 * @return
 	 * @throws IOException
 	 */
-	protected List<CSSClass> generateCSSEntries(Parameters parameters) throws IOException{
-		List<CSSClass> cssEntries = new ArrayList<CSSClass>();
-		
-		File[] imagesForConversion = 
-			FileUtils.getImagesForConversion(
-				parameters.getImageFile(), 
-				parameters.getSupportedTypes()
-			);
-		
-		for(File imageFile : imagesForConversion){
-			CSSClass cssClass = new CSSClass();
-			cssClass.setName(imageFile.getName().replaceAll("\\.","_"));
-			byte[] bytes = FileUtils.getFileBytes(imageFile);
-			Dimension dimension = ByteUtils.getImageDimension(bytes);
-			
-			// Build the CSS class
-			cssClass.setBody(
-				String.format(
-                    PropertiesUtils.getProperty(TEMPLATE.CSS_CLASS),
-					cssClass.getName(),
-					FileUtils.getExtension(imageFile.getName()),
-					ByteUtils.base64EncodeBytes(bytes),
-					(int)dimension.getHeight(),
-					(int)dimension.getWidth()
-				)
-			);
+	protected List<CSSClass> generateCSSEntries(Parameters parameters, File[] imageFiles) throws IOException{
+		List<CSSClass> cssEntries = arrayListFactory.newArrayList();
+        final String cssClassTemplate = getProperty(CSS_CLASS);
+
+        for(File imageFile : imageFiles){
+			final String cssName = imageFile.getName().replaceAll("\\.","_");
+            final String imageFileExtension = fileUtils.getExtension(imageFile.getName());
+			final byte[] bytes = fileUtils.getFileBytes(imageFile);
+            final String base64Bytes = base64Encoder.base64EncodeBytes(bytes);
+
+			Dimension dimension = getImageDimension(bytes);
+            int height = (int)dimension.getHeight();
+            int width = (int)dimension.getWidth();
+
+            CSSClass cssClass =
+                cssClassFactory.newCSSClass(
+                    cssName,
+                    format(cssClassTemplate, cssName, imageFileExtension, base64Bytes, height, width)
+                );
+
 			cssEntries.add(cssClass);
 		}
 
 		return cssEntries;
 	}
-	
-	/**
-	 * Produces console output if parameters dictate.
-	 * @param parameters
-	 * @param cssClasses
-	 */
-	protected void generateConsoleOutput(Parameters parameters, List<CSSClass> cssClasses){
-		if(parameters.isOutputToScreen()){
-			for(CSSClass cssClass : cssClasses){
-				System.out.println(cssClass.getBody());
-			}
-		}
-	}
 
-	/**
-	 * Produces the CSS file if parameters dictate.
-	 * @param parameters
-	 * @param cssClasses
-	 * @throws IOException
-	 */
-	protected void generateCssFileOutput(Parameters parameters, List<CSSClass> cssClasses) throws IOException{
-		if(null != parameters.getCssFile()){
-			FileWriter cssWriter = new FileWriter(parameters.getCssFile());
-			for(CSSClass cssClass : cssClasses){
-				cssWriter.write(cssClass.getBody());
-				cssWriter.write(Utils.NL);
-			}
-			cssWriter.close();
-		}
-	}
-	
-	/**
-	 * Determines if HTML file should be written. If so, outputs HTML to demonstrate the generated CSS classes according to the templates.
-	 * @param parameters
-	 * @param cssClasses
+    /**
+     * Return the dimensions of an image represented by a byte array.
+     * @param bytes
+     * @return
+     */
+    protected Dimension getImageDimension(byte[] bytes){
+        ImageIcon imageIcon = imageIconFactory.newImageIcon(bytes);
+        return dimensionFactory.newDimension(imageIcon.getIconWidth(), imageIcon.getIconHeight());
+    }
+
+    /**
+	 * Returns zero, one or many image files based on inputs.
+	 * @param imageFile
+	 * @param supportedTypes
+	 * @return
 	 * @throws Exception
 	 */
-	protected void generateHtmlOutput(Parameters parameters, List<CSSClass> cssClasses) throws IOException{
-		if(null != parameters.getHtmlFile()){
-			StringBuffer htmlBuffer = new StringBuffer();
-			
-			for(CSSClass cssClass : cssClasses){
-				htmlBuffer.append(
-					String.format(
-                        PropertiesUtils.getProperty(TEMPLATE.HTML_CSS_ENTRY),
-                        cssClass.getName()
-                    )
-				);
+	protected File[] getImagesForConversion(File imageFile, Set<SupportedImageTypes> supportedTypes) throws IOException{
+		File[] imagesForConversion;
+		if(imageFile.isDirectory()){
+			// If none are specified all are indicated
+			if(null == supportedTypes || 0 == supportedTypes.size()){
+				supportedTypes = new HashSet<SupportedImageTypes>();
+				supportedTypes.add(SupportedImageTypes.gif);
+				supportedTypes.add(SupportedImageTypes.jpg);
+				supportedTypes.add(SupportedImageTypes.png);
 			}
 
-			FileWriter htmlWriter = new FileWriter(parameters.getHtmlFile());
-			htmlWriter.write(
-				String
-					.format(
-						PropertiesUtils.getProperty(TEMPLATE.HTML_INDEX),
-						parameters.getCssFile().getName(),
-						htmlBuffer.toString()
-					)
-			);
-			htmlWriter.close();
+			imagesForConversion =
+				imageFile
+					.listFiles(
+						new Image2CssConversionFilenameFilter(supportedTypes)
+					);
+		}else{
+			imagesForConversion = new File[] { imageFile };
 		}
-	}
-	
-	/**
-	 * Outputs a summary of the work performed to the console. Includes number of CSS classes generated, CSS file generated, HTML file generated.
-	 * @param parameters
-	 * @param cssClasses
-	 */
-	protected void generateReportOutput(Parameters parameters, List<CSSClass> cssClasses){
-		System.out.println(String.format(REPORT_CSS_TOTAL, cssClasses.size()));
-		if(null != parameters.getCssFile()){
-			System.out.println(String.format(REPORT_CSS_FILE, parameters.getCssFile().getName()));
-		}
-		if(null != parameters.getHtmlFile()){
-			System.out.println(String.format(REPORT_HTML_FILE, parameters.getHtmlFile().getName()));
-		}
+		return imagesForConversion;
 	}
 }

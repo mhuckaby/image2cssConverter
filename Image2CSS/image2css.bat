@@ -1,2 +1,2 @@
 @echo off
-java -jar image2css-1.0-SNAPSHOT-jar-with-dependencies.jar %*
+java -jar target/image2css-1.1-SNAPSHOT-jar-with-dependencies.jar %*

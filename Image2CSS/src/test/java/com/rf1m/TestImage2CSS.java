@@ -1,22 +1,19 @@
 package com.rf1m;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import com.rf1m.web.image2css.Image2CSS;
+import com.rf1m.web.image2css.cli.Image2CSSParameters;
+import com.rf1m.web.image2css.cli.Parameters;
+import com.rf1m.web.image2css.cli.SupportedImageTypes;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.rf1m.web.image2css.Image2CSS;
-import com.rf1m.web.image2css.Parameters;
-import com.rf1m.web.image2css.Parameters.SupportedImageTypes;
-import com.rf1m.web.image2css.ParametersImpl;
+import static junit.framework.Assert.*;
 
 public class TestImage2CSS {
 	URL urlImageFile 			= this.getClass().getResource("/small_boy_with_book.png");
@@ -43,7 +40,7 @@ public class TestImage2CSS {
 	@Test
 	public void testValidateParameters() throws Exception{
 		try{
-			Parameters parameters = new ParametersImpl(
+			Parameters parameters = new Image2CSSParameters(
 				null, null, null, null, false
 			);
 			new Image2CSS().execute(parameters);
@@ -52,7 +49,7 @@ public class TestImage2CSS {
 		}
 
 		try{
-			Parameters parameters = new ParametersImpl(
+			Parameters parameters = new Image2CSSParameters(
 				imageFile, 
 				null, 
 				null, 
@@ -65,7 +62,7 @@ public class TestImage2CSS {
 		}
 
 		try{
-			Parameters parameters = new ParametersImpl(
+			Parameters parameters = new Image2CSSParameters(
 				imageFileNotExist, 
 				cssFile, 
 				null, 
@@ -86,7 +83,7 @@ public class TestImage2CSS {
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
 		
-		Parameters parameters = new ParametersImpl(
+		Parameters parameters = new Image2CSSParameters(
 			imageDir, 
 			cssFile, 
 			htmlFile, 
@@ -121,7 +118,7 @@ public class TestImage2CSS {
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
 
-		Parameters parameters = new ParametersImpl(
+		Parameters parameters = new Image2CSSParameters(
 			imageFile, 
 			cssFile, 
 			null, 
@@ -141,7 +138,7 @@ public class TestImage2CSS {
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
 		
-		Parameters parameters = new ParametersImpl(
+		Parameters parameters = new Image2CSSParameters(
 			imageFile, 
 			null, 
 			null, 
@@ -163,7 +160,7 @@ public class TestImage2CSS {
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
 		
-		Parameters parameters = new ParametersImpl(
+		Parameters parameters = new Image2CSSParameters(
 			imageDir, 
 			cssFile, 
 			null, 
@@ -187,7 +184,7 @@ public class TestImage2CSS {
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
 		
-		Parameters parameters = new ParametersImpl(
+		Parameters parameters = new Image2CSSParameters(
 			imageDir, 
 			cssFile, 
 			null, 
@@ -211,7 +208,7 @@ public class TestImage2CSS {
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
 		
-		Parameters parameters = new ParametersImpl(
+		Parameters parameters = new Image2CSSParameters(
 			imageDir, 
 			cssFile, 
 			htmlFile,
