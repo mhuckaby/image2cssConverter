@@ -1,11 +1,11 @@
 package com.rf1m.web.image2css;
 
 /**
- * Interface, 'TEMPLATE', holds keys to properties found in file, 'image2css.properties'.
+ * Interface, 'TEMPLATE', holds keys to properties found in file, 'Main.properties'.
  * @see com.rf1m.util.PropertiesUtils
  */
 public interface ContentTemplates {
-    String ABOUT                = "Image2CSS 1.0.1, Matthew D. Huckaby, 2011";
+    String ABOUT                = "Image2CSS 1.1.0, Matthew D. Huckaby, 2012";
     String REPORT_CSS_TOTAL 	= "Generated [%1$s] CSS entries";
     String REPORT_CSS_FILE 	    = "Created CSS file, %1$s";
     String REPORT_HTML_FILE 	= "Created HTML file, %1$s";
