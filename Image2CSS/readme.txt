@@ -78,6 +78,5 @@ Convert GIF & JPG images in directory to data URI and output to CSS and HTML fil
 
 To build with maven:
 
-mvn assembly:single
-
+mvn clean install assembly:single
 
