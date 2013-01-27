@@ -24,6 +24,11 @@ Features:
 	- Output data URI to console
 	- Shell and bat scripts included
 ------------------------------------------------------------------------------------
+Ported Image2CSSConverter project from Google Code (svn) hosting to github
+
+Original project hosted at Google Code can be found here :
+http://code.google.com/p/image2css/
+------------------------------------------------------------------------------------
 Example usage test cases can be found com.rf1m.TestImage2CSS
 Example command line usage:
 
