@@ -28,7 +28,6 @@ import java.util.Set;
 import static com.rf1m.image2css.cli.SupportedImageTypes.*;
 import static com.rf1m.image2css.exception.Errors.cmdArgumentIRequiresFileTypes;
 import static java.util.Arrays.copyOfRange;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 public class CommandLineParametersParser {
     private static final String PARAM_F 	= "-f";
@@ -114,8 +113,7 @@ public class CommandLineParametersParser {
         for(final String imageTypeParam : imageTypeParams) {
             evaluateCurrentImageTypeParameter(result, imageTypeParam);
         }
-
-        if(isEmpty(result)){
+        if(null == result || result.isEmpty()){
             throw new Image2CssValidationException(cmdArgumentIRequiresFileTypes);
         }else {
             return result;
