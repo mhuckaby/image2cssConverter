@@ -70,7 +70,9 @@ public class CommandLineRunner {
             final String issueUrl = "https://github.com/mhuckaby/image2cssConverter/issues";
             final String messageTemplate = "Abnormal program exit. Please open an issue at %1$s\n";
             final String formattedMessage = String.format(messageTemplate, issueUrl);
+
             printStream.println(formattedMessage);
+            printStream.println(e.getMessage());
             e.printStackTrace();
         }
     }
