@@ -27,9 +27,11 @@ import java.io.PrintStream;
 
 import static com.rf1m.image2css.ContentTemplates.ABOUT;
 import static com.rf1m.image2css.cli.CommandLineParametersParser.HELP;
+import static java.lang.String.format;
 
 public class CommandLineRunner {
-    final ObjectFactory objectFactory;
+    private static final int zero = 0;
+    private  final ObjectFactory objectFactory;
 
     public static void main(final String args[]) throws Exception {
         final ObjectFactory objectFactory = ObjectFactory.getInstance();
@@ -37,7 +39,7 @@ public class CommandLineRunner {
 
         printStream.println(ABOUT);
 
-        if(0 == args.length){
+        if(zero == args.length){
             new CommandLineRunner(objectFactory).showHelp(printStream);
         }else{
             new CommandLineRunner(objectFactory).execute(printStream, args);
@@ -68,11 +70,10 @@ public class CommandLineRunner {
             printStream.println(HELP);
         }catch(Exception e) {
             final String issueUrl = "https://github.com/mhuckaby/image2cssConverter/issues";
-            final String messageTemplate = "Abnormal program exit. Please open an issue at %1$s\n";
-            final String formattedMessage = String.format(messageTemplate, issueUrl);
+            final String messageTemplate = "Abnormal program exit: %1$s.\nPlease open an issue at: %2$s\n";
+            final String formattedMessage = format(messageTemplate, e.getMessage(), issueUrl);
 
             printStream.println(formattedMessage);
-            printStream.println(e.getMessage());
             e.printStackTrace();
         }
     }
