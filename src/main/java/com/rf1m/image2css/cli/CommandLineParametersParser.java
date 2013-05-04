@@ -18,8 +18,8 @@
  */
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.domain.BeanType;
-import com.rf1m.image2css.domain.ObjectFactory;
+import com.rf1m.image2css.ioc.BeanType;
+import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 
 import java.io.File;

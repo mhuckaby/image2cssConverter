@@ -5,12 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rf1m</groupId>
     <artifactId>image2css</artifactId>
-    <version>${project.version}</version>
+    <version>1.1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>image2css</name>
 
     <properties>
-        <project.version>1.1.2-SNAPSHOT</project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -78,7 +77,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.rf1m.web.image2css.cli.Image2CSSCommandLineRunner</mainClass>
+                            <mainClass>com.rf1m.image2css.cli.CommandLineRunner</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

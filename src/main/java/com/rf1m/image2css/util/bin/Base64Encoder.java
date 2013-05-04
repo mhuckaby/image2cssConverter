@@ -18,8 +18,8 @@
  */
 package com.rf1m.image2css.util.bin;
 
-import com.rf1m.image2css.domain.BeanType;
-import com.rf1m.image2css.domain.ObjectFactory;
+import com.rf1m.image2css.ioc.BeanType;
+import com.rf1m.image2css.ioc.ObjectFactory;
 
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 

@@ -19,17 +19,18 @@
 package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.Image2Css;
-import com.rf1m.image2css.domain.BeanType;
-import com.rf1m.image2css.domain.ObjectFactory;
+import com.rf1m.image2css.ioc.BeanType;
+import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.exception.Image2CssException;
 
 import java.io.PrintStream;
 
-import static com.rf1m.image2css.ContentTemplates.ABOUT;
 import static com.rf1m.image2css.cli.CommandLineParametersParser.HELP;
 import static java.lang.String.format;
 
 public class CommandLineRunner {
+    protected static final String ABOUT = "Image2CSS 1.1.0, Matthew D. Huckaby, 2012";
+
     protected static final int zero = 0;
     protected  final ObjectFactory objectFactory;
 

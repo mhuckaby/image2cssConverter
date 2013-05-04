@@ -18,8 +18,8 @@
  */
 package com.rf1m.image2css.util.file;
 
-import com.rf1m.image2css.domain.BeanType;
-import com.rf1m.image2css.domain.ObjectFactory;
+import com.rf1m.image2css.ioc.BeanType;
+import com.rf1m.image2css.ioc.ObjectFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

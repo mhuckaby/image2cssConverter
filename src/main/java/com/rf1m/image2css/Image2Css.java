@@ -16,15 +16,14 @@ package com.rf1m.image2css;
 
 import com.rf1m.image2css.cli.Parameters;
 import com.rf1m.image2css.cli.SupportedImageTypes;
-import com.rf1m.image2css.domain.BeanType;
+import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.domain.ObjectFactory;
+import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.out.Output;
 import com.rf1m.image2css.out.ReportOutput;
-import com.rf1m.image2css.util.PropertiesUtils;
 import com.rf1m.image2css.util.bin.Base64Encoder;
 import com.rf1m.image2css.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.util.file.FileUtils;
@@ -36,7 +35,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static com.rf1m.image2css.ContentTemplates.TEMPLATE.CSS_CLASS;
 import static com.rf1m.image2css.exception.Errors.*;
 import static java.lang.String.format;
 
@@ -51,19 +49,19 @@ public class Image2Css {
     protected final Output cssOutput;
     protected final Output htmlOutput;
 
-    protected final PropertiesUtils propertiesUtils;
-
     protected final ReportOutput reportOutput;
+
+    protected final String cssClassTemplate;
 
     public Image2Css(
         final ObjectFactory objectFactory,
         final Base64Encoder base64Encoder,
         final FileUtils fileUtils,
-        final PropertiesUtils propertiesUtils,
         final Output consoleOutput,
         final Output cssOutput,
         final Output htmlOutput,
-        final ReportOutput reportOutput){
+        final ReportOutput reportOutput,
+        final String cssClassTemplate){
 
         this.objectFactory = objectFactory;
         this.base64Encoder = base64Encoder;
@@ -72,7 +70,7 @@ public class Image2Css {
         this.cssOutput = cssOutput;
         this.htmlOutput = htmlOutput;
         this.reportOutput = reportOutput;
-        this.propertiesUtils = propertiesUtils;
+        this.cssClassTemplate = cssClassTemplate;
     }
 
 	/**
@@ -122,7 +120,6 @@ public class Image2Css {
 	protected List<CssClass> generateCSSEntries(final File[] imageFiles) throws Image2CssException {
         try{
             final List<CssClass> cssEntries = this.objectFactory.instance(BeanType.arrayList);
-            final String cssClassTemplate = this.propertiesUtils.getProperty(CSS_CLASS);
 
             for(final File imageFile : imageFiles){
                 final String cssName = imageFile.getName().replaceAll("\\.","_");

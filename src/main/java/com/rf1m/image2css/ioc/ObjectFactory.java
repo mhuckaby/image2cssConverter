@@ -16,17 +16,17 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.domain;
+package com.rf1m.image2css.ioc;
 
 import com.rf1m.image2css.Image2Css;
 import com.rf1m.image2css.cli.CommandLineParametersParser;
 import com.rf1m.image2css.cli.ImmutableParameters;
 import com.rf1m.image2css.cli.MutableParameters;
 import com.rf1m.image2css.cli.SupportedImageTypes;
+import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.out.*;
-import com.rf1m.image2css.util.PropertiesUtils;
 import com.rf1m.image2css.util.bin.Base64Encoder;
 import com.rf1m.image2css.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.util.file.FileUtils;
@@ -42,6 +42,10 @@ import static java.lang.ClassLoader.getSystemResource;
 
 public class ObjectFactory {
     protected static final ObjectFactory objectFactory = new ObjectFactory();
+
+    protected final String cssClassTemplate = ResourceBundle.getBundle("image2css").getString("template.css.class.def");
+    protected final String htmlIndexTemplate = ResourceBundle.getBundle("image2css").getString("template.html.index");
+    protected final String htmlCssEntryTemplate = ResourceBundle.getBundle("image2css").getString("template.html.css.entry");
 
     public static ObjectFactory getInstance() {
         return ObjectFactory.objectFactory;
@@ -125,20 +129,18 @@ public class ObjectFactory {
             }
 
             case htmlOutput: {
-                final PropertiesUtils propertiesUtils = this.instance(BeanType.propertiesUtils);
-                return (T)new HTMLOutput(this, propertiesUtils);
+                return (T)new HTMLOutput(this, htmlCssEntryTemplate, htmlIndexTemplate);
             }
 
             case image2css: {
                 final Base64Encoder base64Encoder = this.instance(BeanType.base64Encoder);
                 final FileUtils fileUtils = this.instance(BeanType.fileUtils);
-                final PropertiesUtils propertiesUtils = this.instance(BeanType.propertiesUtils);
                 final Output consoleOutput = this.instance(BeanType.consoleOutput);
                 final Output cssOutput = this.instance(BeanType.cssOutput);
                 final Output htmlOutput = this.instance(BeanType.htmlOutput);
                 final ReportOutput reportOutput = this.instance(BeanType.consoleOutput);
 
-                return (T)new Image2Css(this, base64Encoder, fileUtils, propertiesUtils, consoleOutput, cssOutput, htmlOutput, reportOutput);
+                return (T)new Image2Css(this, base64Encoder, fileUtils, consoleOutput, cssOutput, htmlOutput, reportOutput, cssClassTemplate);
             }
 
             case imageIcon: {
@@ -157,12 +159,6 @@ public class ObjectFactory {
 
             case mutableParameters:
                 return (T)new MutableParameters();
-
-            case properties:
-                return (T)new Properties();
-
-            case propertiesUtils:
-                return (T)new PropertiesUtils(this);
 
             case reportOutput:
                 return (T)(ReportOutput)this.instance(BeanType.consoleOutput);

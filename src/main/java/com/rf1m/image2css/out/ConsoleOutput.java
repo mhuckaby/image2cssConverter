@@ -29,6 +29,10 @@ import static com.rf1m.image2css.ContentTemplates.*;
 import static java.lang.String.format;
 
 public class ConsoleOutput extends AbstractOutput implements ReportOutput{
+    protected static final String REPORT_CSS_TOTAL 	    = "Generated [%1$s] CSS entries";
+    protected static final String REPORT_CSS_FILE 	    = "Created CSS file, %1$s";
+    protected static final String REPORT_HTML_FILE 	    = "Created HTML file, %1$s";
+
     protected final PrintStream consoleOut;
 
     public ConsoleOutput(){
@@ -63,10 +67,6 @@ public class ConsoleOutput extends AbstractOutput implements ReportOutput{
         return
             super.isValidParametersAndClasses(parameters, cssClasses) &&
             parameters.isOutputToConsoleDesired();
-    }
-
-    protected PrintStream getConsoleOut() {
-        return this.consoleOut;
     }
 
 }

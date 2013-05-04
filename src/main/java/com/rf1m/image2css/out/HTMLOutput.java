@@ -19,31 +19,28 @@
 package com.rf1m.image2css.out;
 
 import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.domain.BeanType;
+import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.domain.ObjectFactory;
-import com.rf1m.image2css.util.PropertiesUtils;
+import com.rf1m.image2css.ioc.ObjectFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import static com.rf1m.image2css.ContentTemplates.TEMPLATE.HTML_CSS_ENTRY;
-import static com.rf1m.image2css.ContentTemplates.TEMPLATE.HTML_INDEX;
 import static java.lang.String.format;
 
 public class HTMLOutput extends AbstractOutput {
     protected final ObjectFactory objectFactory;
-    protected final PropertiesUtils propertiesUtils;
-    protected final String cssEntry;
-    protected final String htmlIndex;
+    protected final String htmlCssEntryTemplate;
+    protected final String htmlIndexTemplate;
 
-    public HTMLOutput(final ObjectFactory objectFactory, final PropertiesUtils propertiesUtils) {
+    public HTMLOutput(final ObjectFactory objectFactory,
+                      final String htmlCssEntryTemplate,
+                      final String htmlIndexTemplate) {
+
         this.objectFactory = objectFactory;
-        this.propertiesUtils = propertiesUtils;
-
-        this.cssEntry = propertiesUtils.getProperty(HTML_CSS_ENTRY);
-        this.htmlIndex = propertiesUtils.getProperty(HTML_INDEX);
+        this.htmlCssEntryTemplate = htmlCssEntryTemplate;
+        this.htmlIndexTemplate = htmlIndexTemplate;
     }
 
     @Override
@@ -53,32 +50,16 @@ public class HTMLOutput extends AbstractOutput {
             final StringBuffer stringBuffer = this.objectFactory.instance(BeanType.stringBuffer);
 
             for(final CssClass cssClass : cssClasses){
-                final String formattedEntry = format(cssEntry, cssClass.getName());
+                final String formattedEntry = format(htmlCssEntryTemplate, cssClass.getName());
                 stringBuffer.append(formattedEntry);
             }
 
             final String cssFilename = parameters.getCssFile().getName();
-            final String formattedLine = format(htmlIndex, cssFilename, stringBuffer.toString());
+            final String formattedLine = format(htmlIndexTemplate, cssFilename, stringBuffer.toString());
 
             fileWriter.write(formattedLine);
 			fileWriter.close();
 		}
-    }
-
-    protected ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
-
-    protected PropertiesUtils getPropertiesUtils() {
-        return propertiesUtils;
-    }
-
-    protected String getCssEntry() {
-        return cssEntry;
-    }
-
-    protected String getHtmlIndex() {
-        return htmlIndex;
     }
 
 }

@@ -19,8 +19,6 @@
 package com.rf1m.image2css.util.file;
 
 import com.rf1m.image2css.cli.SupportedImageTypes;
-import com.rf1m.image2css.domain.BeanType;
-import com.rf1m.image2css.domain.ObjectFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;

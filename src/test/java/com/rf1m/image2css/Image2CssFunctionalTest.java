@@ -16,20 +16,14 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m;
+package com.rf1m.image2css;
 
-import com.rf1m.image2css.Image2Css;
 import com.rf1m.image2css.cli.ImmutableParameters;
 import com.rf1m.image2css.cli.Parameters;
 import com.rf1m.image2css.cli.SupportedImageTypes;
-import com.rf1m.image2css.domain.BeanType;
-import com.rf1m.image2css.domain.ObjectFactory;
+import com.rf1m.image2css.ioc.BeanType;
+import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.exception.Image2CssValidationException;
-import com.rf1m.image2css.out.Output;
-import com.rf1m.image2css.out.ReportOutput;
-import com.rf1m.image2css.util.PropertiesUtils;
-import com.rf1m.image2css.util.bin.Base64Encoder;
-import com.rf1m.image2css.util.file.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,28 +36,20 @@ import java.util.Set;
 import static junit.framework.Assert.*;
 
 public class Image2CssFunctionalTest {
-	URL urlImageFile 			= this.getClass().getResource("/small_boy_with_book.png");
-	URL urlImageDir				= this.getClass().getResource("/");
-	
-	File imageDir 				= new File(urlImageDir.getFile());
-	File imageFile 				= new File(urlImageFile.getFile());
-	File imageFileNotExist 		= new File("some_file_that_does_not_exist.file");
-	File cssFile 				= new File("boy_with_book.css");
-	File htmlFile 				= new File("css-demo.html");
+	final URL urlImageFile 			= this.getClass().getResource("/small_boy_with_book.png");
+    final URL urlImageDir				= this.getClass().getResource("/");
 
-    Image2Css image2Css;
+    final File imageDir 				= new File(urlImageDir.getFile());
+    final File imageFile 				= new File(urlImageFile.getFile());
+    final File imageFileNotExist 		= new File("some_file_that_does_not_exist.file");
+    final File cssFile 				= new File("boy_with_book.css");
+    final File htmlFile 				= new File("css-demo.html");
+
     ObjectFactory objectFactory;
     Set<SupportedImageTypes> types;
 
-    Base64Encoder base64Encoder;
-    FileUtils fileUtils;
-    PropertiesUtils propertiesUtils;
-    Output consoleOutput;
-    Output cssOutput;
-    Output htmlOutput;
-    ReportOutput reportOutput;
+    Image2Css image2Css;
 
-    
     @Before
 	public void before() throws Exception{
 		cssFile.delete();
@@ -72,16 +58,7 @@ public class Image2CssFunctionalTest {
         types = new HashSet<SupportedImageTypes>();
 
         objectFactory = ObjectFactory.getInstance();
-        base64Encoder = objectFactory.instance(BeanType.base64Encoder);
-        fileUtils = objectFactory.instance(BeanType.fileUtils);
-        propertiesUtils = objectFactory.instance(BeanType.propertiesUtils);
-        consoleOutput = objectFactory.instance(BeanType.consoleOutput);
-        cssOutput = objectFactory.instance(BeanType.cssOutput);
-        htmlOutput = objectFactory.instance(BeanType.htmlOutput);
-        reportOutput = objectFactory.instance(BeanType.consoleOutput);
-
-        image2Css =
-            new Image2Css(objectFactory, base64Encoder, fileUtils, propertiesUtils, consoleOutput, cssOutput, htmlOutput, reportOutput);
+        image2Css = objectFactory.instance(BeanType.image2css);
 	}
 	
 	@After

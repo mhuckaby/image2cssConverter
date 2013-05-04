@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.domain.ObjectFactory;
+import com.rf1m.image2css.ioc.ObjectFactory;
 
 public enum SupportedImageTypes {
 	gif,

@@ -1,4 +1,4 @@
-package com.rf1m.image2css.domain;
+package com.rf1m.image2css.ioc;
 
 public enum BeanType {
     arrayList,

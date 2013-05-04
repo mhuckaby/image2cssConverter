@@ -19,14 +19,5 @@
 package com.rf1m.image2css;
 
 public interface ContentTemplates {
-    final String ABOUT                  = "Image2CSS 1.1.0, Matthew D. Huckaby, 2012";
-    final String REPORT_CSS_TOTAL 	    = "Generated [%1$s] CSS entries";
-    final String REPORT_CSS_FILE 	    = "Created CSS file, %1$s";
-    final String REPORT_HTML_FILE 	    = "Created HTML file, %1$s";
 
-    public interface TEMPLATE{
-        public static final String HTML_INDEX       = "template.html.index";
-        public static final String HTML_CSS_ENTRY   = "template.html.css.entry";
-        public static final String CSS_CLASS        = "template.css.class.def";
-    }
 }

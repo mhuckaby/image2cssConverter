@@ -20,7 +20,6 @@ package com.rf1m.image2css.out;
 
 import com.rf1m.image2css.cli.Parameters;
 import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.domain.ObjectFactory;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 
 import java.util.List;
