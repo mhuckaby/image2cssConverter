@@ -24,23 +24,24 @@ import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.exception.Image2CssException;
 
 import java.io.PrintStream;
+import java.util.ResourceBundle;
 
 import static com.rf1m.image2css.cli.CommandLineParametersParser.HELP;
 import static java.lang.String.format;
 
 public class CommandLineRunner {
-    protected static final String ABOUT = "Image2CSS 1.1.0, Matthew D. Huckaby, 2012";
+    protected static final ResourceBundle resourceBundle = ResourceBundle.getBundle("image2css");
 
-    protected static final int zero = 0;
-    protected  final ObjectFactory objectFactory;
+    protected final ObjectFactory objectFactory;
 
     public static void main(final String args[]) throws Exception {
         final ObjectFactory objectFactory = ObjectFactory.getInstance();
         final PrintStream printStream = objectFactory.instance(BeanType.defaultPrintStream);
+        final String about = resourceBundle.getString("about.project");
 
-        printStream.println(ABOUT);
+        printStream.println(about);
 
-        if(zero == args.length){
+        if(0 == args.length){
             new CommandLineRunner(objectFactory).showHelp(printStream);
         }else{
             new CommandLineRunner(objectFactory).execute(printStream, args);
@@ -70,8 +71,8 @@ public class CommandLineRunner {
             printStream.println(exception.getMessage());
             printStream.println(HELP);
         }catch(Exception e) {
-            final String issueUrl = "https://github.com/mhuckaby/image2cssConverter/issues";
-            final String messageTemplate = "Abnormal program exit: %1$s.\nPlease open an issue at: %2$s\n";
+            final String issueUrl = resourceBundle.getString("issue.url");
+            final String messageTemplate = resourceBundle.getString("message.abnormal.exit");
             final String formattedMessage = format(messageTemplate, e.getMessage(), issueUrl);
 
             printStream.println(formattedMessage);

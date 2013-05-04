@@ -4,12 +4,14 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rf1m</groupId>
-    <artifactId>image2css</artifactId>
-    <version>1.1.2-SNAPSHOT</version>
+    <artifactId>${project.artifact}</artifactId>
+    <version>${project.version}</version>
     <packaging>jar</packaging>
     <name>image2css</name>
 
     <properties>
+        <project.artifact>image2css</project.artifact>
+        <project.version>1.1.2-SNAPSHOT</project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -87,6 +89,29 @@
             </plugin>
 
         </plugins>
+
+        <resources>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
+            </resource>
+
+            <resource>
+                <directory>src/main/scripts</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.sh</include>
+                    <include>**/*.bat</include>
+                </includes>
+                <targetPath>../../</targetPath>
+            </resource>
+
+        </resources>
+
     </build>
 
     <reporting>
