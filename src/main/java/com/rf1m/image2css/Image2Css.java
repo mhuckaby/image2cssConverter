@@ -41,20 +41,19 @@ import static com.rf1m.image2css.exception.Errors.*;
 import static java.lang.String.format;
 
 public class Image2Css {
-    private final Base64Encoder base64Encoder;
+    protected final Base64Encoder base64Encoder;
 
-    private final FileUtils fileUtils;
+    protected final FileUtils fileUtils;
 
-    private ObjectFactory objectFactory;
+    protected final ObjectFactory objectFactory;
 
-    private final Output consoleOutput;
-    private final Output cssOutput;
+    protected final Output consoleOutput;
+    protected final Output cssOutput;
+    protected final Output htmlOutput;
 
-    private final Output htmlOutput;
+    protected final PropertiesUtils propertiesUtils;
 
-    private final PropertiesUtils propertiesUtils;
-
-    private final ReportOutput reportOutput;
+    protected final ReportOutput reportOutput;
 
     public Image2Css(
         final ObjectFactory objectFactory,
@@ -188,38 +187,6 @@ public class Image2Css {
         }else if(!parameters.isOutputValid()){
             throw new Image2CssValidationException(parametersObjectOutputInvalid);
         }
-    }
-
-    protected Base64Encoder getBase64Encoder() {
-        return base64Encoder;
-    }
-
-    protected FileUtils getFileUtils() {
-        return fileUtils;
-    }
-
-    protected ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
-
-    protected Output getConsoleOutput() {
-        return consoleOutput;
-    }
-
-    protected Output getCssOutput() {
-        return cssOutput;
-    }
-
-    protected Output getHtmlOutput() {
-        return htmlOutput;
-    }
-
-    protected PropertiesUtils getPropertiesUtils() {
-        return propertiesUtils;
-    }
-
-    protected ReportOutput getReportOutput() {
-        return reportOutput;
     }
 
 }

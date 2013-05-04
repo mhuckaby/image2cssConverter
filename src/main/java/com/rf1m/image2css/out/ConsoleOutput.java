@@ -29,7 +29,7 @@ import static com.rf1m.image2css.ContentTemplates.*;
 import static java.lang.String.format;
 
 public class ConsoleOutput extends AbstractOutput implements ReportOutput{
-    private final PrintStream consoleOut;
+    protected final PrintStream consoleOut;
 
     public ConsoleOutput(){
         this.consoleOut = System.out;

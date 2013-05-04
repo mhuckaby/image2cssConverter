@@ -33,10 +33,10 @@ import static com.rf1m.image2css.ContentTemplates.TEMPLATE.HTML_INDEX;
 import static java.lang.String.format;
 
 public class HTMLOutput extends AbstractOutput {
-    private final ObjectFactory objectFactory;
-    private final PropertiesUtils propertiesUtils;
-    private final String cssEntry;
-    private final String htmlIndex;
+    protected final ObjectFactory objectFactory;
+    protected final PropertiesUtils propertiesUtils;
+    protected final String cssEntry;
+    protected final String htmlIndex;
 
     public HTMLOutput(final ObjectFactory objectFactory, final PropertiesUtils propertiesUtils) {
         this.objectFactory = objectFactory;

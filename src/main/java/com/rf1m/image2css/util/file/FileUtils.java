@@ -26,7 +26,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class FileUtils{
-    private final ObjectFactory objectFactory;
+    protected final ObjectFactory objectFactory;
 
     public FileUtils(final ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
@@ -65,9 +65,5 @@ public class FileUtils{
 
         return bytes;
 	}
-
-    protected ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
 
 }

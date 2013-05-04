@@ -27,10 +27,10 @@ import static org.apache.commons.codec.binary.Base64.encodeBase64;
 //import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class Base64Encoder {
-    private final static String NL 		= "\n";
-    private final static String EMPTY 	= "";
+    protected final static String NL 		= "\n";
+    protected final static String EMPTY 	= "";
 
-    private final ObjectFactory objectFactory;
+    protected final ObjectFactory objectFactory;
 
     public Base64Encoder(final ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
@@ -39,10 +39,6 @@ public class Base64Encoder {
     public String base64EncodeBytes(final byte[] bytes) {
         final String encoded = this.objectFactory.instance(BeanType.string, encodeBase64(bytes, false));
         return encoded.replaceAll(NL, EMPTY);
-    }
-
-    protected ObjectFactory getObjectFactory() {
-        return objectFactory;
     }
 
 }

@@ -30,8 +30,8 @@ import static com.rf1m.image2css.cli.CommandLineParametersParser.HELP;
 import static java.lang.String.format;
 
 public class CommandLineRunner {
-    private static final int zero = 0;
-    private  final ObjectFactory objectFactory;
+    protected static final int zero = 0;
+    protected  final ObjectFactory objectFactory;
 
     public static void main(final String args[]) throws Exception {
         final ObjectFactory objectFactory = ObjectFactory.getInstance();

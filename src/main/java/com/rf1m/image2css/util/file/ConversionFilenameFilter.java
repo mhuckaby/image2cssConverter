@@ -35,8 +35,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  *
  */
 public class ConversionFilenameFilter implements FilenameFilter{
-	private final Set<SupportedImageTypes> supportedTypes;
-    private final FileUtils fileUtils;
+    protected final Set<SupportedImageTypes> supportedTypes;
+    protected final FileUtils fileUtils;
 
 	public ConversionFilenameFilter(final FileUtils fileUtils, final Set<SupportedImageTypes> supportedTypes){
 		this.supportedTypes = supportedTypes;
@@ -66,14 +66,6 @@ public class ConversionFilenameFilter implements FilenameFilter{
         }catch(final IllegalArgumentException e){
             return false;
         }
-    }
-
-    protected Set<SupportedImageTypes> getSupportedTypes() {
-        return supportedTypes;
-    }
-
-    protected FileUtils getFileUtils() {
-        return fileUtils;
     }
 
 }

@@ -1,8 +1,8 @@
 package com.rf1m.web.image2css.domain;
 
 public class CSSClass {
-	private String name;
-	private String body;
+    protected final String name;
+    protected final String body;
 
     public CSSClass(String name, String body) {
         this.name = name;

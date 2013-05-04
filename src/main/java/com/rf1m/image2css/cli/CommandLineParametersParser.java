@@ -30,15 +30,15 @@ import static com.rf1m.image2css.exception.Errors.cmdArgumentIRequiresFileTypes;
 import static java.util.Arrays.copyOfRange;
 
 public class CommandLineParametersParser {
-    private static final String PARAM_F 	= "-f";
-    private static final String PARAM_H 	= "-h";
-    private static final String PARAM_I 	= "-i";
-    private static final String PARAM_O 	= "-o";
-    private static final String PARAM_SYSO 	= "-syso";
+    protected static final String PARAM_F 	= "-f";
+    protected static final String PARAM_H 	= "-h";
+    protected static final String PARAM_I 	= "-i";
+    protected static final String PARAM_O 	= "-o";
+    protected static final String PARAM_SYSO 	= "-syso";
 
-    private static final String EXAMPLE1 	= "./image2CSS.sh -f ./ -h demo.html -o demo.css";
-    private static final String EXAMPLE2 	= "./image2CSS.sh -f ./ -o demo.css -i png";
-    private static final String EXAMPLE3 	= "./image2CSS.sh -f ./image.png -syso";
+    protected static final String EXAMPLE1 	= "./image2CSS.sh -f ./ -h demo.html -o demo.css";
+    protected static final String EXAMPLE2 	= "./image2CSS.sh -f ./ -o demo.css -i png";
+    protected static final String EXAMPLE3 	= "./image2CSS.sh -f ./image.png -syso";
 
     public static final String HELP =
             "\nUsage: Img2CSS [OPTIONS]\n"
@@ -52,7 +52,7 @@ public class CommandLineParametersParser {
             + 	EXAMPLE2 + "\n"
             + 	EXAMPLE3 + "\n";
 
-    private final ObjectFactory objectFactory;
+    protected final ObjectFactory objectFactory;
 
     public CommandLineParametersParser(final ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;

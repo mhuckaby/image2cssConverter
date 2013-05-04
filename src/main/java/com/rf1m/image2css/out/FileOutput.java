@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class FileOutput extends AbstractOutput{
-    private static final String NL = "\n";
-    private final ObjectFactory objectFactory;
+    protected static final String NL = "\n";
+    protected final ObjectFactory objectFactory;
 
     public FileOutput(final ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;

@@ -23,11 +23,11 @@ import java.util.Collections;
 import java.util.Set;
 
 public class ImmutableParameters implements Parameters {
-	private final File imageFile;
-	private final File cssFile;
-	private final File htmlFile;
-	private final Set<SupportedImageTypes> supportedTypes;
-	private boolean outputToScreen;
+	protected final File imageFile;
+	protected final File cssFile;
+	protected final File htmlFile;
+	protected final Set<SupportedImageTypes> supportedTypes;
+	protected boolean outputToScreen;
 	
 	public ImmutableParameters(
             final File imageFile,

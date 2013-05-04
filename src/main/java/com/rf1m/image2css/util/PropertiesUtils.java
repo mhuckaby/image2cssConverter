@@ -33,10 +33,10 @@ import static org.apache.commons.lang3.ArrayUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class PropertiesUtils {
-    private static final String PROPERTIES_FILE = "image2css.properties";
+    protected static final String PROPERTIES_FILE = "image2css.properties";
 
-    private final Properties properties;
-    private final ObjectFactory objectFactory;
+    protected final Properties properties;
+    protected final ObjectFactory objectFactory;
 
     public PropertiesUtils(final ObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
@@ -78,11 +78,4 @@ public class PropertiesUtils {
         }
     }
 
-    protected Properties getProperties() {
-        return properties;
-    }
-
-    protected ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
 }

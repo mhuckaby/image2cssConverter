@@ -19,8 +19,8 @@
 package com.rf1m.image2css.domain;
 
 public class CssClass {
-	private final String name;
-	private final String body;
+	protected final String name;
+	protected final String body;
 
     public CssClass(final String name, final String body) {
         this.name = name;

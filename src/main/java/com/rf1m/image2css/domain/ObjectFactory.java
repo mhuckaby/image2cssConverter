@@ -41,7 +41,7 @@ import static com.rf1m.image2css.exception.Errors.fileNotFoundWhileCreatingFileI
 import static java.lang.ClassLoader.getSystemResource;
 
 public class ObjectFactory {
-    private static final ObjectFactory objectFactory = new ObjectFactory();
+    protected static final ObjectFactory objectFactory = new ObjectFactory();
 
     public static ObjectFactory getInstance() {
         return ObjectFactory.objectFactory;
