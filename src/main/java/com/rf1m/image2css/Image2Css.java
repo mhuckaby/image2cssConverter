@@ -183,6 +183,8 @@ public class Image2Css {
             throw new Image2CssValidationException(parametersObjectImageInputFileOrDirNotExists);
         }else if(!parameters.isOutputValid()){
             throw new Image2CssValidationException(parametersObjectOutputInvalid);
+        }else if(parameters.isHtmlFileOutputDesired() && !parameters.isCssFileOutputDesired()) {
+            throw new Image2CssValidationException(parameterHtmlIndexWithNoCssFile);
         }
     }
 

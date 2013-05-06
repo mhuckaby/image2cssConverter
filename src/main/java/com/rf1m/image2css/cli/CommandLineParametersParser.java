@@ -18,6 +18,8 @@
  */
 package com.rf1m.image2css.cli;
 
+import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.exception.Image2CssValidationException;
@@ -62,7 +64,7 @@ public class CommandLineParametersParser {
         final MutableParameters mutableParameters = objectFactory.instance(BeanType.mutableParameters);
 
         for(int i=0;i<args.length;i++){
-            marshalStringParamToType(args, i, mutableParameters);
+            this.marshalStringParamToType(args, i, mutableParameters);
         }
 
         return objectFactory.instance(
@@ -77,22 +79,38 @@ public class CommandLineParametersParser {
 
     protected void marshalStringParamToType(final String[] args, final int currentIndex, final MutableParameters mutableParameters) {
         final String param = args[currentIndex];
-        final String nextParam = nextParam(args, currentIndex);
+        final String nextParam = this.nextParam(args, currentIndex);
 
         if(PARAM_F.equalsIgnoreCase(param)){
-            final File imageFile = this.objectFactory.instance(BeanType.file, nextParam);
-            mutableParameters.setImageFile(imageFile);
+            this.handleImageInputParameter(mutableParameters, nextParam);
         }else if(PARAM_H.equalsIgnoreCase(param)){
-            final File htmlFile = this.objectFactory.instance(BeanType.file, nextParam);
-            mutableParameters.setHtmlFile(htmlFile);
+            this.handleHtmlIndexParameter(mutableParameters, nextParam);
         }else if(PARAM_I.equalsIgnoreCase(param)){
-            final Set<SupportedImageTypes> supportedTypes = determineSupportedTypes(args, currentIndex);
+            final Set<SupportedImageTypes> supportedTypes = this.determineSupportedTypes(args, currentIndex);
             mutableParameters.setSupportedTypes(supportedTypes);
         }else if(PARAM_O.equalsIgnoreCase(param)){
             final File cssFile = this.objectFactory.instance(BeanType.file, nextParam);
             mutableParameters.setCssFile(cssFile);
         }else if(PARAM_SYSO.equalsIgnoreCase(param)){
             mutableParameters.setOutputToScreen(true);
+        }
+    }
+
+    protected void handleImageInputParameter(final MutableParameters mutableParameters, final String nextParam) {
+        if(null == nextParam) {
+            throw new Image2CssException(Errors.parametersObjectMustHaveValidImageInputFileOrDir);
+        }else {
+            final File imageFile = this.objectFactory.instance(BeanType.file, nextParam);
+            mutableParameters.setImageFile(imageFile);
+        }
+    }
+
+    protected void handleHtmlIndexParameter(final MutableParameters mutableParameters, final String nextParam) {
+        if(null == nextParam) {
+            throw new Image2CssException(Errors.parameterHtmlIndex);
+        }else {
+            final File htmlFile = this.objectFactory.instance(BeanType.file, nextParam);
+            mutableParameters.setHtmlFile(htmlFile);
         }
     }
 

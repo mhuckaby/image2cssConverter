@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
-import static com.rf1m.image2css.ContentTemplates.*;
 import static java.lang.String.format;
 
 public class ConsoleOutput extends AbstractOutput implements ReportOutput{

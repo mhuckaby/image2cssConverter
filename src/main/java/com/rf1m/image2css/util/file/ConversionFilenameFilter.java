@@ -29,7 +29,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Filename filter used to limit which image files are converted.
- * @author Matthew D. Huckaby
  *
  */
 public class ConversionFilenameFilter implements FilenameFilter{

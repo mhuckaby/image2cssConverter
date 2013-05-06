@@ -60,17 +60,17 @@ public class CommandLineRunner {
         final CommandLineParametersParser commandLineParametersParser = objectFactory.instance(BeanType.commandLineParametersParser);
         final Image2Css image2Css = objectFactory.instance(BeanType.image2css);
 
-        runner(image2Css,  commandLineParametersParser, printStream, args);
+        this.runner(image2Css,  commandLineParametersParser, printStream, args);
     }
 
     protected void runner(final Image2Css image2Css, final CommandLineParametersParser commandLineParametersParser, final PrintStream printStream, final String[] args) {
         try{
             final Parameters parameters = commandLineParametersParser.parse(args);
             image2Css.execute(parameters);
-        }catch(Image2CssException exception) {
+        }catch(final Image2CssException exception) {
             printStream.println(exception.getMessage());
             printStream.println(HELP);
-        }catch(Exception e) {
+        }catch(final Exception e) {
             final String issueUrl = resourceBundle.getString("issue.url");
             final String messageTemplate = resourceBundle.getString("message.abnormal.exit");
             final String formattedMessage = format(messageTemplate, e.getMessage(), issueUrl);
