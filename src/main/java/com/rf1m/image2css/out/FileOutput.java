@@ -52,7 +52,4 @@ public class FileOutput extends AbstractOutput{
 		}
     }
 
-    protected ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
 }

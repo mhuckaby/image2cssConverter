@@ -24,15 +24,4 @@ public class Image2CssValidationException extends Image2CssException {
         super(errors);
     }
 
-    public Image2CssValidationException(final Throwable cause, final Errors errors) {
-        super(cause, errors);
-    }
-
-    public Image2CssValidationException(final Throwable cause, final Errors errors, final String ... parameters) {
-        super(cause, errors, parameters);
-    }
-
-    public Image2CssValidationException(Errors errors, String... messageParameters) {
-        super(errors, messageParameters);
-    }
 }
