@@ -23,6 +23,7 @@ public enum BeanType {
     mutableParameters,
     properties,
     reportOutput,
+    resourceBundle,
     set,
     string,
     stringArray,

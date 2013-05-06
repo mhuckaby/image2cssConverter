@@ -24,18 +24,17 @@ import com.rf1m.image2css.domain.CssClass;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static java.lang.String.format;
 
 public class ConsoleOutput extends AbstractOutput implements ReportOutput{
-    protected static final String REPORT_CSS_TOTAL 	    = "Generated [%1$s] CSS entries";
-    protected static final String REPORT_CSS_FILE 	    = "Created CSS file, %1$s";
-    protected static final String REPORT_HTML_FILE 	    = "Created HTML file, %1$s";
-
+    protected final ResourceBundle resourceBundle;
     protected final PrintStream consoleOut;
 
-    public ConsoleOutput(){
-        this.consoleOut = System.out;
+    public ConsoleOutput(final ResourceBundle resourceBundle, final PrintStream consoleOut){
+        this.resourceBundle = resourceBundle;
+        this.consoleOut = consoleOut;
     }
 
     @Override
@@ -50,14 +49,17 @@ public class ConsoleOutput extends AbstractOutput implements ReportOutput{
     @Override
     public void generateReportOutput(final Parameters parameters, final List<CssClass> cssClasses){
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            consoleOut.println(format(REPORT_CSS_TOTAL, cssClasses.size()));
+            final String reportCssTotalTemplate = this.resourceBundle.getString("message.generated.entry.count");
+            consoleOut.println(format(reportCssTotalTemplate, cssClasses.size()));
 
+            final String reportCssFileTemplate = this.resourceBundle.getString("message.created.css.file");
             if(null != parameters.getCssFile()){
-                consoleOut.println(format(REPORT_CSS_FILE, parameters.getCssFile().getName()));
+                consoleOut.println(format(reportCssFileTemplate, parameters.getCssFile().getName()));
             }
 
+            final String reportHtmlFileTemplate = this.resourceBundle.getString("message.created.html.file");
             if(null != parameters.getHtmlFile()){
-                consoleOut.println(format(REPORT_HTML_FILE, parameters.getHtmlFile().getName()));
+                consoleOut.println(format(reportHtmlFileTemplate, parameters.getHtmlFile().getName()));
             }
         }
 	}

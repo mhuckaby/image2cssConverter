@@ -68,7 +68,8 @@ public class ObjectFactory {
                 return (T)new CommandLineParametersParser(this);
 
             case consoleOutput:
-                return (T)new ConsoleOutput();
+                final ResourceBundle resourceBundle = this.instance(BeanType.resourceBundle);
+                return (T)new ConsoleOutput(resourceBundle, System.out);
 
             case conversionFilenameFilter: {
                 final Set supportedImageTypes = (Set<SupportedImageTypes>)args[0];
@@ -162,6 +163,9 @@ public class ObjectFactory {
 
             case reportOutput:
                 return (T)(ReportOutput)this.instance(BeanType.consoleOutput);
+
+            case resourceBundle:
+                return (T)ResourceBundle.getBundle("image2css");
 
             case set:
                 return (T)new HashSet();
