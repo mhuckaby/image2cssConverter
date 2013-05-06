@@ -22,7 +22,6 @@ public enum BeanType {
     immutableParameters,
     mutableParameters,
     properties,
-    propertiesUtils,
     reportOutput,
     set,
     string,
