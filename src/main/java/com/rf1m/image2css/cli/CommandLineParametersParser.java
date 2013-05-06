@@ -86,14 +86,22 @@ public class CommandLineParametersParser {
         }else if(PARAM_H.equalsIgnoreCase(param)){
             this.handleHtmlIndexParameter(mutableParameters, nextParam);
         }else if(PARAM_I.equalsIgnoreCase(param)){
-            final Set<SupportedImageTypes> supportedTypes = this.determineSupportedTypes(args, currentIndex);
-            mutableParameters.setSupportedTypes(supportedTypes);
+            this.handleIncludedFileTypesParameter(mutableParameters, args, currentIndex);
         }else if(PARAM_O.equalsIgnoreCase(param)){
-            final File cssFile = this.objectFactory.instance(BeanType.file, nextParam);
-            mutableParameters.setCssFile(cssFile);
+            this.handleCssFileParameter(mutableParameters, nextParam);
         }else if(PARAM_SYSO.equalsIgnoreCase(param)){
             mutableParameters.setOutputToScreen(true);
         }
+    }
+
+    protected void handleCssFileParameter(final MutableParameters mutableParameters, final String nextParam) {
+        final File cssFile = this.objectFactory.instance(BeanType.file, nextParam);
+        mutableParameters.setCssFile(cssFile);
+    }
+
+    protected void handleIncludedFileTypesParameter(final MutableParameters mutableParameters, final String[] args, final int currentIndex) {
+        final Set<SupportedImageTypes> supportedTypes = this.determineSupportedTypes(args, currentIndex);
+        mutableParameters.setSupportedTypes(supportedTypes);
     }
 
     protected void handleImageInputParameter(final MutableParameters mutableParameters, final String nextParam) {
