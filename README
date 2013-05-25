@@ -1,6 +1,8 @@
-Image2CSS
-Copyright (c) 2011 Matthew D Huckaby. All rights reservered.
-------------------------------------------------------------------------------------
+# Image2CSS is a tool designed to generate data URI for use in CSS files.
+[Originally hosted at Google Code](http://code.google.com/p/image2css)
+
+
+## Copyright (c) 2011 Matthew D Huckaby. All rights reservered.
 Image2CSS is licensed under Apache 2.0, please see LICENSE file.
 
 Use of this software indicates you agree to the following as well : 
@@ -13,24 +15,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
-------------------------------------------------------------------------------------
-The purpose of Image2CSS is stream-line the process of generating data URI 
-for use in CSS files.
 
-Features:
-	- Convert single files or entire directories of images to data URI CSS
-	- Generate CSS file
-	- Generate HTML catalog of generated CSS classes
-	- Output data URI to console
-	- Shell and bat scripts included
-------------------------------------------------------------------------------------
-Ported Image2CSSConverter project from Google Code (svn) hosting to github
 
-Original project hosted at Google Code can be found here:
-http://code.google.com/p/image2css/
-------------------------------------------------------------------------------------
-Example usage test cases can be found com.rf1m.TestImage2CSS
-Example command line usage:
+## Build using Maven
+mvn clean install assembly:single
+
+
+## Features
+1. Convert a single file or an entire directories of images to data URI CSS
+2. Generate CSS file
+3. Generate HTML demonstrating generated CSS classes
+4. Output data URI to console
+5. Shell and bat scripts included
+
+
+## Example command line usage
 
 Display the help screen:
 
@@ -79,9 +78,6 @@ Convert GIF & JPG images in directory to data URI and output to CSS and HTML fil
 	
 	Windows
 	image2css.bat -f / -i gif jpg -o result.css -h result.html
-----
 
-To build with maven:
 
-mvn clean install assembly:single
 
