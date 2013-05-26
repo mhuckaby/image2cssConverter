@@ -3,10 +3,7 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
+import org.apache.commons.cli.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +44,7 @@ public class CommandLineParametersParserTest {
 
         final boolean syso = false;
 
-        CommandLineParser commandLineParser = mock(CommandLineParser.class);
+        BasicParser basicParser = mock(BasicParser.class);
         Option optionCssFile = mock(Option.class);
         Option optionHtmlFile = mock(Option.class);
         Option optionImageFile = mock(Option.class);
@@ -64,8 +61,8 @@ public class CommandLineParametersParserTest {
 
         Parameters parameters = mock(Parameters.class);
 
-        when(objectFactory.instance(BeanType.commandLineParametersParser))
-            .thenReturn(commandLineParser);
+        when(objectFactory.instance(BeanType.basicParser))
+            .thenReturn(basicParser);
 
         when(objectFactory.instance(BeanType.optionCssFile))
             .thenReturn(optionCssFile);
@@ -85,7 +82,7 @@ public class CommandLineParametersParserTest {
         when(objectFactory.instance(BeanType.options))
             .thenReturn(options);
 
-        when(commandLineParser.parse(options, args))
+        when(basicParser.parse(options, args))
             .thenReturn(commandLine);
 
         when(optionCssFile.getOpt())
@@ -130,7 +127,7 @@ public class CommandLineParametersParserTest {
         assertThat(result, is(parameters));
 
         verify(objectFactory, times(1))
-            .instance(BeanType.commandLineParametersParser);
+            .instance(BeanType.basicParser);
 
         verify(objectFactory, times(1))
             .instance(BeanType.optionCssFile);
@@ -150,7 +147,7 @@ public class CommandLineParametersParserTest {
         verify(objectFactory, times(1))
             .instance(BeanType.options);
 
-        verify(commandLineParser, times(1))
+        verify(basicParser, times(1))
             .parse(options, args);
 
         verify(optionCssFile, times(1))

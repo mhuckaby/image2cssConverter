@@ -3,6 +3,7 @@ package com.rf1m.image2css.ioc;
 public enum BeanType {
     arrayList,
     base64Encoder,
+    basicParser,
     byteArray,
     commandLineParametersParser,
     commandLineRunner,

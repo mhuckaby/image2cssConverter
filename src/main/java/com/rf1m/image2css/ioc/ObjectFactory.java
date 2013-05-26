@@ -59,13 +59,16 @@ public class ObjectFactory {
             case base64Encoder:
                 return (T)new Base64Encoder(this);
 
+            case basicParser:
+                return (T)new BasicParser();
+
             case byteArray: {
                 final Number size = (Number)args[0];
                 return (T)new byte[size.intValue()];
             }
 
             case commandLineParametersParser:
-                return (T)new BasicParser();
+                return (T)new CommandLineParametersParser(this);
 
             case commandLineRunner:
                 return (T)new CommandLineRunner(this);

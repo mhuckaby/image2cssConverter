@@ -35,7 +35,7 @@ public class CommandLineParametersParser {
     }
 
     public Parameters parse(final String[] args) throws ParseException {
-        final CommandLineParser commandLineParser = objectFactory.instance(BeanType.commandLineParametersParser);
+        final BasicParser basicParser = objectFactory.instance(BeanType.basicParser);
 
         final Option optionCssFile = objectFactory.instance(BeanType.optionCssFile);
         final Option optionHtmlFile = objectFactory.instance(BeanType.optionHtmlFile);
@@ -45,7 +45,7 @@ public class CommandLineParametersParser {
 
         final Options options = objectFactory.instance(BeanType.options);
 
-        final CommandLine commandLine = commandLineParser.parse(options, args);
+        final CommandLine commandLine = basicParser.parse(options, args);
 
         final File cssFile = this.extractFileFromOption(commandLine, optionCssFile.getOpt());
         final File htmlFile = this.extractFileFromOption(commandLine, optionHtmlFile.getOpt());
