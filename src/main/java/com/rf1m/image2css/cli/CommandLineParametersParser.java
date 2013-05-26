@@ -64,9 +64,21 @@ public class CommandLineParametersParser {
         return file;
     }
 
+    protected String[] determineIncludedImageTypes(final String[] optionValues) {
+        if(null == optionValues || 0 == optionValues.length) {
+            return new String[] {
+                SupportedImageTypes.gif.name(),
+                SupportedImageTypes.jpg.name(),
+                SupportedImageTypes.png.name(),
+            };
+        }else {
+            return optionValues;
+        }
+    }
+
     protected Set<SupportedImageTypes> extractImageTypesFromOption(final CommandLine commandLine, final String option) {
         final Set<SupportedImageTypes> result = this.objectFactory.instance(BeanType.set);
-        final String[] optionValues = commandLine.getOptionValues(option);
+        final String[] optionValues = this.determineIncludedImageTypes(commandLine.getOptionValues(option));
 
         for(final String optionValue : optionValues) {
             final SupportedImageTypes supportedImageType = this.convertStringImageTypeArgumentToEnumType(optionValue);

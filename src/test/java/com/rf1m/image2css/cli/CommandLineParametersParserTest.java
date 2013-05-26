@@ -225,6 +225,10 @@ public class CommandLineParametersParserTest {
         when(commandLine.getOptionValues(option))
             .thenReturn(optionValues);
 
+        doReturn(optionValues)
+            .when(commandLineParametersParser)
+            .determineIncludedImageTypes(optionValues);
+
         doReturn(SupportedImageTypes.gif)
             .when(commandLineParametersParser)
             .convertStringImageTypeArgumentToEnumType(option);
@@ -236,6 +240,9 @@ public class CommandLineParametersParserTest {
 
         verify(objectFactory, times(1))
             .instance(BeanType.set);
+
+        verify(commandLineParametersParser, times(1))
+            .determineIncludedImageTypes(optionValues);
 
         verify(commandLine, times(1))
             .getOptionValues(option);
@@ -260,5 +267,30 @@ public class CommandLineParametersParserTest {
 
         commandLineParametersParser.convertStringImageTypeArgumentToEnumType(optionInvalid);
     }
+
+    @Test
+    public void determineIncludedImageTypesShouldReturnAllTypesWhenNullArrayIsPassed() {
+        final String[] result = commandLineParametersParser.determineIncludedImageTypes(null);
+
+        assertThat(result.length, is(3));
+    }
+
+    @Test
+    public void determineIncludedImageTypesShouldReturnAllTypesWhenNullArrayIsLengthZero() {
+        final String[] result = commandLineParametersParser.determineIncludedImageTypes(new String[] {});
+
+        assertThat(result.length, is(3));
+    }
+
+    @Test
+    public void determineIncludedImageTypesShouldReturnSameParamIfNotNullOrLengthZero() {
+        final String[] arguments = {"argument"};
+
+        final String[] result = commandLineParametersParser.determineIncludedImageTypes(arguments);
+
+        assertThat(result, is(arguments));
+    }
+
+
 
 }
