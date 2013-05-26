@@ -31,9 +31,13 @@ import static java.lang.String.format;
 
 public class CommandLineRunner {
     protected final ObjectFactory objectFactory;
+    protected final PrintStream printStream;
+    protected final ResourceBundle resourceBundle;
 
-    public CommandLineRunner(final ObjectFactory objectFactory) {
+    public CommandLineRunner(final ObjectFactory objectFactory, final PrintStream printStream, final ResourceBundle resourceBundle) {
         this.objectFactory = objectFactory;
+        this.printStream = printStream;
+        this.resourceBundle = resourceBundle;
     }
 
     public static void main(final String arguments[]) throws Exception {
@@ -44,10 +48,7 @@ public class CommandLineRunner {
     }
 
     protected void execute(final String arguments[]) {
-        final PrintStream printStream = this.objectFactory.instance(BeanType.defaultPrintStream);
-        final ResourceBundle resourceBundle = this.objectFactory.instance(BeanType.resourceBundle);
-
-        this.showAbout(resourceBundle, printStream);
+        this.showAbout();
         this.argumentLengthCheck(arguments);
 
         final Image2Css image2Css = this.objectFactory.instance(BeanType.image2css);
@@ -58,15 +59,15 @@ public class CommandLineRunner {
             final Parameters parameters = commandLineParametersParser.parse(arguments);
             image2Css.execute(parameters);
         }catch(final ParseException parseException) {
-            this.handleParseException(resourceBundle, printStream, parseException);
+            this.handleParseException(parseException);
         }catch(final Image2CssException image2CssException) {
-            this.handleImage2CssException(resourceBundle, printStream, image2CssException);
+            this.handleImage2CssException(image2CssException);
         }catch(final Exception e) {
-            this.handleException(resourceBundle, printStream, e);
+            this.handleException(e);
         }
     }
 
-    protected void handleException(final ResourceBundle resourceBundle, final PrintStream printStream, final Exception e) {
+    protected void handleException(final Exception e) {
         final String issueUrl = resourceBundle.getString("issue.url");
         final String messageTemplate = resourceBundle.getString("message.abnormal.exit");
         final String formattedMessage = format(messageTemplate, e.getMessage(), issueUrl);
@@ -75,14 +76,14 @@ public class CommandLineRunner {
         e.printStackTrace();
     }
 
-    protected void handleImage2CssException(final ResourceBundle resourceBundle, final PrintStream printStream, final Image2CssException image2CssException) {
+    protected void handleImage2CssException(final Image2CssException image2CssException) {
         final String exceptionFormat = resourceBundle.getString("format.exception");
         final String formattedExceptionMessage = format(exceptionFormat, image2CssException.getMessage());
 
         printStream.println(formattedExceptionMessage);
     }
 
-    protected void handleParseException(final ResourceBundle resourceBundle, final PrintStream printStream, final ParseException parseException) {
+    protected void handleParseException(final ParseException parseException) {
         final Image2CssHelpFormatter image2CssHelpFormatter = this.objectFactory.instance(BeanType.helpFormatter);
         final String exceptionFormat = resourceBundle.getString("format.exception");
         final String formattedExceptionMessage = format(exceptionFormat, parseException.getMessage());
@@ -91,7 +92,7 @@ public class CommandLineRunner {
         image2CssHelpFormatter.showHelp();
     }
 
-    protected void showAbout(final ResourceBundle resourceBundle, final PrintStream printStream) {
+    protected void showAbout() {
         final String about = resourceBundle.getString("about.project");
         printStream.println(about);
     }

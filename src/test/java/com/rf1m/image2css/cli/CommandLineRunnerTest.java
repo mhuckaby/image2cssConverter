@@ -50,7 +50,7 @@ public class CommandLineRunnerTest {
     @Before
     public void before() throws Exception {
         resourceBundle = ResourceBundle.getBundle("image2css");
-        commandLineRunner = spy(new CommandLineRunner(objectFactory));
+        commandLineRunner = spy(new CommandLineRunner(objectFactory, printStream, resourceBundle));
 
         when(objectFactory.instance(BeanType.resourceBundle))
             .thenReturn(resourceBundle);
@@ -78,7 +78,7 @@ public class CommandLineRunnerTest {
     public void executeShouldParseAndConvert() throws Exception {
         doNothing()
             .when(commandLineRunner)
-            .showAbout(resourceBundle, printStream);
+            .showAbout();
 
         doNothing()
             .when(commandLineRunner)
@@ -90,7 +90,7 @@ public class CommandLineRunnerTest {
             .execute(parameters);
 
         verify(commandLineRunner, times(1))
-            .showAbout(resourceBundle, printStream);
+            .showAbout();
 
         verify(commandLineRunner, times(1))
             .argumentLengthCheck(arguments);
@@ -109,7 +109,7 @@ public class CommandLineRunnerTest {
     public void executeShouldInvokeParseExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {
         doNothing()
             .when(commandLineRunner)
-            .showAbout(resourceBundle, printStream);
+            .showAbout();
 
         doNothing()
             .when(commandLineRunner)
@@ -123,19 +123,19 @@ public class CommandLineRunnerTest {
 
         doNothing()
             .when(commandLineRunner)
-            .handleParseException(resourceBundle, printStream, parseException);
+            .handleParseException(parseException);
 
         commandLineRunner.execute(arguments);
 
         verify(commandLineRunner, times(1))
-            .handleParseException(resourceBundle, printStream, parseException);
+            .handleParseException(parseException);
     }
 
     @Test
     public void executeShouldInvokeImage2CssExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {
         doNothing()
             .when(commandLineRunner)
-            .showAbout(resourceBundle, printStream);
+            .showAbout();
 
         doNothing()
             .when(commandLineRunner)
@@ -149,19 +149,19 @@ public class CommandLineRunnerTest {
 
         doNothing()
             .when(commandLineRunner)
-            .handleImage2CssException(resourceBundle, printStream, image2CssException);
+            .handleImage2CssException(image2CssException);
 
         commandLineRunner.execute(arguments);
 
         verify(commandLineRunner, times(1))
-            .handleImage2CssException(resourceBundle, printStream, image2CssException);
+            .handleImage2CssException(image2CssException);
     }
 
     @Test
     public void executeShouldInvokeExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {
         doNothing()
             .when(commandLineRunner)
-            .showAbout(resourceBundle, printStream);
+            .showAbout();
 
         doNothing()
             .when(commandLineRunner)
@@ -175,12 +175,12 @@ public class CommandLineRunnerTest {
 
         doNothing()
             .when(commandLineRunner)
-            .handleException(resourceBundle, printStream, exception);
+            .handleException(exception);
 
         commandLineRunner.execute(arguments);
 
         verify(commandLineRunner, times(1))
-            .handleException(resourceBundle, printStream, exception);
+            .handleException(exception);
     }
 
     @Test
@@ -213,7 +213,7 @@ public class CommandLineRunnerTest {
 
     @Test
     public void showAboutShouldPrintAboutStringToPrintWriter() {
-        commandLineRunner.showAbout(resourceBundle, printStream);
+        commandLineRunner.showAbout();
 
         verify(printStream, times(1))
             .println(anyString());
@@ -223,7 +223,7 @@ public class CommandLineRunnerTest {
     public void handleParseExceptionShouldPrintFormattedErrorMessageAndShowHelp() {
         ParseException parseException = mock(ParseException.class);
 
-        commandLineRunner.handleParseException(resourceBundle, printStream, parseException);
+        commandLineRunner.handleParseException(parseException);
 
         verify(printStream, times(1))
             .println(anyString());
@@ -236,7 +236,7 @@ public class CommandLineRunnerTest {
     public void handleImage2CssExceptionShouldShowExceptionMessage() {
         Image2CssException image2CssException = mock(Image2CssException.class);
 
-        commandLineRunner.handleImage2CssException(resourceBundle, printStream, image2CssException);
+        commandLineRunner.handleImage2CssException(image2CssException);
 
         verify(printStream, times(1))
             .println(anyString());
@@ -251,7 +251,7 @@ public class CommandLineRunnerTest {
         when(exception.getMessage())
             .thenReturn(message);
 
-        commandLineRunner.handleException(resourceBundle, printStream, exception);
+        commandLineRunner.handleException(exception);
 
         verify(printStream, times(1))
             .println(anyString());

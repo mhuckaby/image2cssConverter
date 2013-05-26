@@ -70,8 +70,12 @@ public class ObjectFactory {
             case commandLineParametersParser:
                 return (T)new CommandLineParametersParser(this);
 
-            case commandLineRunner:
-                return (T)new CommandLineRunner(this);
+            case commandLineRunner: {
+                final PrintStream printStream = this.instance(BeanType.defaultPrintStream);
+                final ResourceBundle resourceBundle = this.instance(BeanType.resourceBundle);
+
+                return (T)new CommandLineRunner(this, printStream, resourceBundle);
+            }
 
             case consoleOutput:
                 final ResourceBundle resourceBundle = this.instance(BeanType.resourceBundle);
