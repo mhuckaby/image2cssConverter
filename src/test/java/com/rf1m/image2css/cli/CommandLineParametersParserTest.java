@@ -1,7 +1,12 @@
 package com.rf1m.image2css.cli;
 
+import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +15,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.File;
 import java.util.Set;
 
-import static junit.framework.Assert.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -18,304 +22,246 @@ import static org.mockito.MockitoAnnotations.Mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineParametersParserTest {
-    final String paramF = "-f";
-    final String paramFValue = "./src/test/resources/";
-
-    final String paramH = "-h";
-    final String paramHValue = "demo.html";
-
-    final String paramI = "-i";
-    final String paramIValuePng = "png";
-    final String paramIValueGif = "gif";
-    final String paramIValueJpg = "jpg";
-
-    final String paramO = "-o";
-    final String paramOValue = "demo.css";
-
-    final String[] paramsFullDirectory = {
-        paramF, paramFValue,
-        paramH, paramHValue,
-        paramO, paramOValue,
-    };
-
-    final String[] paramsIncludeJpegOnly = {
-        paramF, paramFValue,
-        paramH, paramHValue,
-        paramI, paramIValueJpg,
-        paramO, paramOValue,
-    };
-
-    final String[] paramsIncludePngOnly = {
-        paramF, paramFValue,
-        paramH, paramHValue,
-        paramI, paramIValuePng,
-        paramO, paramOValue,
-    };
-
-    final String[] paramsIncludeGifOnly = {
-        paramF, paramFValue,
-        paramH, paramHValue,
-        paramI, paramIValueGif,
-        paramO, paramOValue,
-    };
-
-    final String[] paramsIncludeJpgPngOnly = {
-        paramF, paramFValue,
-        paramH, paramHValue,
-        paramI, paramIValueJpg, paramIValuePng,
-        paramO, paramOValue,
-    };
-
     @Mock
     ObjectFactory objectFactory;
 
     @Mock
-    Set<SupportedImageTypes> supportedImageTypes;
-
-    @Mock
-    MutableParameters mutableParameters;
-
-    @Mock
-    File paramFMarshaledValue;
-
-    @Mock
-    File paramHMarshaledValue;
-
-    @Mock
-    File paramOMarshaledValue;
+    CommandLine commandLine;
 
     CommandLineParametersParser commandLineParametersParser;
 
     @Before
     public void before() {
         commandLineParametersParser = spy(new CommandLineParametersParser(objectFactory));
+    }
 
-        when(objectFactory.instance(BeanType.mutableParameters))
-            .thenReturn(mutableParameters);
+    @Test
+    public void parseShouldDelegateArgumentParsingToCommandLineParser() throws Exception {
+        final String optionSysoGetOptValue = "optionSysoGetOptValue";
+        final String optionCssFileGetOptValue = "optionCssFileGetOptValue";
+        final String optionHtmlFileGetOptValue = "optionHtmlFileGetOptValue";
+        final String optionImageFileGetOptValue = "optionImageFileGetOptValue";
+        final String optionSupportImageTypesGetOptValue = "optionSupportImageTypesGetOptValue";
+
+        final String[] args = {};
+
+        final boolean syso = false;
+
+        CommandLineParser commandLineParser = mock(CommandLineParser.class);
+        Option optionCssFile = mock(Option.class);
+        Option optionHtmlFile = mock(Option.class);
+        Option optionImageFile = mock(Option.class);
+        Option optionSupportedImageTypes = mock(Option.class);
+        Option optionSyso = mock(Option.class);
+
+        Options options = mock(Options.class);
+
+        File cssFile = mock(File.class);
+        File htmlFile = mock(File.class);
+        File imageFile = mock(File.class);
+
+        Set<SupportedImageTypes> supportedImageTypes = mock(Set.class);
+
+        Parameters parameters = mock(Parameters.class);
+
+        when(objectFactory.instance(BeanType.commandLineParametersParser))
+            .thenReturn(commandLineParser);
+
+        when(objectFactory.instance(BeanType.optionCssFile))
+            .thenReturn(optionCssFile);
+
+        when(objectFactory.instance(BeanType.optionHtmlFile))
+            .thenReturn(optionHtmlFile);
+
+        when(objectFactory.instance(BeanType.optionImageFile))
+            .thenReturn(optionImageFile);
+
+        when(objectFactory.instance(BeanType.optionImageTypes))
+            .thenReturn(optionSupportedImageTypes);
+
+        when(objectFactory.instance(BeanType.optionSyso))
+            .thenReturn(optionSyso);
+
+        when(objectFactory.instance(BeanType.options))
+            .thenReturn(options);
+
+        when(commandLineParser.parse(options, args))
+            .thenReturn(commandLine);
+
+        when(optionCssFile.getOpt())
+            .thenReturn(optionCssFileGetOptValue);
+
+        doReturn(cssFile)
+            .when(commandLineParametersParser)
+            .extractFileFromOption(commandLine, optionCssFileGetOptValue);
+
+        when(optionHtmlFile.getOpt())
+            .thenReturn(optionHtmlFileGetOptValue);
+
+        doReturn(htmlFile)
+            .when(commandLineParametersParser)
+            .extractFileFromOption(commandLine, optionHtmlFileGetOptValue);
+
+        when(optionImageFile.getOpt())
+            .thenReturn(optionImageFileGetOptValue);
+
+        doReturn(imageFile)
+            .when(commandLineParametersParser)
+            .extractFileFromOption(commandLine, optionImageFileGetOptValue);
+
+        when(optionSupportedImageTypes.getOpt())
+            .thenReturn(optionSupportImageTypesGetOptValue);
+
+        doReturn(supportedImageTypes)
+            .when(commandLineParametersParser)
+            .extractImageTypesFromOption(commandLine, optionSupportImageTypesGetOptValue);
+
+        when(optionSyso.getOpt())
+            .thenReturn(optionSysoGetOptValue);
+
+        when(commandLine.hasOption(optionSysoGetOptValue))
+            .thenReturn(syso);
+
+        when(objectFactory.instance(BeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso))
+            .thenReturn(parameters);
+
+        final Parameters result = commandLineParametersParser.parse(args);
+
+        assertThat(result, is(parameters));
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.commandLineParametersParser);
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.optionCssFile);
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.optionHtmlFile);
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.optionImageFile);
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.optionImageTypes);
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.optionSyso);
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.options);
+
+        verify(commandLineParser, times(1))
+            .parse(options, args);
+
+        verify(optionCssFile, times(1))
+            .getOpt();
+
+        verify(commandLineParametersParser, times(1))
+            .extractFileFromOption(commandLine, optionCssFileGetOptValue);
+
+        verify(optionHtmlFile, times(1))
+            .getOpt();
+
+        verify(commandLineParametersParser, times(1))
+            .extractFileFromOption(commandLine, optionHtmlFileGetOptValue);
+
+        verify(optionImageFile, times(1))
+            .getOpt();
+
+        verify(commandLineParametersParser, times(1))
+            .extractFileFromOption(commandLine, optionImageFileGetOptValue);
+
+        verify(optionSupportedImageTypes, times(1))
+            .getOpt();
+
+        verify(commandLineParametersParser, times(1))
+            .extractImageTypesFromOption(commandLine, optionSupportImageTypesGetOptValue);
+
+        verify(optionSyso, times(1))
+            .getOpt();
+
+        verify(commandLine, times(1))
+            .hasOption(optionSysoGetOptValue);
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+    }
+
+    @Test
+    public void extractFileFromOptionsShouldPassUseFirstElementInValuesArrayAsFilename() {
+        final String option = "option";
+        final String optionValue = "optionValue";
+
+        final String[] optionValues = {optionValue};
+
+        File file = mock(File.class);
+
+        when(commandLine.getOptionValues(option))
+            .thenReturn(optionValues);
+
+        when(objectFactory.instance(BeanType.file, optionValue))
+            .thenReturn(file);
+
+        final File result = commandLineParametersParser.extractFileFromOption(commandLine, option);
+
+        assertThat(result, is(file));
+
+        verify(commandLine, times(1))
+            .getOptionValues(option);
+
+        verify(objectFactory, times(1))
+            .instance(BeanType.file, optionValue);
+    }
+
+    @Test
+    public void shouldPopulateResultingSetWithImageTypesFromCommandLineArgs() {
+        final String option = "option";
+        final String optionValueGif = "gif";
+
+        final String[] optionValues = {optionValueGif};
+
+        Set<SupportedImageTypes> supportedImageTypes = mock(Set.class);
 
         when(objectFactory.instance(BeanType.set))
             .thenReturn(supportedImageTypes);
 
-        when(objectFactory.instance(BeanType.file, paramFValue))
-            .thenReturn(paramFMarshaledValue);
+        when(commandLine.getOptionValues(option))
+            .thenReturn(optionValues);
 
-        when(objectFactory.instance(BeanType.file, paramHValue))
-            .thenReturn(paramHMarshaledValue);
+        doReturn(SupportedImageTypes.gif)
+            .when(commandLineParametersParser)
+            .convertStringImageTypeArgumentToEnumType(option);
 
-        when(objectFactory.instance(BeanType.file, paramOValue))
-            .thenReturn(paramOMarshaledValue);
+        final Set<SupportedImageTypes> result =
+            commandLineParametersParser.extractImageTypesFromOption(commandLine, option);
 
-    }
+        assertThat(result, is(supportedImageTypes));
 
-    @Test
-    public void shouldReturnParamFValue() {
-        final String result = commandLineParametersParser.nextParam(paramsFullDirectory, 0);
+        verify(objectFactory, times(1))
+            .instance(BeanType.set);
 
-        assertThat(result, is(paramFValue));
-    }
-
-    @Test
-    public void shouldReturnParamH() {
-        final String result = commandLineParametersParser.nextParam(paramsFullDirectory, 1);
-
-        assertThat(result, is(paramH));
-    }
-
-    @Test
-    public void shouldReturnParamHValue() {
-        final String result = commandLineParametersParser.nextParam(paramsFullDirectory, 2);
-
-        assertThat(result, is(paramHValue));
-    }
-
-    @Test
-    public void shouldReturnParamO() {
-        final String result = commandLineParametersParser.nextParam(paramsFullDirectory, 3);
-
-        assertThat(result, is(paramO));
-    }
-
-    @Test
-    public void shouldReturnParamOValue() {
-        final String result = commandLineParametersParser.nextParam(paramsFullDirectory, 4);
-
-        assertThat(result, is(paramOValue));
-    }
-
-    @Test
-    public void shouldReturnNull() {
-        final String result = commandLineParametersParser.nextParam(paramsFullDirectory, 5);
-
-        assertNull(result);
-    }
-
-    @Test
-    public void shouldRecognizeGifAndAddToResult() {
-        final String extension = "gif";
-
-        commandLineParametersParser.evaluateCurrentImageTypeParameter(supportedImageTypes, extension);
-
-        verify(supportedImageTypes, times(1)).add(SupportedImageTypes.gif);
-    }
-
-    @Test
-    public void shouldRecognizeCrookedCaseGifAndAddToResult() {
-        final String extension = "GiF";
-
-        commandLineParametersParser.evaluateCurrentImageTypeParameter(supportedImageTypes, extension);
-
-        verify(supportedImageTypes, times(1)).add(SupportedImageTypes.gif);
-    }
-
-    @Test
-    public void shouldRecognizeJpgAndAddToResult() {
-        final String extension = "jpg";
-
-        commandLineParametersParser.evaluateCurrentImageTypeParameter(supportedImageTypes, extension);
-
-        verify(supportedImageTypes, times(1)).add(SupportedImageTypes.jpg);
-    }
-
-    @Test
-    public void shouldRecognizeCrookedCaseJpgAndAddToResult() {
-        final String extension = "jPg";
-
-        commandLineParametersParser.evaluateCurrentImageTypeParameter(supportedImageTypes, extension);
-
-        verify(supportedImageTypes, times(1)).add(SupportedImageTypes.jpg);
-    }
-
-    @Test
-    public void shouldRecognizePngAndAddToResult() {
-        final String extension = "png";
-
-        commandLineParametersParser.evaluateCurrentImageTypeParameter(supportedImageTypes, extension);
-
-        verify(supportedImageTypes, times(1)).add(SupportedImageTypes.png);
-    }
-
-    @Test
-    public void shouldRecognizeCrookedCasePngAndAddToResult() {
-        final String extension = "PnG";
-
-        commandLineParametersParser.evaluateCurrentImageTypeParameter(supportedImageTypes, extension);
-
-        verify(supportedImageTypes, times(1)).add(SupportedImageTypes.png);
-    }
-
-    @Test
-    public void shouldDetermineTypesToSupportAreOfSizeOneLimitedToJpgBasedOnIncludeParameter() {
-        final Set<SupportedImageTypes> result = commandLineParametersParser.determineSupportedTypes(paramsIncludeJpegOnly, 4);
-
-        verify(commandLineParametersParser, times(1))
-            .evaluateCurrentImageTypeParameter(supportedImageTypes, paramIValueJpg);
-
-        verify(supportedImageTypes, times(1))
-            .add(SupportedImageTypes.jpg);
-
-        verify(supportedImageTypes, times(1))
-            .isEmpty();
-    }
-
-    @Test
-    public void shouldDetermineTypesToSupportAreOfSizeOneLimitedToPngBasedOnIncludeParameter() {
-        final Set<SupportedImageTypes> result = commandLineParametersParser.determineSupportedTypes(paramsIncludePngOnly, 4);
-
-        verify(commandLineParametersParser, times(1))
-            .evaluateCurrentImageTypeParameter(supportedImageTypes, paramIValuePng);
-
-        verify(supportedImageTypes, times(1))
-            .add(SupportedImageTypes.png);
-
-        verify(supportedImageTypes, times(1))
-            .isEmpty();
-    }
-
-    @Test
-    public void shouldDetermineTypesToSupportAreOfSizeOneLimitedToGifBasedOnIncludeParameter() {
-        final Set<SupportedImageTypes> result = commandLineParametersParser.determineSupportedTypes(paramsIncludeGifOnly, 4);
-
-        verify(commandLineParametersParser, times(1))
-            .evaluateCurrentImageTypeParameter(supportedImageTypes, paramIValueGif);
+        verify(commandLine, times(1))
+            .getOptionValues(option);
 
         verify(supportedImageTypes, times(1))
             .add(SupportedImageTypes.gif);
-
-        verify(supportedImageTypes, times(1))
-            .isEmpty();
     }
 
     @Test
-    public void shouldMarshalParamFValueToParamFMarshaledValue() {
-        commandLineParametersParser.marshalStringParamToType(paramsIncludeJpegOnly, 0, mutableParameters);
+    public void convertStringImageTypeArgumentToEnumTypeShouldConvertStringValueToEnumValueRegardlessOfCase() {
+        final String optionValueGif = "GiF";
 
-        verify(mutableParameters, times(1))
-            .setImageFile(paramFMarshaledValue);
+        final SupportedImageTypes result =
+            commandLineParametersParser.convertStringImageTypeArgumentToEnumType(optionValueGif);
+
+        assertThat(result, is(SupportedImageTypes.gif));
     }
 
-    @Test
-    public void shouldMarshalParamHValueToParamHMarshaledValue() {
-        commandLineParametersParser.marshalStringParamToType(paramsIncludeJpegOnly, 2, mutableParameters);
+    @Test(expected = Image2CssValidationException.class)
+    public void convertStringImageTypeArgumentToEnumTypeShouldWrapInvalidArgumentInProjectException() {
+        final String optionInvalid = "optionInvalid";
 
-        verify(mutableParameters, times(1))
-            .setHtmlFile(paramHMarshaledValue);
-    }
-
-    @Test
-    public void shouldMarshalParamIValueToDeterminedSet() {
-        Set<SupportedImageTypes> determinedSet = mock(Set.class);
-
-        doReturn(determinedSet)
-            .when(commandLineParametersParser)
-            .determineSupportedTypes(any(String[].class), anyInt());
-
-        commandLineParametersParser.marshalStringParamToType(paramsIncludeJpegOnly, 4, mutableParameters);
-
-        verify(mutableParameters, times(1))
-            .setSupportedTypes(determinedSet);
-    }
-
-    @Test
-    public void shouldMarshalParamOValueToParamOMarshaledValue() {
-        commandLineParametersParser.marshalStringParamToType(paramsIncludeJpegOnly, 6, mutableParameters);
-
-        verify(mutableParameters, times(1))
-            .setCssFile(paramOMarshaledValue);
-    }
-
-    @Test
-    public void should() {
-        Parameters immutableParameters = mock(Parameters.class);
-
-        when(objectFactory.instance(any(BeanType.class), any(File.class), any(File.class), any(File.class), any(Set.class), anyBoolean()))
-            .thenReturn(immutableParameters);
-
-        doNothing()
-            .when(commandLineParametersParser)
-            .marshalStringParamToType(any(String[].class), anyInt(), any(MutableParameters.class));
-
-        final Parameters result = commandLineParametersParser.parse(paramsIncludeJpegOnly);
-
-        assertThat(result, is(immutableParameters));
-
-        verify(mutableParameters, times(1))
-            .getImageFile();
-
-        verify(mutableParameters, times(1))
-            .getCssFile();
-
-        verify(mutableParameters, times(1))
-            .getHtmlFile();
-
-        verify(mutableParameters, times(1))
-            .getSupportedTypes();
-
-        verify(mutableParameters, times(1))
-            .isOutputToScreen();
+        commandLineParametersParser.convertStringImageTypeArgumentToEnumType(optionInvalid);
     }
 
 }
-
-
-
-

@@ -19,10 +19,7 @@
 package com.rf1m.image2css.ioc;
 
 import com.rf1m.image2css.Image2Css;
-import com.rf1m.image2css.cli.CommandLineParametersParser;
-import com.rf1m.image2css.cli.ImmutableParameters;
-import com.rf1m.image2css.cli.MutableParameters;
-import com.rf1m.image2css.cli.SupportedImageTypes;
+import com.rf1m.image2css.cli.*;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
@@ -30,6 +27,9 @@ import com.rf1m.image2css.out.*;
 import com.rf1m.image2css.util.bin.Base64Encoder;
 import com.rf1m.image2css.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.util.file.FileUtils;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +65,10 @@ public class ObjectFactory {
             }
 
             case commandLineParametersParser:
-                return (T)new CommandLineParametersParser(this);
+                return (T)new BasicParser();
+
+            case commandLineRunner:
+                return (T)new CommandLineRunner(this);
 
             case consoleOutput:
                 final ResourceBundle resourceBundle = this.instance(BeanType.resourceBundle);
@@ -158,8 +161,89 @@ public class ObjectFactory {
                 return (T)new ImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, outputToScreen);
             }
 
-            case mutableParameters:
-                return (T)new MutableParameters();
+            case optionCssFile: {
+                final ResourceBundle objResourceBundle = objectFactory.instance(BeanType.resourceBundle);
+                final String command = objResourceBundle.getString("command.line.option.cmd.css.output.filename");
+                final String description = objResourceBundle.getString("command.line.option.description.css.output.filename");
+
+                final Option option = new Option(command, true, description);
+                option.setRequired(true);
+
+                return (T)option;
+            }
+
+            case optionHtmlFile: {
+                final ResourceBundle objResourceBundle = objectFactory.instance(BeanType.resourceBundle);
+                final String command = objResourceBundle.getString("command.line.option.cmd.html.output.filename");
+                final String description = objResourceBundle.getString("command.line.option.description.html.output.filename");
+
+                final Option option = new Option(command, true, description);
+                option.setRequired(true);
+
+                return (T)option;
+            }
+
+            case optionImageFile: {
+                final ResourceBundle objResourceBundle = objectFactory.instance(BeanType.resourceBundle);
+                final String command = objResourceBundle.getString("command.line.option.cmd.target.file.or.directory");
+                final String description = objResourceBundle.getString("command.line.option.description.target.file.or.directory");
+
+                final Option option = new Option(command, true, description);
+                option.setRequired(true);
+                option.setOptionalArg(false);
+
+                return (T)option;
+            }
+
+            case optionImageTypes: {
+                final ResourceBundle objResourceBundle = objectFactory.instance(BeanType.resourceBundle);
+                final String command = objResourceBundle.getString("command.line.option.cmd.included.image.types");
+                final String description = objResourceBundle.getString("command.line.option.description.included.image.types");
+
+                final Option option = new Option(command, true, description);
+                option.setValueSeparator(' ');
+                option.setArgs(3);
+
+                return (T)option;
+            }
+
+            case optionSyso: {
+                final ResourceBundle objResourceBundle = objectFactory.instance(BeanType.resourceBundle);
+                final String command = objResourceBundle.getString("command.line.option.cmd.output.to.screen");
+                final String description = objResourceBundle.getString("command.line.option.description.output.to.screen");
+
+                final Option option = new Option(command, false, description);
+
+                return (T)option;
+            }
+
+            case options: {
+                final Option cssFileOption = objectFactory.instance(BeanType.optionCssFile);
+                final Option htmlFileOption = objectFactory.instance(BeanType.optionHtmlFile);
+                final Option imageFileOption = objectFactory.instance(BeanType.optionImageFile);
+                final Option imageTypesOption = objectFactory.instance(BeanType.optionImageTypes);
+                final Option sysoOption = objectFactory.instance(BeanType.optionSyso);
+
+                final Options options = new Options();
+
+                options.addOption(cssFileOption);
+                options.addOption(htmlFileOption);
+                options.addOption(imageFileOption);
+                options.addOption(imageTypesOption);
+                options.addOption(sysoOption);
+
+                return (T)options;
+            }
+
+            case helpFormatter: {
+                final ResourceBundle objResourceBundle = objectFactory.instance(BeanType.resourceBundle);
+                final String helpText = objResourceBundle.getString("command.line.help.text");
+                final Options image2cssOptions = objectFactory.instance(BeanType.options);
+                final Image2CssHelpFormatter image2CssHelpFormatter = new Image2CssHelpFormatter(helpText, image2cssOptions);
+
+                image2CssHelpFormatter.setWidth(85);
+                return (T)image2CssHelpFormatter;
+            }
 
             case reportOutput:
                 return (T)(ReportOutput)this.instance(BeanType.consoleOutput);
@@ -190,6 +274,10 @@ public class ObjectFactory {
                 result.add(SupportedImageTypes.png);
 
                 return (T)Collections.unmodifiableSet(result);
+            }
+
+            case systemWrapper : {
+                return (T)new SystemWrapper();
             }
 
             case url: {

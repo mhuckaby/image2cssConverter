@@ -6,14 +6,13 @@ public enum Errors {
     parametersObjectOutputInvalid("At least one output type required: CSS file to write or output to screen"),
     parametersObjectImageInputFileOrDirNotExists("A valid output to file or screen must be specified for CSS"),
     parameterBeanType("Unknown bean type, %1$s"),
-    parameterHtmlIndex("No filename specified for HTML index"),
     parameterHtmlIndexWithNoCssFile("CSS file output is required to produce HTML index"),
 
     parameterCssClassCollectionIsNull("CSS classes collection is null"),
+    parameterUnsupportedImageType("Unsupported image type specified"),
 
     fileNotFoundWhileCreatingFileInputStream("File not found"),
 
-    cmdArgumentIRequiresFileTypes("-i requires file types be supplied"),
 
     failureToOutput("Failure occurred during output");
 

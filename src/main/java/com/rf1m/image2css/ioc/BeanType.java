@@ -5,6 +5,7 @@ public enum BeanType {
     base64Encoder,
     byteArray,
     commandLineParametersParser,
+    commandLineRunner,
     consoleOutput,
     conversionFilenameFilter,
     cssClass,
@@ -20,11 +21,13 @@ public enum BeanType {
     image2css,
     imageIcon,
     immutableParameters,
-    mutableParameters,
     optionCssFile,
     optionHtmlFile,
     optionImageFile,
     optionImageTypes,
+    optionSyso,
+    options,
+    helpFormatter,
     properties,
     reportOutput,
     resourceBundle,
@@ -33,6 +36,7 @@ public enum BeanType {
     stringArray,
     stringBuffer,
     supportedImageTypes,
+    systemWrapper,
     url
 
 }

@@ -22,55 +22,87 @@ import com.rf1m.image2css.Image2Css;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
+import org.apache.commons.cli.ParseException;
 
 import java.io.PrintStream;
 import java.util.ResourceBundle;
 
-import static com.rf1m.image2css.cli.CommandLineParametersParser.HELP;
 import static java.lang.String.format;
 
 public class CommandLineRunner {
-    protected static final ObjectFactory objectFactory = ObjectFactory.getInstance();
-    protected static final ResourceBundle resourceBundle = objectFactory.instance(BeanType.resourceBundle);
+    protected final ObjectFactory objectFactory;
 
-    public static void main(final String args[]) throws Exception {
-        final PrintStream printStream = objectFactory.instance(BeanType.defaultPrintStream);
-        final String about = resourceBundle.getString("about.project");
+    public CommandLineRunner(final ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
+    }
 
-        printStream.println(about);
+    public static void main(final String arguments[]) throws Exception {
+        final ObjectFactory objectFactory = ObjectFactory.getInstance();
+        final CommandLineRunner commandLineRunner = objectFactory.instance(BeanType.commandLineRunner);
 
-        if(0 == args.length){
-            new CommandLineRunner().showHelp(printStream);
-        }else{
-            new CommandLineRunner().execute(printStream, args);
+        commandLineRunner.execute(arguments);
+    }
+
+    protected void execute(final String arguments[]) {
+        final PrintStream printStream = this.objectFactory.instance(BeanType.defaultPrintStream);
+        final ResourceBundle resourceBundle = this.objectFactory.instance(BeanType.resourceBundle);
+
+        this.showAbout(resourceBundle, printStream);
+        this.argumentLengthCheck(arguments);
+
+        final Image2Css image2Css = this.objectFactory.instance(BeanType.image2css);
+        final CommandLineParametersParser commandLineParametersParser =
+            this.objectFactory.instance(BeanType.commandLineParametersParser);
+
+        try {
+            final Parameters parameters = commandLineParametersParser.parse(arguments);
+            image2Css.execute(parameters);
+        }catch(final ParseException parseException) {
+            this.handleParseException(resourceBundle, printStream, parseException);
+        }catch(final Image2CssException image2CssException) {
+            this.handleImage2CssException(resourceBundle, printStream, image2CssException);
+        }catch(final Exception e) {
+            this.handleException(resourceBundle, printStream, e);
         }
     }
 
-    protected void showHelp(final PrintStream printStream) {
-        printStream.println(HELP);
+    protected void handleException(final ResourceBundle resourceBundle, final PrintStream printStream, final Exception e) {
+        final String issueUrl = resourceBundle.getString("issue.url");
+        final String messageTemplate = resourceBundle.getString("message.abnormal.exit");
+        final String formattedMessage = format(messageTemplate, e.getMessage(), issueUrl);
+
+        printStream.println(formattedMessage);
+        e.printStackTrace();
     }
 
-    protected void execute(final PrintStream printStream, final String args[]) {
-        final CommandLineParametersParser commandLineParametersParser = objectFactory.instance(BeanType.commandLineParametersParser);
-        final Image2Css image2Css = objectFactory.instance(BeanType.image2css);
+    protected void handleImage2CssException(final ResourceBundle resourceBundle, final PrintStream printStream, final Image2CssException image2CssException) {
+        final String exceptionFormat = resourceBundle.getString("format.exception");
+        final String formattedExceptionMessage = format(exceptionFormat, image2CssException.getMessage());
 
-        this.runner(image2Css, commandLineParametersParser, printStream, args);
+        printStream.println(formattedExceptionMessage);
     }
 
-    protected void runner(final Image2Css image2Css, final CommandLineParametersParser commandLineParametersParser, final PrintStream printStream, final String[] args) {
-        try{
-            final Parameters parameters = commandLineParametersParser.parse(args);
-            image2Css.execute(parameters);
-        }catch(final Image2CssException exception) {
-            printStream.println(exception.getMessage());
-            printStream.println(HELP);
-        }catch(final Exception e) {
-            final String issueUrl = resourceBundle.getString("issue.url");
-            final String messageTemplate = resourceBundle.getString("message.abnormal.exit");
-            final String formattedMessage = format(messageTemplate, e.getMessage(), issueUrl);
+    protected void handleParseException(final ResourceBundle resourceBundle, final PrintStream printStream, final ParseException parseException) {
+        final Image2CssHelpFormatter image2CssHelpFormatter = this.objectFactory.instance(BeanType.helpFormatter);
+        final String exceptionFormat = resourceBundle.getString("format.exception");
+        final String formattedExceptionMessage = format(exceptionFormat, parseException.getMessage());
 
-            printStream.println(formattedMessage);
-            e.printStackTrace();
+        printStream.println(formattedExceptionMessage);
+        image2CssHelpFormatter.showHelp();
+    }
+
+    protected void showAbout(final ResourceBundle resourceBundle, final PrintStream printStream) {
+        final String about = resourceBundle.getString("about.project");
+        printStream.println(about);
+    }
+
+    protected void argumentLengthCheck(final String[] arguments) {
+        if(0 == arguments.length){
+            final Image2CssHelpFormatter image2CssHelpFormatter = this.objectFactory.instance(BeanType.helpFormatter);
+            final SystemWrapper systemWrapper = this.objectFactory.instance(BeanType.systemWrapper);
+
+            image2CssHelpFormatter.showHelp();
+            systemWrapper.exit();
         }
     }
 
