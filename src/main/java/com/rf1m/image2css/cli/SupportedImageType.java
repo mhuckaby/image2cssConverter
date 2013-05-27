@@ -20,7 +20,7 @@ package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.ioc.ObjectFactory;
 
-public enum SupportedImageTypes {
+public enum SupportedImageType {
 	gif,
     jpg,
     jpeg,
@@ -28,7 +28,7 @@ public enum SupportedImageTypes {
 
     protected final ObjectFactory objectFactory;
 
-    SupportedImageTypes() {
+    SupportedImageType() {
         this.objectFactory = ObjectFactory.getInstance();
     }
 

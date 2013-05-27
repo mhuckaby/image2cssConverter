@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.util.file;
 
-import com.rf1m.image2css.cli.SupportedImageTypes;
+import com.rf1m.image2css.cli.SupportedImageType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.rf1m.image2css.cli.SupportedImageTypes.gif;
+import static com.rf1m.image2css.cli.SupportedImageType.gif;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
@@ -47,11 +47,11 @@ public class ConversionFilenameFilterTest {
 
     ConversionFilenameFilter conversionFilenameFilter;
 
-    Set<SupportedImageTypes> supportedTypes;
+    Set<SupportedImageType> supportedTypes;
 
     @Before
     public void before(){
-        supportedTypes = new HashSet<SupportedImageTypes>();
+        supportedTypes = new HashSet<SupportedImageType>();
 
         when(fileUtils.getExtension(anyString()))
             .thenReturn(filenameExtension);

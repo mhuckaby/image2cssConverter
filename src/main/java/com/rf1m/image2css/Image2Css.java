@@ -15,7 +15,7 @@
 package com.rf1m.image2css;
 
 import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.cli.SupportedImageTypes;
+import com.rf1m.image2css.cli.SupportedImageType;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.ioc.ObjectFactory;
@@ -82,7 +82,7 @@ public class Image2Css {
 		this.validateParameters(parameters);
 
         final File imageFile = parameters.getImageFile();
-        final Set<SupportedImageTypes> supportedImageTypes = parameters.getSupportedTypes();
+        final Set<SupportedImageType> supportedImageTypes = parameters.getSupportedTypes();
         final File[] imageFiles = getImagesForConversion(imageFile, supportedImageTypes);
         final List<CssClass> cssClasses = generateCSSEntries(imageFiles);
 
@@ -154,13 +154,13 @@ public class Image2Css {
         return dimension;
     }
 
-	protected File[] getImagesForConversion(final File imageFile, final Set<SupportedImageTypes> supportedTypes) throws Image2CssException {
+	protected File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
 		File[] imagesForConversion;
 
 		if(imageFile.isDirectory()){
-            final Set<SupportedImageTypes> defaultSupportedImageTypes = this.objectFactory.instance(BeanType.supportedImageTypes);
+            final Set<SupportedImageType> defaultSupportedImageTypes = this.objectFactory.instance(BeanType.supportedImageTypes);
 
-            final Set<SupportedImageTypes> supportedTypesToFilterFor =
+            final Set<SupportedImageType> supportedTypesToFilterFor =
                 supportedTypes.isEmpty() ? defaultSupportedImageTypes : supportedTypes;
 
             final ConversionFilenameFilter filter =

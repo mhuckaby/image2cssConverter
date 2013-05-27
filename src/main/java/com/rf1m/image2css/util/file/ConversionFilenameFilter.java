@@ -18,13 +18,13 @@
  */
 package com.rf1m.image2css.util.file;
 
-import com.rf1m.image2css.cli.SupportedImageTypes;
+import com.rf1m.image2css.cli.SupportedImageType;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Set;
 
-import static com.rf1m.image2css.cli.SupportedImageTypes.valueOf;
+import static com.rf1m.image2css.cli.SupportedImageType.valueOf;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -32,10 +32,10 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  *
  */
 public class ConversionFilenameFilter implements FilenameFilter{
-    protected final Set<SupportedImageTypes> supportedTypes;
+    protected final Set<SupportedImageType> supportedTypes;
     protected final FileUtils fileUtils;
 
-	public ConversionFilenameFilter(final FileUtils fileUtils, final Set<SupportedImageTypes> supportedTypes){
+	public ConversionFilenameFilter(final FileUtils fileUtils, final Set<SupportedImageType> supportedTypes){
 		this.supportedTypes = supportedTypes;
         this.fileUtils = fileUtils;
 	}
@@ -53,7 +53,7 @@ public class ConversionFilenameFilter implements FilenameFilter{
 
     protected boolean isSupported(final String extension) {
         try{
-            final SupportedImageTypes supportedImageType = valueOf(extension);
+            final SupportedImageType supportedImageType = valueOf(extension);
 
             if(supportedTypes.contains(supportedImageType)) {
                 return true;

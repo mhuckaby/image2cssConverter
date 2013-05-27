@@ -45,7 +45,7 @@ public interface Parameters{
 	 * Image types that will be included in filter when image-file is a directory.
 	 * @return
 	 */
-	Set<SupportedImageTypes> getSupportedTypes();
+	Set<SupportedImageType> getSupportedTypes();
 
     /**
      * Valid if css file or console is specified.

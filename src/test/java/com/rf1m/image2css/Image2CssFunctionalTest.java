@@ -20,7 +20,7 @@ package com.rf1m.image2css;
 
 import com.rf1m.image2css.cli.ImmutableParameters;
 import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.cli.SupportedImageTypes;
+import com.rf1m.image2css.cli.SupportedImageType;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.exception.Image2CssValidationException;
@@ -46,7 +46,7 @@ public class Image2CssFunctionalTest {
     final File htmlFile 				= new File("css-demo.html");
 
     ObjectFactory objectFactory;
-    Set<SupportedImageTypes> types;
+    Set<SupportedImageType> types;
 
     Image2Css image2Css;
 
@@ -55,7 +55,7 @@ public class Image2CssFunctionalTest {
 		cssFile.delete();
 		htmlFile.delete();
 
-        types = new HashSet<SupportedImageTypes>();
+        types = new HashSet<SupportedImageType>();
 
         objectFactory = ObjectFactory.getInstance();
         image2Css = objectFactory.instance(BeanType.image2css);
@@ -92,7 +92,7 @@ public class Image2CssFunctionalTest {
 	
 	@Test
 	public void testExecute() throws Exception{
-		types.add(SupportedImageTypes.png);
+		types.add(SupportedImageType.png);
 		
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
@@ -150,7 +150,7 @@ public class Image2CssFunctionalTest {
 	@Test
 	public void testExecuteExample4() throws Exception{
 		// Convert PNG-images in directory to data URI and output to CSS file :
-		types.add(SupportedImageTypes.png);
+		types.add(SupportedImageType.png);
 		
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
@@ -166,8 +166,8 @@ public class Image2CssFunctionalTest {
 	@Test
 	public void testExecuteExample5() throws Exception{
 		// Convert GIF & JPG images in directory to data URI and output to CSS file :
-		types.add(SupportedImageTypes.png);
-		types.add(SupportedImageTypes.gif);
+		types.add(SupportedImageType.png);
+		types.add(SupportedImageType.gif);
 		
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());
@@ -183,8 +183,8 @@ public class Image2CssFunctionalTest {
 	@Test
 	public void testExecuteExample6() throws Exception{
 		// Convert GIF & JPG images in directory to data URI and output to CSS and HTML files 
-		types.add(SupportedImageTypes.jpg);
-		types.add(SupportedImageTypes.gif);
+		types.add(SupportedImageType.jpg);
+		types.add(SupportedImageType.gif);
 		
 		assertFalse(htmlFile.exists());
 		assertFalse(cssFile.exists());

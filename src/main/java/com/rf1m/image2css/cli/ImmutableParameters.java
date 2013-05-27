@@ -26,14 +26,14 @@ public class ImmutableParameters implements Parameters {
 	protected final File imageFile;
 	protected final File cssFile;
 	protected final File htmlFile;
-	protected final Set<SupportedImageTypes> supportedTypes;
+	protected final Set<SupportedImageType> supportedTypes;
 	protected boolean outputToScreen;
 	
 	public ImmutableParameters(
             final File imageFile,
             final File cssFile,
             final File htmlFile,
-            final Set<SupportedImageTypes> supportedTypes,
+            final Set<SupportedImageType> supportedTypes,
             final boolean outputToScreen) {
 
 		this.imageFile = imageFile;
@@ -64,7 +64,7 @@ public class ImmutableParameters implements Parameters {
 	}
 
 	@Override
-	public Set<SupportedImageTypes> getSupportedTypes() {
+	public Set<SupportedImageType> getSupportedTypes() {
 		return supportedTypes;
 	}
 

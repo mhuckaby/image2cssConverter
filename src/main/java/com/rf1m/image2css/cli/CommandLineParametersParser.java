@@ -50,7 +50,7 @@ public class CommandLineParametersParser {
         final File cssFile = this.extractFileFromOption(commandLine, optionCssFile.getOpt());
         final File htmlFile = this.extractFileFromOption(commandLine, optionHtmlFile.getOpt());
         final File imageFile = this.extractFileFromOption(commandLine, optionImageFile.getOpt());
-        final Set<SupportedImageTypes> supportedImageTypes =
+        final Set<SupportedImageType> supportedImageTypes =
             this.extractImageTypesFromOption(commandLine, optionSupportedImageTypes.getOpt());
         final boolean syso = commandLine.hasOption(optionSyso.getOpt());
 
@@ -67,30 +67,30 @@ public class CommandLineParametersParser {
     protected String[] determineIncludedImageTypes(final String[] optionValues) {
         if(null == optionValues || 0 == optionValues.length) {
             return new String[] {
-                SupportedImageTypes.gif.name(),
-                SupportedImageTypes.jpg.name(),
-                SupportedImageTypes.png.name(),
+                SupportedImageType.gif.name(),
+                SupportedImageType.jpg.name(),
+                SupportedImageType.png.name(),
             };
         }else {
             return optionValues;
         }
     }
 
-    protected Set<SupportedImageTypes> extractImageTypesFromOption(final CommandLine commandLine, final String option) {
-        final Set<SupportedImageTypes> result = this.objectFactory.instance(BeanType.set);
+    protected Set<SupportedImageType> extractImageTypesFromOption(final CommandLine commandLine, final String option) {
+        final Set<SupportedImageType> result = this.objectFactory.instance(BeanType.set);
         final String[] optionValues = this.determineIncludedImageTypes(commandLine.getOptionValues(option));
 
         for(final String optionValue : optionValues) {
-            final SupportedImageTypes supportedImageType = this.convertStringImageTypeArgumentToEnumType(optionValue);
+            final SupportedImageType supportedImageType = this.convertStringImageTypeArgumentToEnumType(optionValue);
             result.add(supportedImageType);
         }
 
         return result;
     }
 
-    protected SupportedImageTypes convertStringImageTypeArgumentToEnumType(final String supportedImageTypeArg) {
+    protected SupportedImageType convertStringImageTypeArgumentToEnumType(final String supportedImageTypeArg) {
         try {
-            return SupportedImageTypes.valueOf(supportedImageTypeArg.toLowerCase());
+            return SupportedImageType.valueOf(supportedImageTypeArg.toLowerCase());
         }catch(final IllegalArgumentException illegalArgumentException) {
             throw new Image2CssValidationException(Errors.parameterUnsupportedImageType);
         }

@@ -57,7 +57,7 @@ public class CommandLineParametersParserTest {
         File htmlFile = mock(File.class);
         File imageFile = mock(File.class);
 
-        Set<SupportedImageTypes> supportedImageTypes = mock(Set.class);
+        Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
         Parameters parameters = mock(Parameters.class);
 
@@ -217,7 +217,7 @@ public class CommandLineParametersParserTest {
 
         final String[] optionValues = {optionValueGif};
 
-        Set<SupportedImageTypes> supportedImageTypes = mock(Set.class);
+        Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
         when(objectFactory.instance(BeanType.set))
             .thenReturn(supportedImageTypes);
@@ -229,11 +229,11 @@ public class CommandLineParametersParserTest {
             .when(commandLineParametersParser)
             .determineIncludedImageTypes(optionValues);
 
-        doReturn(SupportedImageTypes.gif)
+        doReturn(SupportedImageType.gif)
             .when(commandLineParametersParser)
             .convertStringImageTypeArgumentToEnumType(option);
 
-        final Set<SupportedImageTypes> result =
+        final Set<SupportedImageType> result =
             commandLineParametersParser.extractImageTypesFromOption(commandLine, option);
 
         assertThat(result, is(supportedImageTypes));
@@ -248,17 +248,17 @@ public class CommandLineParametersParserTest {
             .getOptionValues(option);
 
         verify(supportedImageTypes, times(1))
-            .add(SupportedImageTypes.gif);
+            .add(SupportedImageType.gif);
     }
 
     @Test
     public void convertStringImageTypeArgumentToEnumTypeShouldConvertStringValueToEnumValueRegardlessOfCase() {
         final String optionValueGif = "GiF";
 
-        final SupportedImageTypes result =
+        final SupportedImageType result =
             commandLineParametersParser.convertStringImageTypeArgumentToEnumType(optionValueGif);
 
-        assertThat(result, is(SupportedImageTypes.gif));
+        assertThat(result, is(SupportedImageType.gif));
     }
 
     @Test(expected = Image2CssValidationException.class)

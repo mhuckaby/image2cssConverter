@@ -82,7 +82,7 @@ public class ObjectFactory {
                 return (T)new ConsoleOutput(resourceBundle, System.out);
 
             case conversionFilenameFilter: {
-                final Set supportedImageTypes = (Set<SupportedImageTypes>)args[0];
+                final Set supportedImageTypes = (Set<SupportedImageType>)args[0];
                 final FileUtils fileUtils = this.instance(BeanType.fileUtils);
 
                 return (T)new ConversionFilenameFilter(fileUtils, supportedImageTypes);
@@ -163,7 +163,7 @@ public class ObjectFactory {
                 final File imageFile = (File)args[0];
                 final File cssFile = (File)args[1];
                 final File htmlFile = (File)args[2];
-                final Set<SupportedImageTypes> supportedImageTypes = (Set<SupportedImageTypes>)args[3];
+                final Set<SupportedImageType> supportedImageTypes = (Set<SupportedImageType>)args[3];
                 final boolean outputToScreen = (Boolean)args[4];
                 return (T)new ImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, outputToScreen);
             }
@@ -275,10 +275,10 @@ public class ObjectFactory {
                 return (T)new StringBuffer();
 
             case supportedImageTypes: {
-                final Set<SupportedImageTypes> result = new HashSet<SupportedImageTypes>();
-                result.add(SupportedImageTypes.gif);
-                result.add(SupportedImageTypes.jpg);
-                result.add(SupportedImageTypes.png);
+                final Set<SupportedImageType> result = new HashSet<SupportedImageType>();
+                result.add(SupportedImageType.gif);
+                result.add(SupportedImageType.jpg);
+                result.add(SupportedImageType.png);
 
                 return (T)Collections.unmodifiableSet(result);
             }
