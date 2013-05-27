@@ -1,5 +1,6 @@
 package com.rf1m.image2css.cli;
 
+import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;

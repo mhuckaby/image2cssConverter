@@ -18,6 +18,8 @@
  */
 package com.rf1m.image2css.cli;
 
+import com.rf1m.image2css.domain.SupportedImageType;
+
 import java.io.File;
 import java.util.Set;
 

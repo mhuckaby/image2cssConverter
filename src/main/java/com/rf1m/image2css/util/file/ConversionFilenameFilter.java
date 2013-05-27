@@ -18,13 +18,13 @@
  */
 package com.rf1m.image2css.util.file;
 
-import com.rf1m.image2css.cli.SupportedImageType;
+import com.rf1m.image2css.domain.SupportedImageType;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Set;
 
-import static com.rf1m.image2css.cli.SupportedImageType.valueOf;
+import static com.rf1m.image2css.domain.SupportedImageType.valueOf;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**

@@ -21,6 +21,7 @@ package com.rf1m.image2css.ioc;
 import com.rf1m.image2css.Image2Css;
 import com.rf1m.image2css.cli.*;
 import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.out.*;

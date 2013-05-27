@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.util.file;
 
-import com.rf1m.image2css.cli.SupportedImageType;
+import com.rf1m.image2css.domain.SupportedImageType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.rf1m.image2css.cli.SupportedImageType.gif;
+import static com.rf1m.image2css.domain.SupportedImageType.gif;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
