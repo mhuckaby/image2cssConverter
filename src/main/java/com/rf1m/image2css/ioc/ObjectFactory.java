@@ -25,12 +25,16 @@ import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.out.*;
+import com.rf1m.image2css.service.DefaultImageConversionService;
+import com.rf1m.image2css.service.ImageConversionService;
 import com.rf1m.image2css.util.bin.Base64Encoder;
 import com.rf1m.image2css.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.util.file.FileUtils;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
 import java.awt.*;
@@ -99,6 +103,16 @@ public class ObjectFactory {
             case cssOutput:
                 return (T)new FileOutput(this);
 
+            case defaultImageConversionService: {
+                final FileUtils fileUtils = this.instance(BeanType.fileUtils);
+                final Base64Encoder base64Encoder = this.instance(BeanType.base64Encoder);
+
+                ImageConversionService imageConversionService =
+                    new DefaultImageConversionService(fileUtils, base64Encoder, this, cssClassTemplate);
+
+                return (T)imageConversionService;
+            }
+
             case defaultPrintStream:
                 return (T) System.out;
 
@@ -145,14 +159,13 @@ public class ObjectFactory {
             }
 
             case image2css: {
-                final Base64Encoder base64Encoder = this.instance(BeanType.base64Encoder);
-                final FileUtils fileUtils = this.instance(BeanType.fileUtils);
                 final Output consoleOutput = this.instance(BeanType.consoleOutput);
                 final Output cssOutput = this.instance(BeanType.cssOutput);
                 final Output htmlOutput = this.instance(BeanType.htmlOutput);
                 final ReportOutput reportOutput = this.instance(BeanType.consoleOutput);
+                final ImageConversionService imageConversionService = this.instance(BeanType.defaultImageConversionService);
 
-                return (T)new Image2Css(this, base64Encoder, fileUtils, consoleOutput, cssOutput, htmlOutput, reportOutput, cssClassTemplate);
+                return (T)new Image2Css(this, consoleOutput, cssOutput, htmlOutput, reportOutput, imageConversionService);
             }
 
             case imageIcon: {
@@ -241,6 +254,11 @@ public class ObjectFactory {
                 options.addOption(sysoOption);
 
                 return (T)options;
+            }
+
+            case pair: {
+                final Pair<?, ?> result = new ImmutablePair(args[0], args[1]);
+                return (T)result;
             }
 
             case helpFormatter: {

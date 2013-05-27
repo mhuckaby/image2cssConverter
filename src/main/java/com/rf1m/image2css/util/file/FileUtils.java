@@ -18,6 +18,8 @@
  */
 package com.rf1m.image2css.util.file;
 
+import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
 
@@ -56,12 +58,21 @@ public class FileUtils{
 	 * @return
 	 * @throws Exception
 	 */
-	public byte[] getFileBytes(final File file) throws IOException{
+	public byte[] getFileBytes(final File file) {
 		final FileInputStream fileInputStream = this.objectFactory.instance(BeanType.fileInputStream, file);
 		final byte[] bytes = this.objectFactory.instance(BeanType.byteArray, file.length());
 
-        fileInputStream.read(bytes);
-		fileInputStream.close();
+        try {
+            fileInputStream.read(bytes);
+        }catch(final IOException ioException) {
+            throw new Image2CssException(ioException, Errors.errorReadingFile);
+        }finally {
+            try {
+                fileInputStream.close();
+            }catch(final Exception exception) {
+                throw new Image2CssException(exception, Errors.errorClosingFile);
+            }
+        }
 
         return bytes;
 	}

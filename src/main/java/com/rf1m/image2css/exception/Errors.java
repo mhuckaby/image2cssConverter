@@ -14,7 +14,10 @@ public enum Errors {
     fileNotFound("File not found"),
 
 
-    failureToOutput("Failure occurred during output");
+    failureToOutput("Failure occurred during output"),
+
+    errorReadingFile("Error while reading file"),
+    errorClosingFile("Error while closing file");
 
     protected final String message;
 

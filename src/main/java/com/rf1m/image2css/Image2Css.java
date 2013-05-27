@@ -15,34 +15,26 @@
 package com.rf1m.image2css;
 
 import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.ioc.ObjectFactory;
+import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
+import com.rf1m.image2css.ioc.BeanType;
+import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.out.Output;
 import com.rf1m.image2css.out.ReportOutput;
-import com.rf1m.image2css.util.bin.Base64Encoder;
+import com.rf1m.image2css.service.ImageConversionService;
 import com.rf1m.image2css.util.file.ConversionFilenameFilter;
-import com.rf1m.image2css.util.file.FileUtils;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
 import static com.rf1m.image2css.exception.Errors.*;
-import static java.lang.String.format;
 
 public class Image2Css {
-    protected final Base64Encoder base64Encoder;
-
-    protected final FileUtils fileUtils;
-
     protected final ObjectFactory objectFactory;
 
     protected final Output consoleOutput;
@@ -51,26 +43,22 @@ public class Image2Css {
 
     protected final ReportOutput reportOutput;
 
-    protected final String cssClassTemplate;
+    protected final ImageConversionService imageConversionService;
 
     public Image2Css(
         final ObjectFactory objectFactory,
-        final Base64Encoder base64Encoder,
-        final FileUtils fileUtils,
         final Output consoleOutput,
         final Output cssOutput,
         final Output htmlOutput,
         final ReportOutput reportOutput,
-        final String cssClassTemplate){
+        final ImageConversionService imageConversionService){
 
         this.objectFactory = objectFactory;
-        this.base64Encoder = base64Encoder;
-        this.fileUtils = fileUtils;
         this.consoleOutput = consoleOutput;
         this.cssOutput = cssOutput;
         this.htmlOutput = htmlOutput;
         this.reportOutput = reportOutput;
-        this.cssClassTemplate = cssClassTemplate;
+        this.imageConversionService = imageConversionService;
     }
 
 	/**
@@ -87,7 +75,6 @@ public class Image2Css {
         final List<CssClass> cssClasses = generateCSSEntries(imageFiles);
 
         this.doOutput(parameters, cssClasses);
-
 	}
 
     protected void doOutput(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
@@ -107,7 +94,7 @@ public class Image2Css {
             if(parameters.isOutputToConsoleDesired()) {
                 reportOutput.generateReportOutput(parameters, cssClasses);
             }
-        }catch(IOException e) {
+        }catch(final Exception e) {
             throw new Image2CssException(e, Errors.failureToOutput);
         }
     }
@@ -122,37 +109,15 @@ public class Image2Css {
             final List<CssClass> cssEntries = this.objectFactory.instance(BeanType.arrayList);
 
             for(final File imageFile : imageFiles){
-                final String cssName = imageFile.getName().replaceAll("\\.","_");
-                final String imageFileExtension = fileUtils.getExtension(imageFile.getName());
-                final byte[] bytes = fileUtils.getFileBytes(imageFile);
-                final String base64Bytes = base64Encoder.base64EncodeBytes(bytes);
-
-                final Dimension dimension = getImageDimension(bytes);
-                final int height = (int)dimension.getHeight();
-                final int width = (int)dimension.getWidth();
-                final String cssEntry = format(cssClassTemplate, cssName, imageFileExtension, base64Bytes, width, height);
-                final CssClass cssClass = this.objectFactory.instance(BeanType.cssClass, cssName, cssEntry);
-
+                final CssClass cssClass = this.imageConversionService.convert(imageFile);
                 cssEntries.add(cssClass);
             }
 
             return cssEntries;
-        }catch(IOException e) {
+        }catch(final Exception e) {
             throw new Image2CssException(e, Errors.failureToOutput);
         }
 	}
-
-    /**
-     * Return the dimensions of an image represented by a byte array.
-     * @param bytes
-     * @return
-     */
-    protected Dimension getImageDimension(final byte[] bytes){
-        final ImageIcon imageIcon = this.objectFactory.instance(BeanType.imageIcon, bytes);
-        final Dimension dimension = this.objectFactory.instance(BeanType.dimension, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-
-        return dimension;
-    }
 
 	protected File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
 		File[] imagesForConversion;
