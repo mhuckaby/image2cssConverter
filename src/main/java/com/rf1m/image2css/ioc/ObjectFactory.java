@@ -38,7 +38,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 
-import static com.rf1m.image2css.exception.Errors.fileNotFoundWhileCreatingFileInputStream;
+import static com.rf1m.image2css.exception.Errors.fileNotFound;
 import static java.lang.ClassLoader.getSystemResource;
 
 public class ObjectFactory {
@@ -124,7 +124,7 @@ public class ObjectFactory {
                     final File file = (File)args[0];
                     return (T)new FileInputStream(file);
                 }catch(FileNotFoundException e) {
-                    throw new Image2CssException(e, fileNotFoundWhileCreatingFileInputStream);
+                    throw new Image2CssException(e, fileNotFound);
                 }
             }
 

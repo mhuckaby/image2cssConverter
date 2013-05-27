@@ -11,7 +11,7 @@ public enum Errors {
     parameterCssClassCollectionIsNull("CSS classes collection is null"),
     parameterUnsupportedImageType("Unsupported image type specified"),
 
-    fileNotFoundWhileCreatingFileInputStream("File not found"),
+    fileNotFound("File not found"),
 
 
     failureToOutput("Failure occurred during output");
