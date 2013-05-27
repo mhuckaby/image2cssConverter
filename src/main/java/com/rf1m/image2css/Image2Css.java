@@ -130,7 +130,7 @@ public class Image2Css {
                 final Dimension dimension = getImageDimension(bytes);
                 final int height = (int)dimension.getHeight();
                 final int width = (int)dimension.getWidth();
-                final String cssEntry = format(cssClassTemplate, cssName, imageFileExtension, base64Bytes, height, width);
+                final String cssEntry = format(cssClassTemplate, cssName, imageFileExtension, base64Bytes, width, height);
                 final CssClass cssClass = this.objectFactory.instance(BeanType.cssClass, cssName, cssEntry);
 
                 cssEntries.add(cssClass);
