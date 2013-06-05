@@ -18,6 +18,7 @@
  */
 package com.rf1m.image2css.util.file;
 
+import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.BeanType;
@@ -26,6 +27,7 @@ import com.rf1m.image2css.ioc.ObjectFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Set;
 
 public class FileUtils{
     protected final ObjectFactory objectFactory;
@@ -76,5 +78,17 @@ public class FileUtils{
 
         return bytes;
 	}
+
+    public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
+        if(imageFile.isDirectory()){
+            final Set<SupportedImageType> defaultSupportedImageTypes = this.objectFactory.instance(BeanType.supportedImageTypes);
+            final Set<SupportedImageType> supportedTypesToFilterFor = supportedTypes.isEmpty() ? defaultSupportedImageTypes : supportedTypes;
+            final ConversionFilenameFilter filter = this.objectFactory.instance(BeanType.conversionFilenameFilter, supportedTypesToFilterFor);
+
+            return imageFile.listFiles(filter);
+        }else{
+            return this.objectFactory.instance(BeanType.fileArray, imageFile);
+        }
+    }
 
 }

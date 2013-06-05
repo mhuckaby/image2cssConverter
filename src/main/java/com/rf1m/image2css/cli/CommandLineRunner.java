@@ -18,93 +18,90 @@
  */
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.Image2Css;
+import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
+import com.rf1m.image2css.service.ImageConversionService;
+import com.rf1m.image2css.util.file.FileUtils;
 import org.apache.commons.cli.ParseException;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.ResourceBundle;
-
-import static java.lang.String.format;
+import java.util.Set;
 
 public class CommandLineRunner {
     protected final ObjectFactory objectFactory;
     protected final PrintStream printStream;
     protected final ResourceBundle resourceBundle;
+    protected final CommandLineRunnerValidator commandLineRunnerValidator;
+    protected final CommandLineParametersParser commandLineParametersParser;
+    protected final ExceptionHandler exceptionHandler;
+    protected final FileUtils fileUtils;
+    protected final ImageConversionService imageConversionService;
+    protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager;
 
-    public CommandLineRunner(final ObjectFactory objectFactory, final PrintStream printStream, final ResourceBundle resourceBundle) {
+    public CommandLineRunner(final ObjectFactory objectFactory, final PrintStream printStream,
+                             final ResourceBundle resourceBundle, final CommandLineRunnerValidator commandLineRunnerValidator,
+                             final CommandLineParametersParser commandLineParametersParser, final ExceptionHandler exceptionHandler,
+                             final FileUtils fileUtils, final ImageConversionService imageConversionService,
+                             final CommandLineRunnerOutputManager commandLineRunnerOutputManager) {
+
         this.objectFactory = objectFactory;
         this.printStream = printStream;
         this.resourceBundle = resourceBundle;
+        this.commandLineRunnerValidator = commandLineRunnerValidator;
+        this.commandLineParametersParser = commandLineParametersParser;
+        this.exceptionHandler = exceptionHandler;
+        this.fileUtils = fileUtils;
+        this.imageConversionService = imageConversionService;
+        this.commandLineRunnerOutputManager = commandLineRunnerOutputManager;
     }
 
-    public static void main(final String arguments[]) throws Exception {
+    public static void main(final String[] arguments) throws Exception {
         final ObjectFactory objectFactory = ObjectFactory.getInstance();
         final CommandLineRunner commandLineRunner = objectFactory.instance(BeanType.commandLineRunner);
-
-        commandLineRunner.execute(arguments);
+        commandLineRunner.run(arguments);
     }
 
-    protected void execute(final String arguments[]) {
-        this.showAbout();
-        this.argumentLengthCheck(arguments);
-
-        final Image2Css image2Css = this.objectFactory.instance(BeanType.image2css);
-        final CommandLineParametersParser commandLineParametersParser =
-            this.objectFactory.instance(BeanType.commandLineParametersParser);
-
+    protected void run(final String[] arguments) {
         try {
-            final Parameters parameters = commandLineParametersParser.parse(arguments);
-            image2Css.execute(parameters);
+            final Parameters parameters = this.initialize(arguments);
+            this.execute(parameters);
         }catch(final ParseException parseException) {
-            this.handleParseException(parseException);
+            this.exceptionHandler.handleParseException(parseException);
         }catch(final Image2CssException image2CssException) {
-            this.handleImage2CssException(image2CssException);
+            this.exceptionHandler.handleImage2CssException(image2CssException);
         }catch(final Exception e) {
-            this.handleException(e);
+            this.exceptionHandler.handleException(e);
         }
     }
 
-    protected void handleException(final Exception e) {
-        final String issueUrl = resourceBundle.getString("issue.url");
-        final String messageTemplate = resourceBundle.getString("message.abnormal.exit");
-        final String formattedMessage = format(messageTemplate, e.getMessage(), issueUrl);
+    protected Parameters initialize(final String[] arguments) throws ParseException {
+        this.commandLineRunnerOutputManager.showAbout();
+        this.commandLineRunnerValidator.argumentLengthCheck(arguments);
 
-        printStream.println(formattedMessage);
-        e.printStackTrace();
+        final Parameters parameters = this.commandLineParametersParser.parse(arguments);
+        this.commandLineRunnerValidator.validateParameters(parameters);
+
+        return parameters;
     }
 
-    protected void handleImage2CssException(final Image2CssException image2CssException) {
-        final String exceptionFormat = resourceBundle.getString("format.exception");
-        final String formattedExceptionMessage = format(exceptionFormat, image2CssException.getMessage());
+    protected void execute(final Parameters parameters) throws IOException {
+        final File targetImageFile = parameters.getImageFile();
+        final Set<SupportedImageType> supportedImageTypes = parameters.getSupportedTypes();
+        final File[] imageFiles = this.fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes);
+        final List<CssClass> cssEntries = this.objectFactory.instance(BeanType.arrayList);
 
-        printStream.println(formattedExceptionMessage);
-    }
-
-    protected void handleParseException(final ParseException parseException) {
-        final Image2CssHelpFormatter image2CssHelpFormatter = this.objectFactory.instance(BeanType.helpFormatter);
-        final String exceptionFormat = resourceBundle.getString("format.exception");
-        final String formattedExceptionMessage = format(exceptionFormat, parseException.getMessage());
-
-        printStream.println(formattedExceptionMessage);
-        image2CssHelpFormatter.showHelp();
-    }
-
-    protected void showAbout() {
-        final String about = resourceBundle.getString("about.project");
-        printStream.println(about);
-    }
-
-    protected void argumentLengthCheck(final String[] arguments) {
-        if(0 == arguments.length){
-            final Image2CssHelpFormatter image2CssHelpFormatter = this.objectFactory.instance(BeanType.helpFormatter);
-            final SystemWrapper systemWrapper = this.objectFactory.instance(BeanType.systemWrapper);
-
-            image2CssHelpFormatter.showHelp();
-            systemWrapper.exit();
+        for(final File imageFile : imageFiles){
+            final CssClass cssClass = this.imageConversionService.convert(imageFile);
+            cssEntries.add(cssClass);
         }
-    }
 
+        this.commandLineRunnerOutputManager.doOutput(parameters, cssEntries);
+    }
 }

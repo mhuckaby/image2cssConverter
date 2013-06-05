@@ -1,9 +1,12 @@
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.Image2Css;
+import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
+import com.rf1m.image2css.service.ImageConversionService;
+import com.rf1m.image2css.util.file.FileUtils;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +14,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.File;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -36,13 +42,25 @@ public class CommandLineRunnerTest {
     PrintStream printStream;
 
     @Mock
-    Image2Css image2Css;
-
-    @Mock
     CommandLineParametersParser commandLineParametersParser;
 
     @Mock
+    CommandLineRunnerValidator commandLineRunnerValidator;
+
+    @Mock
+    ExceptionHandler exceptionHandler;
+
+    @Mock
     Parameters parameters;
+
+    @Mock
+    FileUtils fileUtils;
+
+    @Mock
+    ImageConversionService imageConversionService;
+
+    @Mock
+    CommandLineRunnerOutputManager commandLineRunnerOutputManager;
 
     ResourceBundle resourceBundle;
     CommandLineRunner commandLineRunner;
@@ -50,25 +68,10 @@ public class CommandLineRunnerTest {
     @Before
     public void before() throws Exception {
         resourceBundle = ResourceBundle.getBundle("image2css");
-        commandLineRunner = spy(new CommandLineRunner(objectFactory, printStream, resourceBundle));
-
-        when(objectFactory.instance(BeanType.resourceBundle))
-            .thenReturn(resourceBundle);
-
-        when(objectFactory.instance(BeanType.helpFormatter))
-            .thenReturn(image2CssHelpFormatter);
-
-        when(objectFactory.instance(BeanType.systemWrapper))
-            .thenReturn(systemWrapper);
-
-        when(objectFactory.instance(BeanType.defaultPrintStream))
-            .thenReturn(printStream);
-
-        when(objectFactory.instance(BeanType.image2css))
-            .thenReturn(image2Css);
-
-        when(objectFactory.instance(BeanType.commandLineParametersParser))
-            .thenReturn(commandLineParametersParser);
+        commandLineRunner = spy(
+            new CommandLineRunner(objectFactory, printStream, resourceBundle, commandLineRunnerValidator,
+                commandLineParametersParser, exceptionHandler, fileUtils, imageConversionService, commandLineRunnerOutputManager)
+        );
 
         when(commandLineParametersParser.parse(arguments))
             .thenReturn(parameters);
@@ -76,188 +79,117 @@ public class CommandLineRunnerTest {
 
     @Test
     public void executeShouldParseAndConvert() throws Exception {
-        doNothing()
-            .when(commandLineRunner)
-            .showAbout();
+        File targetImageFile = mock(File.class);
+        Set<SupportedImageType> supportedImageTypes = mock(Set.class);
+        File imageForConversion = mock(File.class);
+        File[] imagesForConversion = {imageForConversion};
+        List<CssClass> cssEntries = mock(List.class);
+        CssClass cssClass = mock(CssClass.class);
 
-        doNothing()
-            .when(commandLineRunner)
-            .argumentLengthCheck(arguments);
+        when(parameters.getImageFile())
+            .thenReturn(targetImageFile);
 
-        commandLineRunner.execute(arguments);
+        when(parameters.getSupportedTypes())
+            .thenReturn(supportedImageTypes);
 
-        verify(image2Css, times(1))
-            .execute(parameters);
+        when(fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes))
+            .thenReturn(imagesForConversion);
 
-        verify(commandLineRunner, times(1))
-            .showAbout();
+        when(objectFactory.instance(BeanType.arrayList))
+            .thenReturn(cssEntries);
 
-        verify(commandLineRunner, times(1))
-            .argumentLengthCheck(arguments);
+        when(imageConversionService.convert(imageForConversion))
+            .thenReturn(cssClass);
+
+        commandLineRunner.execute(parameters);
+
+        verify(parameters, times(1))
+            .getImageFile();
+
+        verify(parameters, times(1))
+            .getSupportedTypes();
+
+        verify(fileUtils, times(1))
+            .getImagesForConversion(targetImageFile, supportedImageTypes);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.image2css);
+            .instance(BeanType.arrayList);
 
-        verify(objectFactory, times(1))
-            .instance(BeanType.commandLineParametersParser);
+        verify(imageConversionService, times(1))
+            .convert(imageForConversion);
 
-        verify(commandLineParametersParser, times(1))
-            .parse(arguments);
+        verify(cssEntries, times(1))
+            .add(cssClass);
     }
 
     @Test
-    public void executeShouldInvokeParseExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {
-        doNothing()
-            .when(commandLineRunner)
-            .showAbout();
-
-        doNothing()
-            .when(commandLineRunner)
-            .argumentLengthCheck(arguments);
-
+    public void runShouldInvokeParseExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {
         ParseException parseException = mock(ParseException.class);
 
         doThrow(parseException)
-            .when(commandLineParametersParser)
-            .parse(arguments);
+            .when(commandLineRunner)
+            .initialize(arguments);
 
         doNothing()
-            .when(commandLineRunner)
+            .when(exceptionHandler)
             .handleParseException(parseException);
 
-        commandLineRunner.execute(arguments);
+        commandLineRunner.run(arguments);
 
-        verify(commandLineRunner, times(1))
+        verify(exceptionHandler, times(1))
             .handleParseException(parseException);
     }
 
     @Test
-    public void executeShouldInvokeImage2CssExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {
+    public void executeShouldInvokeImage2CssExceptionHandlerWhenImage2CssExceptionExceptionIsEncountered() throws Exception {
+        Image2CssException image2CssException = mock(Image2CssException.class);
+
         doNothing()
-            .when(commandLineRunner)
+            .when(commandLineRunnerOutputManager)
             .showAbout();
 
         doNothing()
-            .when(commandLineRunner)
+            .when(commandLineRunnerValidator)
             .argumentLengthCheck(arguments);
 
-        Image2CssException image2CssException = mock(Image2CssException.class);
-
         doThrow(image2CssException)
-            .when(image2Css)
+            .when(commandLineRunner)
             .execute(parameters);
 
         doNothing()
-            .when(commandLineRunner)
+            .when(exceptionHandler)
             .handleImage2CssException(image2CssException);
 
-        commandLineRunner.execute(arguments);
+        commandLineRunner.run(arguments);
 
-        verify(commandLineRunner, times(1))
+        verify(exceptionHandler, times(1))
             .handleImage2CssException(image2CssException);
     }
 
     @Test
     public void executeShouldInvokeExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {
         doNothing()
-            .when(commandLineRunner)
+            .when(commandLineRunnerOutputManager)
             .showAbout();
 
         doNothing()
-            .when(commandLineRunner)
+            .when(commandLineRunnerValidator)
             .argumentLengthCheck(arguments);
 
         RuntimeException exception = mock(RuntimeException.class);
 
         doThrow(exception)
-            .when(image2Css)
+            .when(commandLineRunner)
             .execute(parameters);
 
         doNothing()
-            .when(commandLineRunner)
+            .when(exceptionHandler)
             .handleException(exception);
 
-        commandLineRunner.execute(arguments);
+        commandLineRunner.run(arguments);
 
-        verify(commandLineRunner, times(1))
+        verify(exceptionHandler, times(1))
             .handleException(exception);
-    }
-
-    @Test
-    public void argumentLengthCheckShouldDoNothingIfArgumentLengthIsGtZero() {
-        commandLineRunner.argumentLengthCheck(arguments);
-
-        verify(objectFactory, times(0))
-            .instance(BeanType.helpFormatter);
-
-        verify(objectFactory, times(0))
-            .instance(BeanType.systemWrapper);
-    }
-
-    @Test
-    public void argumentLengthCheckShouldShowHelpAndExitIfArgumentLengthIsEqualToZero() {
-        commandLineRunner.argumentLengthCheck(new String[] {});
-
-        verify(objectFactory, times(1))
-            .instance(BeanType.helpFormatter);
-
-        verify(objectFactory, times(1))
-            .instance(BeanType.systemWrapper);
-
-        verify(image2CssHelpFormatter, times(1))
-            .showHelp();
-
-        verify(systemWrapper, times(1))
-            .exit();
-    }
-
-    @Test
-    public void showAboutShouldPrintAboutStringToPrintWriter() {
-        commandLineRunner.showAbout();
-
-        verify(printStream, times(1))
-            .println(anyString());
-    }
-
-    @Test
-    public void handleParseExceptionShouldPrintFormattedErrorMessageAndShowHelp() {
-        ParseException parseException = mock(ParseException.class);
-
-        commandLineRunner.handleParseException(parseException);
-
-        verify(printStream, times(1))
-            .println(anyString());
-
-        verify(image2CssHelpFormatter, times(1))
-            .showHelp();
-    }
-
-    @Test
-    public void handleImage2CssExceptionShouldShowExceptionMessage() {
-        Image2CssException image2CssException = mock(Image2CssException.class);
-
-        commandLineRunner.handleImage2CssException(image2CssException);
-
-        verify(printStream, times(1))
-            .println(anyString());
-    }
-
-    @Test
-    public void handleExceptionShouldPrintException() {
-        final String message = "message";
-
-        Exception exception = mock(Exception.class);
-
-        when(exception.getMessage())
-            .thenReturn(message);
-
-        commandLineRunner.handleException(exception);
-
-        verify(printStream, times(1))
-            .println(anyString());
-
-        verify(exception, times(1))
-            .printStackTrace();
     }
 
 }

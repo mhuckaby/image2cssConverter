@@ -18,7 +18,6 @@
  */
 package com.rf1m.image2css.ioc;
 
-import com.rf1m.image2css.Image2Css;
 import com.rf1m.image2css.cli.*;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;
@@ -48,6 +47,7 @@ import static java.lang.ClassLoader.getSystemResource;
 public class ObjectFactory {
     protected static final ObjectFactory objectFactory = new ObjectFactory();
 
+    protected final String aboutProject = ResourceBundle.getBundle("image2css").getString("about.project");
     protected final String cssClassTemplate = ResourceBundle.getBundle("image2css").getString("template.css.class.def");
     protected final String htmlIndexTemplate = ResourceBundle.getBundle("image2css").getString("template.html.index");
     protected final String htmlCssEntryTemplate = ResourceBundle.getBundle("image2css").getString("template.html.css.entry");
@@ -78,8 +78,38 @@ public class ObjectFactory {
             case commandLineRunner: {
                 final PrintStream printStream = this.instance(BeanType.defaultPrintStream);
                 final ResourceBundle resourceBundle = this.instance(BeanType.resourceBundle);
+                final CommandLineRunnerValidator commandLineRunnerValidator = this.instance(BeanType.commandLineRunnerValidator);
+                final CommandLineParametersParser commandLineParametersParser = this.instance(BeanType.commandLineParametersParser);
+                final ExceptionHandler exceptionHandler = this.instance(BeanType.exceptionHandler);
+                final FileUtils fileUtils = this.instance(BeanType.fileUtils);
+                final ImageConversionService imageConversionService = this.instance(BeanType.defaultImageConversionService);
+                final CommandLineRunnerOutputManager commandLineRunnerOutputManager = this.instance(BeanType.commandLineRunnerOutputManager);
+                final CommandLineRunner commandLineRunner =
+                    new CommandLineRunner(this, printStream, resourceBundle, commandLineRunnerValidator,
+                                            commandLineParametersParser, exceptionHandler, fileUtils,
+                                                imageConversionService, commandLineRunnerOutputManager);
 
-                return (T)new CommandLineRunner(this, printStream, resourceBundle);
+                return (T)commandLineRunner;
+            }
+
+            case commandLineRunnerOutputManager: {
+                final Output consoleOutput = this.instance(BeanType.consoleOutput);
+                final Output cssOutput = this.instance(BeanType.cssOutput);
+                final Output htmlOutput = this.instance(BeanType.htmlOutput);
+                final ReportOutput reportOutput = this.instance(BeanType.consoleOutput);
+                final PrintStream printStream = this.instance(BeanType.defaultPrintStream);
+                final CommandLineRunnerOutputManager commandLineRunnerOutputManager =
+                    new CommandLineRunnerOutputManager(consoleOutput, cssOutput, htmlOutput, reportOutput, printStream, aboutProject);
+
+                return (T) commandLineRunnerOutputManager;
+            }
+
+            case commandLineRunnerValidator: {
+                final Image2CssHelpFormatter image2CssHelpFormatter = this.instance(BeanType.helpFormatter);
+                final SystemWrapper systemWrapper = this.instance(BeanType.systemWrapper);
+                final CommandLineRunnerValidator commandLineRunnerValidator = new CommandLineRunnerValidator(image2CssHelpFormatter, systemWrapper);
+
+                return (T)commandLineRunnerValidator;
             }
 
             case consoleOutput:
@@ -123,6 +153,14 @@ public class ObjectFactory {
                 return (T)new Dimension(width, height);
             }
 
+            case exceptionHandler: {
+                final PrintStream printStream = this.instance(BeanType.defaultPrintStream);
+                final ResourceBundle objResourceBundle = objectFactory.instance(BeanType.resourceBundle);
+                final ExceptionHandler exceptionHandler = new ExceptionHandler(this, printStream, objResourceBundle);
+
+                return (T)exceptionHandler;
+            }
+
             case file: {
                 final String filename = (String)args[0];
                 return (T)new File(filename);
@@ -156,16 +194,6 @@ public class ObjectFactory {
 
             case htmlOutput: {
                 return (T)new HTMLOutput(this, htmlCssEntryTemplate, htmlIndexTemplate);
-            }
-
-            case image2css: {
-                final Output consoleOutput = this.instance(BeanType.consoleOutput);
-                final Output cssOutput = this.instance(BeanType.cssOutput);
-                final Output htmlOutput = this.instance(BeanType.htmlOutput);
-                final ReportOutput reportOutput = this.instance(BeanType.consoleOutput);
-                final ImageConversionService imageConversionService = this.instance(BeanType.defaultImageConversionService);
-
-                return (T)new Image2Css(this, consoleOutput, cssOutput, htmlOutput, reportOutput, imageConversionService);
             }
 
             case imageIcon: {
