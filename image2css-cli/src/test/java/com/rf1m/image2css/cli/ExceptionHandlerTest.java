@@ -2,8 +2,8 @@ package com.rf1m.image2css.cli;
 
 
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.ioc.CliBeanType;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 public class ExceptionHandlerTest {
 
     @Mock
-    ObjectFactory objectFactory;
+    CliObjectFactory objectFactory;
 
     @Mock
     PrintStream printStream;
@@ -124,7 +124,7 @@ public class ExceptionHandlerTest {
         Image2CssHelpFormatter image2CssHelpFormatter = mock(Image2CssHelpFormatter.class);
         ParseException parseException = mock(ParseException.class);
 
-        when(objectFactory.instance(BeanType.helpFormatter))
+        when(objectFactory.instance(CliBeanType.helpFormatter))
             .thenReturn(image2CssHelpFormatter);
 
         doReturn(exceptionFormat)
@@ -141,7 +141,7 @@ public class ExceptionHandlerTest {
         exceptionHandler.handleParseException(parseException);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.helpFormatter);
+            .instance(CliBeanType.helpFormatter);
 
         verify(exceptionHandler)
             .getString("format.exception");

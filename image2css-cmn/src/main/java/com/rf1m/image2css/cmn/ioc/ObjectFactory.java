@@ -27,7 +27,6 @@ import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -49,9 +48,6 @@ public class ObjectFactory {
 
             case base64Encoder:
                 return (T)new Base64Encoder(this);
-
-            case basicParser:
-                return (T)new BasicParser();
 
             case byteArray: {
                 final Number size = (Number)args[0];
@@ -81,9 +77,6 @@ public class ObjectFactory {
 
                 return (T)imageConversionService;
             }
-
-            case defaultPrintStream:
-                return (T) System.out;
 
             case dimension: {
                 final int width = (Integer)args[0];

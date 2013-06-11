@@ -22,9 +22,10 @@ import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
 import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
+import com.rf1m.image2css.ioc.CliBeanType;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
 
 import java.io.File;
@@ -35,7 +36,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 public class CommandLineRunner {
-    protected final ObjectFactory objectFactory;
+    protected final CliObjectFactory objectFactory;
     protected final PrintStream printStream;
     protected final ResourceBundle resourceBundle;
     protected final CommandLineRunnerValidator commandLineRunnerValidator;
@@ -45,7 +46,7 @@ public class CommandLineRunner {
     protected final ImageConversionService imageConversionService;
     protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager;
 
-    public CommandLineRunner(final ObjectFactory objectFactory, final PrintStream printStream,
+    public CommandLineRunner(final CliObjectFactory objectFactory, final PrintStream printStream,
                              final ResourceBundle resourceBundle, final CommandLineRunnerValidator commandLineRunnerValidator,
                              final CommandLineParametersParser commandLineParametersParser, final ExceptionHandler exceptionHandler,
                              final FileUtils fileUtils, final ImageConversionService imageConversionService,
@@ -63,8 +64,8 @@ public class CommandLineRunner {
     }
 
     public static void main(final String[] arguments) throws Exception {
-        final ObjectFactory objectFactory = new ObjectFactory();
-        final CommandLineRunner commandLineRunner = objectFactory.instance(BeanType.commandLineRunner);
+        final CliObjectFactory objectFactory = new CliObjectFactory();
+        final CommandLineRunner commandLineRunner = objectFactory.instance(CliBeanType.commandLineRunner);
         commandLineRunner.run(arguments);
     }
 

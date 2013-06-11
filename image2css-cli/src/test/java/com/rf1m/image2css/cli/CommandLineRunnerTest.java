@@ -4,9 +4,9 @@ import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
 import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class CommandLineRunnerTest {
     final String[] arguments = {argument};
 
     @Mock
-    ObjectFactory objectFactory;
+    CliObjectFactory objectFactory;
 
     @Mock
     Image2CssHelpFormatter image2CssHelpFormatter;

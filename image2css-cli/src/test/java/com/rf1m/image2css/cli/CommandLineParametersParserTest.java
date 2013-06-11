@@ -3,7 +3,8 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
 import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.ioc.CliBeanType;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -24,7 +25,7 @@ import static org.mockito.MockitoAnnotations.Mock;
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineParametersParserTest {
     @Mock
-    ObjectFactory objectFactory;
+    CliObjectFactory objectFactory;
 
     @Mock
     CommandLine commandLine;
@@ -65,25 +66,25 @@ public class CommandLineParametersParserTest {
 
         Parameters parameters = mock(Parameters.class);
 
-        when(objectFactory.instance(BeanType.basicParser))
+        when(objectFactory.instance(CliBeanType.basicParser))
             .thenReturn(basicParser);
 
-        when(objectFactory.instance(BeanType.optionCssFile))
+        when(objectFactory.instance(CliBeanType.optionCssFile))
             .thenReturn(optionCssFile);
 
-        when(objectFactory.instance(BeanType.optionHtmlFile))
+        when(objectFactory.instance(CliBeanType.optionHtmlFile))
             .thenReturn(optionHtmlFile);
 
-        when(objectFactory.instance(BeanType.optionImageFile))
+        when(objectFactory.instance(CliBeanType.optionImageFile))
             .thenReturn(optionImageFile);
 
-        when(objectFactory.instance(BeanType.optionImageTypes))
+        when(objectFactory.instance(CliBeanType.optionImageTypes))
             .thenReturn(optionSupportedImageTypes);
 
-        when(objectFactory.instance(BeanType.optionSyso))
+        when(objectFactory.instance(CliBeanType.optionSyso))
             .thenReturn(optionSyso);
 
-        when(objectFactory.instance(BeanType.options))
+        when(objectFactory.instance(CliBeanType.options))
             .thenReturn(options);
 
         when(basicParser.parse(options, args))
@@ -123,7 +124,7 @@ public class CommandLineParametersParserTest {
         when(commandLine.hasOption(optionSysoGetOptValue))
             .thenReturn(syso);
 
-        when(objectFactory.instance(BeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso))
+        when(objectFactory.instance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso))
             .thenReturn(parameters);
 
         final Parameters result = commandLineParametersParser.parse(args);
@@ -131,25 +132,25 @@ public class CommandLineParametersParserTest {
         assertThat(result, is(parameters));
 
         verify(objectFactory, times(1))
-            .instance(BeanType.basicParser);
+            .instance(CliBeanType.basicParser);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.optionCssFile);
+            .instance(CliBeanType.optionCssFile);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.optionHtmlFile);
+            .instance(CliBeanType.optionHtmlFile);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.optionImageFile);
+            .instance(CliBeanType.optionImageFile);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.optionImageTypes);
+            .instance(CliBeanType.optionImageTypes);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.optionSyso);
+            .instance(CliBeanType.optionSyso);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.options);
+            .instance(CliBeanType.options);
 
         verify(basicParser, times(1))
             .parse(options, args);
@@ -185,7 +186,7 @@ public class CommandLineParametersParserTest {
             .hasOption(optionSysoGetOptValue);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+            .instance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
     }
 
     @Test
