@@ -1,8 +1,8 @@
-# Image2CSS is a tool designed to generate data URI for use in CSS files.
+# Image2CSS generates data URI for use in CSS files.
 [Originally hosted at Google Code](http://code.google.com/p/image2css)
 
 
-## Copyright (c) 2011 Matthew D Huckaby. All rights reservered.
+## Copyright (c) 2011 Matthew D Huckaby. All rights reserved.
 Image2CSS is licensed under Apache 2.0, please see LICENSE file.
 
 Use of this software indicates you agree to the following as well : 
