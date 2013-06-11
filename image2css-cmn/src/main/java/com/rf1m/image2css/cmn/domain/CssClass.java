@@ -16,14 +16,22 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.out;
+package com.rf1m.image2css.cmn.domain;
 
-import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.cmn.domain.CssClass;
+public class CssClass {
+	protected final String name;
+	protected final String body;
 
-import java.io.IOException;
-import java.util.List;
+    public CssClass(final String name, final String body) {
+        this.name = name;
+        this.body = body;
+    }
 
-public interface Output {
-    void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException;
+    public String getName() {
+		return name;
+	}
+
+	public String getBody() {
+		return body;
+	}
 }

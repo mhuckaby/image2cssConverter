@@ -16,14 +16,31 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.out;
+package com.rf1m.image2css.cmn.util.bin;
 
-import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.cmn.domain.CssClass;
+import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.ObjectFactory;
 
-import java.io.IOException;
-import java.util.List;
+import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
-public interface Output {
-    void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException;
+// Limits JVM to Sun/Oracle distribution
+//import com.sun.org.apache.xml.internal.security.utils.Base64;
+
+public class Base64Encoder {
+    protected final static String NL 		= "\n";
+    protected final static String EMPTY 	= "";
+
+    protected final ObjectFactory objectFactory;
+
+    public Base64Encoder(final ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
+    }
+
+    public String base64EncodeBytes(final byte[] bytes) {
+        final byte[] encodedBase64Bytes = encodeBase64(bytes, false);
+        final String encoded = this.objectFactory.instance(BeanType.string, encodedBase64Bytes);
+
+        return encoded.replaceAll(NL, EMPTY);
+    }
+
 }

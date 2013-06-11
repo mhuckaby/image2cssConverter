@@ -1,12 +1,12 @@
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.exception.Image2CssException;
-import com.rf1m.image2css.ioc.BeanType;
-import com.rf1m.image2css.ioc.ObjectFactory;
-import com.rf1m.image2css.service.ImageConversionService;
-import com.rf1m.image2css.util.file.FileUtils;
+import com.rf1m.image2css.cmn.domain.CssClass;
+import com.rf1m.image2css.cmn.domain.SupportedImageType;
+import com.rf1m.image2css.cmn.exception.Image2CssException;
+import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.cmn.service.ImageConversionService;
+import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;

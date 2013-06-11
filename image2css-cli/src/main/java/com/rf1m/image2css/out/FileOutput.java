@@ -19,9 +19,9 @@
 package com.rf1m.image2css.out;
 
 import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.ioc.BeanType;
-import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.ioc.ObjectFactory;
+import com.rf1m.image2css.cmn.domain.CssClass;
+import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.ObjectFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;

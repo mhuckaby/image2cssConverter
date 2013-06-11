@@ -1,9 +1,9 @@
 package com.rf1m.image2css.cli;
 
 
-import com.rf1m.image2css.exception.Image2CssException;
-import com.rf1m.image2css.ioc.BeanType;
-import com.rf1m.image2css.ioc.ObjectFactory;
+import com.rf1m.image2css.cmn.exception.Image2CssException;
+import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.ObjectFactory;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,8 +16,6 @@ import java.util.ResourceBundle;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExceptionHandlerTest {

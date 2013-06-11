@@ -1,10 +1,13 @@
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.exception.Image2CssValidationException;
-import com.rf1m.image2css.ioc.BeanType;
-import com.rf1m.image2css.ioc.ObjectFactory;
-import org.apache.commons.cli.*;
+import com.rf1m.image2css.cmn.domain.SupportedImageType;
+import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
+import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

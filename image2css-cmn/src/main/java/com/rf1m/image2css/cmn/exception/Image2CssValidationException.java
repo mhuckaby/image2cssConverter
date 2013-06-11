@@ -16,14 +16,12 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.out;
+package com.rf1m.image2css.cmn.exception;
 
-import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.cmn.domain.CssClass;
+public class Image2CssValidationException extends Image2CssException {
 
-import java.io.IOException;
-import java.util.List;
+    public Image2CssValidationException(final Errors errors) {
+        super(errors);
+    }
 
-public interface Output {
-    void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException;
 }

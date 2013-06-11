@@ -1,6 +1,6 @@
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.out.Output;
 import com.rf1m.image2css.out.ReportOutput;
 

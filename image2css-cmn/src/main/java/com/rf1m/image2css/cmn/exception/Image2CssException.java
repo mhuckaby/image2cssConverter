@@ -16,36 +16,26 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.out;
+package com.rf1m.image2css.cmn.exception;
 
-import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.cmn.domain.CssClass;
-import com.rf1m.image2css.cmn.exception.Errors;
-import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
+import static java.lang.String.format;
 
-import java.util.List;
+public class Image2CssException extends RuntimeException {
 
-public abstract class AbstractOutput implements Output{
-    protected boolean validate(final List<CssClass> cssClasses) {
-        if(null == cssClasses){
-            throw new Image2CssValidationException(Errors.parameterCssClassCollectionIsNull);
-        }else{
-            return true;
-        }
+    public Image2CssException(final Errors errors) {
+        super(errors.getMessage());
     }
 
-    protected boolean isValidParametersAndClasses(final Parameters parameters, final List<CssClass> cssClasses) {
-        return
-            this.validate(parameters) &&
-            this.validate(cssClasses);
+    public Image2CssException(final Throwable cause, final Errors errors) {
+        super(errors.getMessage(), cause);
     }
 
-    protected boolean validate(final Parameters parameters) {
-        if(null == parameters){
-            throw new Image2CssValidationException(Errors.parametersObjectCannotBeNull);
-        }else{
-            return true;
-        }
+    public Image2CssException(final Throwable cause, final Errors errors, final String ... messageParameters) {
+        super(format(errors.getMessage(), messageParameters), cause);
+    }
+
+    public Image2CssException(final Errors errors, final String ... messageParameters) {
+        super(format(errors.getMessage(), messageParameters));
     }
 
 }
