@@ -20,9 +20,11 @@ This product includes software developed by The Apache Software Foundation (http
 ## Build using Maven
 
 Parent module, "image2css":
+
     mvn clean install
 
 Sub-module, "image2css-cli":
+
     mvn clean install assembly:single
 
 
