@@ -1,7 +1,6 @@
 package com.rf1m.image2css.service;
 
 import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.BeanType;
 import com.rf1m.image2css.ioc.ObjectFactory;
 import com.rf1m.image2css.util.bin.Base64Encoder;
@@ -16,7 +15,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

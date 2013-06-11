@@ -2,15 +2,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+    <artifactId>image2css</artifactId>
     <groupId>com.rf1m</groupId>
-    <artifactId>${project.artifact}</artifactId>
-    <version>${project.version}</version>
-    <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
     <name>image2css</name>
+    <packaging>pom</packaging>
+    <version>${project.version}</version>
+
+    <modules>
+        <module>image2css-cli</module>
+    </modules>
 
     <properties>
-        <project.artifact>image2css</project.artifact>
         <project.version>1.1.2-SNAPSHOT</project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -20,54 +23,6 @@
         <tag>HEAD</tag>
         <url>https://github.com/mhuckaby/image2cssConverter.git</url>
     </scm>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit-dep</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.2.9</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-    </dependencies>
 
     <build>
         <plugins>
@@ -81,43 +36,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.rf1m.image2css.cli.CommandLineRunner</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
-
         </plugins>
-
-        <resources>
-
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>*.properties</include>
-                </includes>
-            </resource>
-
-            <resource>
-                <directory>src/main/scripts</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.sh</include>
-                    <include>**/*.bat</include>
-                </includes>
-                <targetPath>../../</targetPath>
-            </resource>
-
-        </resources>
 
     </build>
 
