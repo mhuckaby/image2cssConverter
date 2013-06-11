@@ -1,4 +1,4 @@
-# Image2CSS generates data URI for use in CSS files.
+# Image2CSS generates data URI for use in CSS
 [Originally hosted at Google Code](http://code.google.com/p/image2css)
 
 
