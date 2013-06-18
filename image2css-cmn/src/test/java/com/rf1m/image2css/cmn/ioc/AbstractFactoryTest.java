@@ -88,14 +88,33 @@ public class AbstractFactoryTest {
         }
     }
 
+    final class CombinationFactory extends AbstractFactory<Unknown> {
+        CombinationFactory() {
+            super(new AnimalFactory(), new FruitFactory());
+        }
+
+        @Override
+        protected Class<Unknown> instanceOfCatalogue() {
+            return Unknown.class;
+        }
+
+        @Override
+        protected <T> T createInstanceByFactory(Unknown value, Object... args) {
+            return null;
+        }
+    }
+
     FruitFactory fruitFactory;
 
     AnimalFactory animalFactory;
+
+    CombinationFactory combinationFactory;
 
     @Before
     public void before() {
         fruitFactory = new FruitFactory();
         animalFactory = new AnimalFactory();
+        combinationFactory = new CombinationFactory();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -144,6 +163,21 @@ public class AbstractFactoryTest {
 
         assertNotNull(result);
         assertThat(result.name, is(name));
+    }
+
+    @Test
+    public void multipleFactoryConstructorWillImportFactories() {
+        final boolean resultSupportsAnimal = combinationFactory.isSupported(Animal.cat);
+        final boolean resultSupportsFruit = combinationFactory.isSupported(Fruit.apple);
+
+        final Cat resultAnimal = combinationFactory.getInstance(Animal.cat);
+        final Fuji resultFruit = combinationFactory.getInstance(Fruit.apple);
+
+        assertTrue(resultSupportsAnimal);
+        assertTrue(resultSupportsFruit);
+
+        assertNotNull(resultAnimal);
+        assertNotNull(resultFruit);
     }
 
 }
