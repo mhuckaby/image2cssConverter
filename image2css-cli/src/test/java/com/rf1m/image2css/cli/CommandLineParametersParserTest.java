@@ -3,7 +3,7 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
 import com.rf1m.image2css.cmn.ioc.CommonObjectType;
-import com.rf1m.image2css.ioc.CliBeanType;
+import com.rf1m.image2css.ioc.CliObjectType;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -118,7 +118,7 @@ public class CommandLineParametersParserTest {
         when(commandLine.hasOption(optionSysoGetOptValue))
             .thenReturn(syso);
 
-        when(objectFactory.getInstance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso))
+        when(objectFactory.getInstance(CliObjectType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso))
             .thenReturn(parameters);
 
         final Parameters result = commandLineParametersParser.parse(args);
@@ -159,7 +159,7 @@ public class CommandLineParametersParserTest {
             .hasOption(optionSysoGetOptValue);
 
         verify(objectFactory, times(1))
-            .getInstance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+            .getInstance(CliObjectType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
     }
 
     @Test

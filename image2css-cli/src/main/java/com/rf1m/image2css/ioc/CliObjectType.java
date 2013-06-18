@@ -1,6 +1,6 @@
 package com.rf1m.image2css.ioc;
 
-public enum CliBeanType {
+public enum CliObjectType {
     basicParser,
     commandLineParametersParser,
     commandLineRunner,

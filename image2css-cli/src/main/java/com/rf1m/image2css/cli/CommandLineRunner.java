@@ -24,7 +24,7 @@ import com.rf1m.image2css.cmn.exception.Image2CssException;
 import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
-import com.rf1m.image2css.ioc.CliBeanType;
+import com.rf1m.image2css.ioc.CliObjectType;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
 
@@ -65,7 +65,7 @@ public class CommandLineRunner {
 
     public static void main(final String[] arguments) throws Exception {
         final CliObjectFactory objectFactory = new CliObjectFactory();
-        final CommandLineRunner commandLineRunner = objectFactory.getInstance(CliBeanType.commandLineRunner);
+        final CommandLineRunner commandLineRunner = objectFactory.getInstance(CliObjectType.commandLineRunner);
         commandLineRunner.run(arguments);
     }
 
