@@ -15,7 +15,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.PrintStream;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -93,9 +92,10 @@ public class CliObjectFactory extends AbstractFactory<CliBeanType> {
                 return (T) System.out;
 
             case exceptionHandler: {
+                final Image2CssHelpFormatter image2CssHelpFormatter = this.getInstance(CliBeanType.helpFormatter);
                 final PrintStream printStream = this.getInstance(CliBeanType.defaultPrintStream);
                 final ResourceBundle objResourceBundle = this.getInstance(BeanType.resourceBundle);
-                final ExceptionHandler exceptionHandler = new ExceptionHandler(this, printStream, objResourceBundle);
+                final ExceptionHandler exceptionHandler = new ExceptionHandler(image2CssHelpFormatter, printStream, objResourceBundle);
 
                 return (T)exceptionHandler;
             }

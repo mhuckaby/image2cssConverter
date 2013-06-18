@@ -2,8 +2,6 @@ package com.rf1m.image2css.cli;
 
 
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.ioc.CliBeanType;
-import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +19,7 @@ import static org.mockito.Mockito.*;
 public class ExceptionHandlerTest {
 
     @Mock
-    CliObjectFactory objectFactory;
+    Image2CssHelpFormatter helpFormatter;
 
     @Mock
     PrintStream printStream;
@@ -33,7 +31,7 @@ public class ExceptionHandlerTest {
 
     @Before
     public void before() {
-        exceptionHandler = spy(new ExceptionHandler(objectFactory, printStream, resourceBundle));
+        exceptionHandler = spy(new ExceptionHandler(helpFormatter, printStream, resourceBundle));
     }
 
     @Test
@@ -121,11 +119,7 @@ public class ExceptionHandlerTest {
         final String formattedExceptionMessage = "formattedExceptionMessage";
         final String exceptionMessage = "exceptionMessage";
 
-        Image2CssHelpFormatter image2CssHelpFormatter = mock(Image2CssHelpFormatter.class);
         ParseException parseException = mock(ParseException.class);
-
-        when(objectFactory.getInstance(CliBeanType.helpFormatter))
-            .thenReturn(image2CssHelpFormatter);
 
         doReturn(exceptionFormat)
             .when(exceptionHandler)
@@ -140,9 +134,6 @@ public class ExceptionHandlerTest {
 
         exceptionHandler.handleParseException(parseException);
 
-        verify(objectFactory, times(1))
-            .getInstance(CliBeanType.helpFormatter);
-
         verify(exceptionHandler)
             .getString("format.exception");
 
@@ -152,7 +143,7 @@ public class ExceptionHandlerTest {
         verify(printStream, times(1))
             .println(formattedExceptionMessage);
 
-        verify(image2CssHelpFormatter, times(1))
+        verify(helpFormatter, times(1))
             .showHelp();
 
         verify(exceptionHandler, times(1))
