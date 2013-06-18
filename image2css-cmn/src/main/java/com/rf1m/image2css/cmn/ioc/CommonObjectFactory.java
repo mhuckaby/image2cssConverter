@@ -38,16 +38,16 @@ import java.util.*;
 
 import static java.lang.ClassLoader.getSystemResource;
 
-public class ObjectFactory extends AbstractFactory<BeanType> {
+public class CommonObjectFactory extends AbstractFactory<CommonObjectType> {
     protected final String cssClassTemplate = ResourceBundle.getBundle("image2css").getString("template.css.class.def");
 
     @Override
-    protected Class<BeanType> instanceOfCatalogue() {
-        return BeanType.class;
+    protected Class<CommonObjectType> instanceOfCatalogue() {
+        return CommonObjectType.class;
     }
 
     @Override
-    protected <T> T createInstanceByFactory(final BeanType value, final Object ... args) {
+    protected <T> T createInstanceByFactory(final CommonObjectType value, final Object ... args) {
         switch(value) {
             case arrayList:
                 return (T)new ArrayList();
@@ -62,7 +62,7 @@ public class ObjectFactory extends AbstractFactory<BeanType> {
 
             case conversionFilenameFilter: {
                 final Set supportedImageTypes = (Set<SupportedImageType>)args[0];
-                final FileUtils fileUtils = this.getInstance(BeanType.fileUtils);
+                final FileUtils fileUtils = this.getInstance(CommonObjectType.fileUtils);
 
                 return (T)new ConversionFilenameFilter(fileUtils, supportedImageTypes);
             }
@@ -75,8 +75,8 @@ public class ObjectFactory extends AbstractFactory<BeanType> {
             }
 
             case defaultImageConversionService: {
-                final FileUtils fileUtils = this.getInstance(BeanType.fileUtils);
-                final Base64Encoder base64Encoder = this.getInstance(BeanType.base64Encoder);
+                final FileUtils fileUtils = this.getInstance(CommonObjectType.fileUtils);
+                final Base64Encoder base64Encoder = this.getInstance(CommonObjectType.base64Encoder);
 
                 final ImageConversionService imageConversionService =
                     new DefaultImageConversionService(fileUtils, base64Encoder, this, cssClassTemplate);

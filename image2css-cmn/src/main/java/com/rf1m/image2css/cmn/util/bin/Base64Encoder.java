@@ -18,8 +18,8 @@
  */
 package com.rf1m.image2css.cmn.util.bin;
 
-import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
@@ -30,15 +30,15 @@ public class Base64Encoder {
     protected final static String NL 		= "\n";
     protected final static String EMPTY 	= "";
 
-    protected final ObjectFactory objectFactory;
+    protected final CommonObjectFactory commonObjectFactory;
 
-    public Base64Encoder(final ObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
+    public Base64Encoder(final CommonObjectFactory commonObjectFactory) {
+        this.commonObjectFactory = commonObjectFactory;
     }
 
     public String base64EncodeBytes(final byte[] bytes) {
         final byte[] encodedBase64Bytes = encodeBase64(bytes, false);
-        final String encoded = this.objectFactory.getInstance(BeanType.string, encodedBase64Bytes);
+        final String encoded = this.commonObjectFactory.getInstance(CommonObjectType.string, encodedBase64Bytes);
 
         return encoded.replaceAll(NL, EMPTY);
     }

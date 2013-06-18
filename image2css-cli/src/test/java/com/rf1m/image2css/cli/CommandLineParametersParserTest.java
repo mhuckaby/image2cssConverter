@@ -2,7 +2,7 @@ package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
-import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.ioc.CliBeanType;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.BasicParser;
@@ -174,7 +174,7 @@ public class CommandLineParametersParserTest {
         when(commandLine.getOptionValues(option))
             .thenReturn(optionValues);
 
-        when(objectFactory.getInstance(BeanType.file, optionValue))
+        when(objectFactory.getInstance(CommonObjectType.file, optionValue))
             .thenReturn(file);
 
         final File result = commandLineParametersParser.extractFileFromOption(commandLine, option);
@@ -185,7 +185,7 @@ public class CommandLineParametersParserTest {
             .getOptionValues(option);
 
         verify(objectFactory, times(1))
-            .getInstance(BeanType.file, optionValue);
+            .getInstance(CommonObjectType.file, optionValue);
     }
 
     @Test
@@ -197,7 +197,7 @@ public class CommandLineParametersParserTest {
 
         Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
-        when(objectFactory.getInstance(BeanType.set))
+        when(objectFactory.getInstance(CommonObjectType.set))
             .thenReturn(supportedImageTypes);
 
         when(commandLine.getOptionValues(option))
@@ -217,7 +217,7 @@ public class CommandLineParametersParserTest {
         assertThat(result, is(supportedImageTypes));
 
         verify(objectFactory, times(1))
-            .getInstance(BeanType.set);
+            .getInstance(CommonObjectType.set);
 
         verify(commandLineParametersParser, times(1))
             .determineIncludedImageTypes(optionValues);

@@ -21,7 +21,7 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import com.rf1m.image2css.ioc.CliBeanType;
@@ -96,7 +96,7 @@ public class CommandLineRunner {
         final File targetImageFile = parameters.getImageFile();
         final Set<SupportedImageType> supportedImageTypes = parameters.getSupportedTypes();
         final File[] imageFiles = this.fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes);
-        final List<CssClass> cssEntries = this.objectFactory.getInstance(BeanType.arrayList);
+        final List<CssClass> cssEntries = this.objectFactory.getInstance(CommonObjectType.arrayList);
 
         for(final File imageFile : imageFiles){
             final CssClass cssClass = this.imageConversionService.convert(imageFile);

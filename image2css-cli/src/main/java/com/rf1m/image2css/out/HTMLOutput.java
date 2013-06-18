@@ -20,7 +20,7 @@ package com.rf1m.image2css.out;
 
 import com.rf1m.image2css.cli.Parameters;
 import com.rf1m.image2css.cmn.domain.CssClass;
-import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 
 import java.io.FileWriter;
@@ -46,8 +46,8 @@ public class HTMLOutput extends AbstractOutput {
     @Override
     public void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException {
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            final FileWriter fileWriter = this.objectFactory.getInstance(BeanType.fileWriter, parameters.getHtmlFile());
-            final StringBuffer stringBuffer = this.objectFactory.getInstance(BeanType.stringBuffer);
+            final FileWriter fileWriter = this.objectFactory.getInstance(CommonObjectType.fileWriter, parameters.getHtmlFile());
+            final StringBuffer stringBuffer = this.objectFactory.getInstance(CommonObjectType.stringBuffer);
 
             for(final CssClass cssClass : cssClasses){
                 final String formattedEntry = format(htmlCssEntryTemplate, cssClass.getName());

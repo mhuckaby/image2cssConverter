@@ -1,6 +1,6 @@
 package com.rf1m.image2css.cmn.ioc;
 
-public enum BeanType {
+public enum CommonObjectType {
     arrayList,
     base64Encoder,
     byteArray,

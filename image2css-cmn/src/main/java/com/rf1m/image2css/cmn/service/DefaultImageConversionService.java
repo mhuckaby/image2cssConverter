@@ -1,8 +1,8 @@
 package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.cmn.domain.CssClass;
-import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -16,13 +16,13 @@ public class DefaultImageConversionService implements ImageConversionService {
 
     protected final FileUtils fileUtils;
     protected final Base64Encoder base64Encoder;
-    protected final ObjectFactory objectFactory;
+    protected final CommonObjectFactory commonObjectFactory;
     protected final String cssClassTemplate;
 
-    public DefaultImageConversionService(FileUtils fileUtils, Base64Encoder base64Encoder, ObjectFactory objectFactory, String cssClassTemplate) {
+    public DefaultImageConversionService(FileUtils fileUtils, Base64Encoder base64Encoder, CommonObjectFactory commonObjectFactory, String cssClassTemplate) {
         this.fileUtils = fileUtils;
         this.base64Encoder = base64Encoder;
-        this.objectFactory = objectFactory;
+        this.commonObjectFactory = commonObjectFactory;
         this.cssClassTemplate = cssClassTemplate;
     }
 
@@ -35,7 +35,7 @@ public class DefaultImageConversionService implements ImageConversionService {
         final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
         final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
         final String cssEntry = this.determineCssEntry(cssClassName, fileExtension, base64Bytes, dimension);
-        final CssClass cssClass = this.objectFactory.getInstance(BeanType.cssClass, cssClassName, cssEntry);
+        final CssClass cssClass = this.commonObjectFactory.getInstance(CommonObjectType.cssClass, cssClassName, cssEntry);
 
         return cssClass;
     }
@@ -54,9 +54,9 @@ public class DefaultImageConversionService implements ImageConversionService {
      * @return Pair with left as width and right as height.
      */
     protected Pair<Integer, Integer> getImageDimension(final byte[] bytes){
-        final ImageIcon imageIcon = this.objectFactory.getInstance(BeanType.imageIcon, bytes);
+        final ImageIcon imageIcon = this.commonObjectFactory.getInstance(CommonObjectType.imageIcon, bytes);
         final Pair<Integer, Integer> result =
-            this.objectFactory.getInstance(BeanType.pair, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+            this.commonObjectFactory.getInstance(CommonObjectType.pair, imageIcon.getIconWidth(), imageIcon.getIconHeight());
 
         return result;
     }

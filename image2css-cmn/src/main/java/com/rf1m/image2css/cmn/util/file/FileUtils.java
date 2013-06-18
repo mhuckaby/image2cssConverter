@@ -21,8 +21,8 @@ package com.rf1m.image2css.cmn.util.file;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,10 +30,10 @@ import java.io.IOException;
 import java.util.Set;
 
 public class FileUtils {
-    protected final ObjectFactory objectFactory;
+    protected final CommonObjectFactory commonObjectFactory;
 
-    public FileUtils(final ObjectFactory objectFactory) {
-        this.objectFactory = objectFactory;
+    public FileUtils(final CommonObjectFactory commonObjectFactory) {
+        this.commonObjectFactory = commonObjectFactory;
     }
 
     /**
@@ -61,8 +61,8 @@ public class FileUtils {
 	 * @throws Exception
 	 */
 	public byte[] getFileBytes(final File file) {
-		final FileInputStream fileInputStream = this.objectFactory.getInstance(BeanType.fileInputStream, file);
-		final byte[] bytes = this.objectFactory.getInstance(BeanType.byteArray, file.length());
+		final FileInputStream fileInputStream = this.commonObjectFactory.getInstance(CommonObjectType.fileInputStream, file);
+		final byte[] bytes = this.commonObjectFactory.getInstance(CommonObjectType.byteArray, file.length());
 
         try {
             fileInputStream.read(bytes);
@@ -81,13 +81,13 @@ public class FileUtils {
 
     public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
         if(imageFile.isDirectory()){
-            final Set<SupportedImageType> defaultSupportedImageTypes = this.objectFactory.getInstance(BeanType.supportedImageTypes);
+            final Set<SupportedImageType> defaultSupportedImageTypes = this.commonObjectFactory.getInstance(CommonObjectType.supportedImageTypes);
             final Set<SupportedImageType> supportedTypesToFilterFor = supportedTypes.isEmpty() ? defaultSupportedImageTypes : supportedTypes;
-            final ConversionFilenameFilter filter = this.objectFactory.getInstance(BeanType.conversionFilenameFilter, supportedTypesToFilterFor);
+            final ConversionFilenameFilter filter = this.commonObjectFactory.getInstance(CommonObjectType.conversionFilenameFilter, supportedTypesToFilterFor);
 
             return imageFile.listFiles(filter);
         }else{
-            return this.objectFactory.getInstance(BeanType.fileArray, imageFile);
+            return this.commonObjectFactory.getInstance(CommonObjectType.fileArray, imageFile);
         }
     }
 

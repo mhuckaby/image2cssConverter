@@ -1,8 +1,8 @@
 package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.cmn.domain.CssClass;
-import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -25,7 +25,7 @@ public class DefaultImageConversionServiceTest {
     final String cssClassTemplate = "cssClassTemplate";
 
     @Mock
-    ObjectFactory objectFactory;
+    CommonObjectFactory commonObjectFactory;
 
     @Mock
     Base64Encoder base64Encoder;
@@ -37,7 +37,7 @@ public class DefaultImageConversionServiceTest {
 
     @Before
     public void before() {
-        defaultImageConversionService = spy(new DefaultImageConversionService(fileUtils, base64Encoder, objectFactory, cssClassTemplate));
+        defaultImageConversionService = spy(new DefaultImageConversionService(fileUtils, base64Encoder, commonObjectFactory, cssClassTemplate));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class DefaultImageConversionServiceTest {
             .when(defaultImageConversionService)
             .determineCssEntry(cssClassName, fileExtension, base64EncodedBytes, dimension);
 
-        when(objectFactory.getInstance(BeanType.cssClass, cssClassName, cssEntry))
+        when(commonObjectFactory.getInstance(CommonObjectType.cssClass, cssClassName, cssEntry))
             .thenReturn(cssClass);
 
         final CssClass result = defaultImageConversionService.convert(file);
@@ -85,7 +85,7 @@ public class DefaultImageConversionServiceTest {
         assertThat(result, is(cssClass));
 
         InOrder inOrder = inOrder(file, defaultImageConversionService, fileUtils, fileUtils, base64Encoder,
-            defaultImageConversionService, defaultImageConversionService, objectFactory);
+            defaultImageConversionService, defaultImageConversionService, commonObjectFactory);
 
         inOrder.verify(file, times(1))
             .getName();
@@ -108,8 +108,8 @@ public class DefaultImageConversionServiceTest {
         inOrder.verify(defaultImageConversionService, times(1))
             .determineCssEntry(cssClassName, fileExtension, base64EncodedBytes, dimension);
 
-        inOrder.verify(objectFactory, times(1))
-            .getInstance(BeanType.cssClass, cssClassName, cssEntry);
+        inOrder.verify(commonObjectFactory, times(1))
+            .getInstance(CommonObjectType.cssClass, cssClassName, cssEntry);
     }
 
     @Test
@@ -121,7 +121,7 @@ public class DefaultImageConversionServiceTest {
         final int height = 2;
         final byte[] bytes = {01};
 
-        when(objectFactory.getInstance(BeanType.imageIcon, bytes))
+        when(commonObjectFactory.getInstance(CommonObjectType.imageIcon, bytes))
             .thenReturn(imageIcon);
 
         when(imageIcon.getIconWidth())
@@ -130,15 +130,15 @@ public class DefaultImageConversionServiceTest {
         when(imageIcon.getIconHeight())
             .thenReturn(height);
 
-        when(objectFactory.getInstance(BeanType.pair, width, height))
+        when(commonObjectFactory.getInstance(CommonObjectType.pair, width, height))
             .thenReturn(dimension);
 
         final Pair<Integer, Integer> result = defaultImageConversionService.getImageDimension(bytes);
 
         assertThat(result, is(dimension));
 
-        verify(objectFactory, times(1))
-            .getInstance(BeanType.imageIcon, bytes);
+        verify(commonObjectFactory, times(1))
+            .getInstance(CommonObjectType.imageIcon, bytes);
 
         verify(imageIcon, times(1))
             .getIconWidth();
@@ -146,8 +146,8 @@ public class DefaultImageConversionServiceTest {
         verify(imageIcon, times(1))
             .getIconHeight();
 
-        verify(objectFactory, times(1))
-            .getInstance(BeanType.pair, width, height);
+        verify(commonObjectFactory, times(1))
+            .getInstance(CommonObjectType.pair, width, height);
     }
 
     @Test

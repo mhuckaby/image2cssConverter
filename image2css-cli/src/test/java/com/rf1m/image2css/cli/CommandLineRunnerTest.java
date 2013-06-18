@@ -3,7 +3,7 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.ioc.BeanType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import com.rf1m.image2css.ioc.CliObjectFactory;
@@ -95,7 +95,7 @@ public class CommandLineRunnerTest {
         when(fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes))
             .thenReturn(imagesForConversion);
 
-        when(objectFactory.getInstance(BeanType.arrayList))
+        when(objectFactory.getInstance(CommonObjectType.arrayList))
             .thenReturn(cssEntries);
 
         when(imageConversionService.convert(imageForConversion))
@@ -113,7 +113,7 @@ public class CommandLineRunnerTest {
             .getImagesForConversion(targetImageFile, supportedImageTypes);
 
         verify(objectFactory, times(1))
-            .getInstance(BeanType.arrayList);
+            .getInstance(CommonObjectType.arrayList);
 
         verify(imageConversionService, times(1))
             .convert(imageForConversion);

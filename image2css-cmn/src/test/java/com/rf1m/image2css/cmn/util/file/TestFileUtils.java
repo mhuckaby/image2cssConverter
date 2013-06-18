@@ -18,8 +18,8 @@
  */
 package com.rf1m.image2css.cmn.util.file;
 
-import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.cmn.ioc.CommonObjectType;
+import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TestFileUtils {
     @Mock
-    ObjectFactory objectFactory;
+    CommonObjectFactory commonObjectFactory;
 
     @Mock
     File file;
@@ -52,15 +52,15 @@ public class TestFileUtils {
 
     @Before
     public void before() throws IOException{
-        fileUtils = new FileUtils(objectFactory);
+        fileUtils = new FileUtils(commonObjectFactory);
 
-        when(objectFactory.getInstance(BeanType.fileInputStream, file))
+        when(commonObjectFactory.getInstance(CommonObjectType.fileInputStream, file))
             .thenReturn(fileInputStream);
 
         when(file.length())
             .thenReturn((long)bytes.length);
 
-        when(objectFactory.getInstance(BeanType.byteArray, (long)bytes.length))
+        when(commonObjectFactory.getInstance(CommonObjectType.byteArray, (long) bytes.length))
             .thenReturn(bytes);
 
         when(file.length())
