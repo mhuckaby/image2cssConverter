@@ -38,11 +38,17 @@ import java.util.*;
 
 import static java.lang.ClassLoader.getSystemResource;
 
-public class ObjectFactory {
+public class ObjectFactory extends AbstractFactory<BeanType> {
     protected final String cssClassTemplate = ResourceBundle.getBundle("image2css").getString("template.css.class.def");
 
-    public <T> T instance(final BeanType beanType, final Object ... args) {
-        switch(beanType) {
+    @Override
+    protected Class<BeanType> instanceOfCatalogue() {
+        return BeanType.class;
+    }
+
+    @Override
+    protected <T> T createInstanceByFactory(final BeanType value, final Object ... args) {
+        switch(value) {
             case arrayList:
                 return (T)new ArrayList();
 
@@ -56,7 +62,7 @@ public class ObjectFactory {
 
             case conversionFilenameFilter: {
                 final Set supportedImageTypes = (Set<SupportedImageType>)args[0];
-                final FileUtils fileUtils = this.instance(BeanType.fileUtils);
+                final FileUtils fileUtils = this.getInstance(BeanType.fileUtils);
 
                 return (T)new ConversionFilenameFilter(fileUtils, supportedImageTypes);
             }
@@ -69,8 +75,8 @@ public class ObjectFactory {
             }
 
             case defaultImageConversionService: {
-                final FileUtils fileUtils = this.instance(BeanType.fileUtils);
-                final Base64Encoder base64Encoder = this.instance(BeanType.base64Encoder);
+                final FileUtils fileUtils = this.getInstance(BeanType.fileUtils);
+                final Base64Encoder base64Encoder = this.getInstance(BeanType.base64Encoder);
 
                 final ImageConversionService imageConversionService =
                     new DefaultImageConversionService(fileUtils, base64Encoder, this, cssClassTemplate);
@@ -160,7 +166,7 @@ public class ObjectFactory {
             }
 
             default:
-                throw new Image2CssException(Errors.parameterBeanType, beanType.name());
+                throw new Image2CssException(Errors.parameterBeanType, value.name());
         }
     }
 

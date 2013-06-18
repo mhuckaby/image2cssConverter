@@ -124,7 +124,7 @@ public class ExceptionHandlerTest {
         Image2CssHelpFormatter image2CssHelpFormatter = mock(Image2CssHelpFormatter.class);
         ParseException parseException = mock(ParseException.class);
 
-        when(objectFactory.instance(CliBeanType.helpFormatter))
+        when(objectFactory.getInstance(CliBeanType.helpFormatter))
             .thenReturn(image2CssHelpFormatter);
 
         doReturn(exceptionFormat)
@@ -141,7 +141,7 @@ public class ExceptionHandlerTest {
         exceptionHandler.handleParseException(parseException);
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.helpFormatter);
+            .getInstance(CliBeanType.helpFormatter);
 
         verify(exceptionHandler)
             .getString("format.exception");

@@ -35,7 +35,7 @@ public class DefaultImageConversionService implements ImageConversionService {
         final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
         final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
         final String cssEntry = this.determineCssEntry(cssClassName, fileExtension, base64Bytes, dimension);
-        final CssClass cssClass = this.objectFactory.instance(BeanType.cssClass, cssClassName, cssEntry);
+        final CssClass cssClass = this.objectFactory.getInstance(BeanType.cssClass, cssClassName, cssEntry);
 
         return cssClass;
     }
@@ -54,9 +54,9 @@ public class DefaultImageConversionService implements ImageConversionService {
      * @return Pair with left as width and right as height.
      */
     protected Pair<Integer, Integer> getImageDimension(final byte[] bytes){
-        final ImageIcon imageIcon = this.objectFactory.instance(BeanType.imageIcon, bytes);
+        final ImageIcon imageIcon = this.objectFactory.getInstance(BeanType.imageIcon, bytes);
         final Pair<Integer, Integer> result =
-            this.objectFactory.instance(BeanType.pair, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+            this.objectFactory.getInstance(BeanType.pair, imageIcon.getIconWidth(), imageIcon.getIconHeight());
 
         return result;
     }

@@ -4,6 +4,7 @@ import com.rf1m.image2css.cli.*;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
+import com.rf1m.image2css.cmn.ioc.AbstractFactory;
 import com.rf1m.image2css.cmn.ioc.BeanType;
 import com.rf1m.image2css.cmn.ioc.ObjectFactory;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
@@ -14,19 +15,29 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.PrintStream;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 
-public class CliObjectFactory extends ObjectFactory{
+public class CliObjectFactory extends AbstractFactory<CliBeanType> {
     protected final String aboutProject = ResourceBundle.getBundle("image2css").getString("about.project");
     protected final String htmlIndexTemplate = ResourceBundle.getBundle("image2css").getString("template.html.index");
     protected final String htmlCssEntryTemplate = ResourceBundle.getBundle("image2css").getString("template.html.css.entry");
 
 
-    public <T> T instance(final CliBeanType beanType, final Object ... args) {
+    public CliObjectFactory() {
+        super(new ObjectFactory());
+    }
 
+    @Override
+    protected Class<CliBeanType> instanceOfCatalogue() {
+        return CliBeanType.class;
+    }
+
+    @Override
+    protected <T> T createInstanceByFactory(CliBeanType beanType, Object... args) {
         switch(beanType) {
             case basicParser:
                 return (T)new BasicParser();
@@ -35,14 +46,14 @@ public class CliObjectFactory extends ObjectFactory{
                 return (T)new CommandLineParametersParser(this);
 
             case commandLineRunner: {
-                final PrintStream printStream = this.instance(CliBeanType.defaultPrintStream);
-                final ResourceBundle resourceBundle = this.instance(BeanType.resourceBundle);
-                final CommandLineRunnerValidator commandLineRunnerValidator = this.instance(CliBeanType.commandLineRunnerValidator);
-                final CommandLineParametersParser commandLineParametersParser = this.instance(CliBeanType.commandLineParametersParser);
-                final ExceptionHandler exceptionHandler = this.instance(CliBeanType.exceptionHandler);
-                final FileUtils fileUtils = this.instance(BeanType.fileUtils);
-                final ImageConversionService imageConversionService = this.instance(BeanType.defaultImageConversionService);
-                final CommandLineRunnerOutputManager commandLineRunnerOutputManager = this.instance(CliBeanType.commandLineRunnerOutputManager);
+                final PrintStream printStream = this.getInstance(CliBeanType.defaultPrintStream);
+                final ResourceBundle resourceBundle = this.getInstance(BeanType.resourceBundle);
+                final CommandLineRunnerValidator commandLineRunnerValidator = this.getInstance(CliBeanType.commandLineRunnerValidator);
+                final CommandLineParametersParser commandLineParametersParser = this.getInstance(CliBeanType.commandLineParametersParser);
+                final ExceptionHandler exceptionHandler = this.getInstance(CliBeanType.exceptionHandler);
+                final FileUtils fileUtils = this.getInstance(BeanType.fileUtils);
+                final ImageConversionService imageConversionService = this.getInstance(BeanType.defaultImageConversionService);
+                final CommandLineRunnerOutputManager commandLineRunnerOutputManager = this.getInstance(CliBeanType.commandLineRunnerOutputManager);
                 final CommandLineRunner commandLineRunner =
                     new CommandLineRunner(this, printStream, resourceBundle, commandLineRunnerValidator,
                         commandLineParametersParser, exceptionHandler, fileUtils,
@@ -52,11 +63,11 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case commandLineRunnerOutputManager: {
-                final Output consoleOutput = this.instance(CliBeanType.consoleOutput);
-                final Output cssOutput = this.instance(CliBeanType.cssOutput);
-                final Output htmlOutput = this.instance(CliBeanType.htmlOutput);
-                final ReportOutput reportOutput = this.instance(CliBeanType.consoleOutput);
-                final PrintStream printStream = this.instance(CliBeanType.defaultPrintStream);
+                final Output consoleOutput = this.getInstance(CliBeanType.consoleOutput);
+                final Output cssOutput = this.getInstance(CliBeanType.cssOutput);
+                final Output htmlOutput = this.getInstance(CliBeanType.htmlOutput);
+                final ReportOutput reportOutput = this.getInstance(CliBeanType.consoleOutput);
+                final PrintStream printStream = this.getInstance(CliBeanType.defaultPrintStream);
                 final CommandLineRunnerOutputManager commandLineRunnerOutputManager =
                         new CommandLineRunnerOutputManager(consoleOutput, cssOutput, htmlOutput, reportOutput, printStream, aboutProject);
 
@@ -64,15 +75,15 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case commandLineRunnerValidator: {
-                final Image2CssHelpFormatter image2CssHelpFormatter = this.instance(CliBeanType.helpFormatter);
-                final SystemWrapper systemWrapper = this.instance(CliBeanType.systemWrapper);
+                final Image2CssHelpFormatter image2CssHelpFormatter = this.getInstance(CliBeanType.helpFormatter);
+                final SystemWrapper systemWrapper = this.getInstance(CliBeanType.systemWrapper);
                 final CommandLineRunnerValidator commandLineRunnerValidator = new CommandLineRunnerValidator(image2CssHelpFormatter, systemWrapper);
 
                 return (T)commandLineRunnerValidator;
             }
 
             case consoleOutput:
-                final ResourceBundle resourceBundle = this.instance(BeanType.resourceBundle);
+                final ResourceBundle resourceBundle = this.getInstance(BeanType.resourceBundle);
                 return (T)new ConsoleOutput(resourceBundle, System.out);
 
             case cssOutput:
@@ -82,8 +93,8 @@ public class CliObjectFactory extends ObjectFactory{
                 return (T) System.out;
 
             case exceptionHandler: {
-                final PrintStream printStream = this.instance(CliBeanType.defaultPrintStream);
-                final ResourceBundle objResourceBundle = this.instance(BeanType.resourceBundle);
+                final PrintStream printStream = this.getInstance(CliBeanType.defaultPrintStream);
+                final ResourceBundle objResourceBundle = this.getInstance(BeanType.resourceBundle);
                 final ExceptionHandler exceptionHandler = new ExceptionHandler(this, printStream, objResourceBundle);
 
                 return (T)exceptionHandler;
@@ -103,7 +114,7 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case optionCssFile: {
-                final ResourceBundle objResourceBundle = super.instance(BeanType.resourceBundle);
+                final ResourceBundle objResourceBundle = this.getInstance(BeanType.resourceBundle);
                 final String command = objResourceBundle.getString("command.line.option.cmd.css.output.filename");
                 final String description = objResourceBundle.getString("command.line.option.description.css.output.filename");
 
@@ -114,7 +125,7 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case optionHtmlFile: {
-                final ResourceBundle objResourceBundle = super.instance(BeanType.resourceBundle);
+                final ResourceBundle objResourceBundle = this.getInstance(BeanType.resourceBundle);
                 final String command = objResourceBundle.getString("command.line.option.cmd.html.output.filename");
                 final String description = objResourceBundle.getString("command.line.option.description.html.output.filename");
 
@@ -125,7 +136,7 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case optionImageFile: {
-                final ResourceBundle objResourceBundle = super.instance(BeanType.resourceBundle);
+                final ResourceBundle objResourceBundle = this.getInstance(BeanType.resourceBundle);
                 final String command = objResourceBundle.getString("command.line.option.cmd.target.file.or.directory");
                 final String description = objResourceBundle.getString("command.line.option.description.target.file.or.directory");
 
@@ -137,7 +148,7 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case optionImageTypes: {
-                final ResourceBundle objResourceBundle = super.instance(BeanType.resourceBundle);
+                final ResourceBundle objResourceBundle = this.getInstance(BeanType.resourceBundle);
                 final String command = objResourceBundle.getString("command.line.option.cmd.included.image.types");
                 final String description = objResourceBundle.getString("command.line.option.description.included.image.types");
 
@@ -149,7 +160,7 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case optionSyso: {
-                final ResourceBundle objResourceBundle = super.instance(BeanType.resourceBundle);
+                final ResourceBundle objResourceBundle = this.getInstance(BeanType.resourceBundle);
                 final String command = objResourceBundle.getString("command.line.option.cmd.output.to.screen");
                 final String description = objResourceBundle.getString("command.line.option.description.output.to.screen");
 
@@ -159,11 +170,11 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case options: {
-                final Option cssFileOption = this.instance(CliBeanType.optionCssFile);
-                final Option htmlFileOption = this.instance(CliBeanType.optionHtmlFile);
-                final Option imageFileOption = this.instance(CliBeanType.optionImageFile);
-                final Option imageTypesOption = this.instance(CliBeanType.optionImageTypes);
-                final Option sysoOption = this.instance(CliBeanType.optionSyso);
+                final Option cssFileOption = this.getInstance(CliBeanType.optionCssFile);
+                final Option htmlFileOption = this.getInstance(CliBeanType.optionHtmlFile);
+                final Option imageFileOption = this.getInstance(CliBeanType.optionImageFile);
+                final Option imageTypesOption = this.getInstance(CliBeanType.optionImageTypes);
+                final Option sysoOption = this.getInstance(CliBeanType.optionSyso);
 
                 final Options options = new Options();
 
@@ -177,9 +188,9 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case helpFormatter: {
-                final ResourceBundle objResourceBundle = super.instance(BeanType.resourceBundle);
+                final ResourceBundle objResourceBundle = this.getInstance(BeanType.resourceBundle);
                 final String helpText = objResourceBundle.getString("command.line.help.text");
-                final Options image2cssOptions = this.instance(CliBeanType.options);
+                final Options image2cssOptions = this.getInstance(CliBeanType.options);
                 final Image2CssHelpFormatter image2CssHelpFormatter = new Image2CssHelpFormatter(helpText, image2cssOptions);
 
                 image2CssHelpFormatter.setWidth(85);
@@ -187,7 +198,7 @@ public class CliObjectFactory extends ObjectFactory{
             }
 
             case reportOutput:
-                return (T)(ReportOutput)this.instance(CliBeanType.consoleOutput);
+                return (T)(ReportOutput)this.getInstance(CliBeanType.consoleOutput);
 
             case systemWrapper : {
                 return (T)new SystemWrapper();

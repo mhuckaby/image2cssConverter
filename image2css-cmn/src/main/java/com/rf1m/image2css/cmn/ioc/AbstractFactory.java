@@ -54,7 +54,7 @@ public abstract class AbstractFactory <C extends Enum> {
                 return (T)result;
             }
         }else {
-            return this.getInstanceFromImportedFactory(value);
+            return this.getInstanceFromImportedFactory(value, args);
         }
     }
 
@@ -82,13 +82,13 @@ public abstract class AbstractFactory <C extends Enum> {
 
     protected abstract Class<C> instanceOfCatalogue();
 
-    protected <T> T getInstanceFromImportedFactory(final Enum value) {
+    protected <T> T getInstanceFromImportedFactory(final Enum value, final Object ... args) {
         final AbstractFactory supportingImportedFactory = this.getSupportingFactory(value);
 
         if(null == supportingImportedFactory) {
             throw new IllegalArgumentException(format("Factory does not know how to create %1$s", value.toString()));
         }else {
-            return (T)supportingImportedFactory.getInstance(value);
+            return (T)supportingImportedFactory.getInstance(value, args);
         }
     }
 

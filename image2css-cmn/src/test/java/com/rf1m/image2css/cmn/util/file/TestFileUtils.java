@@ -54,13 +54,13 @@ public class TestFileUtils {
     public void before() throws IOException{
         fileUtils = new FileUtils(objectFactory);
 
-        when(objectFactory.instance(BeanType.fileInputStream, file))
+        when(objectFactory.getInstance(BeanType.fileInputStream, file))
             .thenReturn(fileInputStream);
 
         when(file.length())
             .thenReturn((long)bytes.length);
 
-        when(objectFactory.instance(BeanType.byteArray, (long)bytes.length))
+        when(objectFactory.getInstance(BeanType.byteArray, (long)bytes.length))
             .thenReturn(bytes);
 
         when(file.length())

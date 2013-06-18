@@ -38,7 +38,7 @@ public class Base64Encoder {
 
     public String base64EncodeBytes(final byte[] bytes) {
         final byte[] encodedBase64Bytes = encodeBase64(bytes, false);
-        final String encoded = this.objectFactory.instance(BeanType.string, encodedBase64Bytes);
+        final String encoded = this.objectFactory.getInstance(BeanType.string, encodedBase64Bytes);
 
         return encoded.replaceAll(NL, EMPTY);
     }

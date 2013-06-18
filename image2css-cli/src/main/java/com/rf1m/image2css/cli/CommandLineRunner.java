@@ -65,7 +65,7 @@ public class CommandLineRunner {
 
     public static void main(final String[] arguments) throws Exception {
         final CliObjectFactory objectFactory = new CliObjectFactory();
-        final CommandLineRunner commandLineRunner = objectFactory.instance(CliBeanType.commandLineRunner);
+        final CommandLineRunner commandLineRunner = objectFactory.getInstance(CliBeanType.commandLineRunner);
         commandLineRunner.run(arguments);
     }
 
@@ -96,7 +96,7 @@ public class CommandLineRunner {
         final File targetImageFile = parameters.getImageFile();
         final Set<SupportedImageType> supportedImageTypes = parameters.getSupportedTypes();
         final File[] imageFiles = this.fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes);
-        final List<CssClass> cssEntries = this.objectFactory.instance(BeanType.arrayList);
+        final List<CssClass> cssEntries = this.objectFactory.getInstance(BeanType.arrayList);
 
         for(final File imageFile : imageFiles){
             final CssClass cssClass = this.imageConversionService.convert(imageFile);

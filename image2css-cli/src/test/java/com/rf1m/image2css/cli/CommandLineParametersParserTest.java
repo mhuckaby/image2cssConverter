@@ -66,25 +66,25 @@ public class CommandLineParametersParserTest {
 
         Parameters parameters = mock(Parameters.class);
 
-        when(objectFactory.instance(CliBeanType.basicParser))
+        when(objectFactory.getInstance(CliBeanType.basicParser))
             .thenReturn(basicParser);
 
-        when(objectFactory.instance(CliBeanType.optionCssFile))
+        when(objectFactory.getInstance(CliBeanType.optionCssFile))
             .thenReturn(optionCssFile);
 
-        when(objectFactory.instance(CliBeanType.optionHtmlFile))
+        when(objectFactory.getInstance(CliBeanType.optionHtmlFile))
             .thenReturn(optionHtmlFile);
 
-        when(objectFactory.instance(CliBeanType.optionImageFile))
+        when(objectFactory.getInstance(CliBeanType.optionImageFile))
             .thenReturn(optionImageFile);
 
-        when(objectFactory.instance(CliBeanType.optionImageTypes))
+        when(objectFactory.getInstance(CliBeanType.optionImageTypes))
             .thenReturn(optionSupportedImageTypes);
 
-        when(objectFactory.instance(CliBeanType.optionSyso))
+        when(objectFactory.getInstance(CliBeanType.optionSyso))
             .thenReturn(optionSyso);
 
-        when(objectFactory.instance(CliBeanType.options))
+        when(objectFactory.getInstance(CliBeanType.options))
             .thenReturn(options);
 
         when(basicParser.parse(options, args))
@@ -124,7 +124,7 @@ public class CommandLineParametersParserTest {
         when(commandLine.hasOption(optionSysoGetOptValue))
             .thenReturn(syso);
 
-        when(objectFactory.instance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso))
+        when(objectFactory.getInstance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso))
             .thenReturn(parameters);
 
         final Parameters result = commandLineParametersParser.parse(args);
@@ -132,25 +132,25 @@ public class CommandLineParametersParserTest {
         assertThat(result, is(parameters));
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.basicParser);
+            .getInstance(CliBeanType.basicParser);
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.optionCssFile);
+            .getInstance(CliBeanType.optionCssFile);
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.optionHtmlFile);
+            .getInstance(CliBeanType.optionHtmlFile);
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.optionImageFile);
+            .getInstance(CliBeanType.optionImageFile);
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.optionImageTypes);
+            .getInstance(CliBeanType.optionImageTypes);
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.optionSyso);
+            .getInstance(CliBeanType.optionSyso);
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.options);
+            .getInstance(CliBeanType.options);
 
         verify(basicParser, times(1))
             .parse(options, args);
@@ -186,7 +186,7 @@ public class CommandLineParametersParserTest {
             .hasOption(optionSysoGetOptValue);
 
         verify(objectFactory, times(1))
-            .instance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+            .getInstance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
     }
 
     @Test
@@ -201,7 +201,7 @@ public class CommandLineParametersParserTest {
         when(commandLine.getOptionValues(option))
             .thenReturn(optionValues);
 
-        when(objectFactory.instance(BeanType.file, optionValue))
+        when(objectFactory.getInstance(BeanType.file, optionValue))
             .thenReturn(file);
 
         final File result = commandLineParametersParser.extractFileFromOption(commandLine, option);
@@ -212,7 +212,7 @@ public class CommandLineParametersParserTest {
             .getOptionValues(option);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.file, optionValue);
+            .getInstance(BeanType.file, optionValue);
     }
 
     @Test
@@ -224,7 +224,7 @@ public class CommandLineParametersParserTest {
 
         Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
-        when(objectFactory.instance(BeanType.set))
+        when(objectFactory.getInstance(BeanType.set))
             .thenReturn(supportedImageTypes);
 
         when(commandLine.getOptionValues(option))
@@ -244,7 +244,7 @@ public class CommandLineParametersParserTest {
         assertThat(result, is(supportedImageTypes));
 
         verify(objectFactory, times(1))
-            .instance(BeanType.set);
+            .getInstance(BeanType.set);
 
         verify(commandLineParametersParser, times(1))
             .determineIncludedImageTypes(optionValues);

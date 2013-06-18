@@ -37,7 +37,7 @@ public class ExceptionHandler {
     }
 
     protected void handleParseException(final ParseException parseException) {
-        final Image2CssHelpFormatter image2CssHelpFormatter = this.objectFactory.instance(CliBeanType.helpFormatter);
+        final Image2CssHelpFormatter image2CssHelpFormatter = this.objectFactory.getInstance(CliBeanType.helpFormatter);
         final String exceptionFormat = this.getString("format.exception");
         final String formattedExceptionMessage = this.format(exceptionFormat, parseException.getMessage());
 

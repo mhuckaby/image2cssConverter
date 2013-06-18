@@ -21,7 +21,7 @@ package com.rf1m.image2css.out;
 import com.rf1m.image2css.cli.Parameters;
 import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,11 +30,11 @@ import java.util.List;
 import static java.lang.String.format;
 
 public class HTMLOutput extends AbstractOutput {
-    protected final ObjectFactory objectFactory;
+    protected final CliObjectFactory objectFactory;
     protected final String htmlCssEntryTemplate;
     protected final String htmlIndexTemplate;
 
-    public HTMLOutput(final ObjectFactory objectFactory,
+    public HTMLOutput(final CliObjectFactory objectFactory,
                       final String htmlCssEntryTemplate,
                       final String htmlIndexTemplate) {
 
@@ -46,8 +46,8 @@ public class HTMLOutput extends AbstractOutput {
     @Override
     public void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException {
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            final FileWriter fileWriter = this.objectFactory.instance(BeanType.fileWriter, parameters.getHtmlFile());
-            final StringBuffer stringBuffer = this.objectFactory.instance(BeanType.stringBuffer);
+            final FileWriter fileWriter = this.objectFactory.getInstance(BeanType.fileWriter, parameters.getHtmlFile());
+            final StringBuffer stringBuffer = this.objectFactory.getInstance(BeanType.stringBuffer);
 
             for(final CssClass cssClass : cssClasses){
                 final String formattedEntry = format(htmlCssEntryTemplate, cssClass.getName());

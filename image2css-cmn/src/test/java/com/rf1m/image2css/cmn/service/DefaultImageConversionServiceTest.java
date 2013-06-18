@@ -77,7 +77,7 @@ public class DefaultImageConversionServiceTest {
             .when(defaultImageConversionService)
             .determineCssEntry(cssClassName, fileExtension, base64EncodedBytes, dimension);
 
-        when(objectFactory.instance(BeanType.cssClass, cssClassName, cssEntry))
+        when(objectFactory.getInstance(BeanType.cssClass, cssClassName, cssEntry))
             .thenReturn(cssClass);
 
         final CssClass result = defaultImageConversionService.convert(file);
@@ -109,7 +109,7 @@ public class DefaultImageConversionServiceTest {
             .determineCssEntry(cssClassName, fileExtension, base64EncodedBytes, dimension);
 
         inOrder.verify(objectFactory, times(1))
-            .instance(BeanType.cssClass, cssClassName, cssEntry);
+            .getInstance(BeanType.cssClass, cssClassName, cssEntry);
     }
 
     @Test
@@ -121,7 +121,7 @@ public class DefaultImageConversionServiceTest {
         final int height = 2;
         final byte[] bytes = {01};
 
-        when(objectFactory.instance(BeanType.imageIcon, bytes))
+        when(objectFactory.getInstance(BeanType.imageIcon, bytes))
             .thenReturn(imageIcon);
 
         when(imageIcon.getIconWidth())
@@ -130,7 +130,7 @@ public class DefaultImageConversionServiceTest {
         when(imageIcon.getIconHeight())
             .thenReturn(height);
 
-        when(objectFactory.instance(BeanType.pair, width, height))
+        when(objectFactory.getInstance(BeanType.pair, width, height))
             .thenReturn(dimension);
 
         final Pair<Integer, Integer> result = defaultImageConversionService.getImageDimension(bytes);
@@ -138,7 +138,7 @@ public class DefaultImageConversionServiceTest {
         assertThat(result, is(dimension));
 
         verify(objectFactory, times(1))
-            .instance(BeanType.imageIcon, bytes);
+            .getInstance(BeanType.imageIcon, bytes);
 
         verify(imageIcon, times(1))
             .getIconWidth();
@@ -147,7 +147,7 @@ public class DefaultImageConversionServiceTest {
             .getIconHeight();
 
         verify(objectFactory, times(1))
-            .instance(BeanType.pair, width, height);
+            .getInstance(BeanType.pair, width, height);
     }
 
     @Test

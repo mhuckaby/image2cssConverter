@@ -61,8 +61,8 @@ public class FileUtils {
 	 * @throws Exception
 	 */
 	public byte[] getFileBytes(final File file) {
-		final FileInputStream fileInputStream = this.objectFactory.instance(BeanType.fileInputStream, file);
-		final byte[] bytes = this.objectFactory.instance(BeanType.byteArray, file.length());
+		final FileInputStream fileInputStream = this.objectFactory.getInstance(BeanType.fileInputStream, file);
+		final byte[] bytes = this.objectFactory.getInstance(BeanType.byteArray, file.length());
 
         try {
             fileInputStream.read(bytes);
@@ -81,13 +81,13 @@ public class FileUtils {
 
     public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
         if(imageFile.isDirectory()){
-            final Set<SupportedImageType> defaultSupportedImageTypes = this.objectFactory.instance(BeanType.supportedImageTypes);
+            final Set<SupportedImageType> defaultSupportedImageTypes = this.objectFactory.getInstance(BeanType.supportedImageTypes);
             final Set<SupportedImageType> supportedTypesToFilterFor = supportedTypes.isEmpty() ? defaultSupportedImageTypes : supportedTypes;
-            final ConversionFilenameFilter filter = this.objectFactory.instance(BeanType.conversionFilenameFilter, supportedTypesToFilterFor);
+            final ConversionFilenameFilter filter = this.objectFactory.getInstance(BeanType.conversionFilenameFilter, supportedTypesToFilterFor);
 
             return imageFile.listFiles(filter);
         }else{
-            return this.objectFactory.instance(BeanType.fileArray, imageFile);
+            return this.objectFactory.getInstance(BeanType.fileArray, imageFile);
         }
     }
 

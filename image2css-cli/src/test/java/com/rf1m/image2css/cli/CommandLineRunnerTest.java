@@ -95,7 +95,7 @@ public class CommandLineRunnerTest {
         when(fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes))
             .thenReturn(imagesForConversion);
 
-        when(objectFactory.instance(BeanType.arrayList))
+        when(objectFactory.getInstance(BeanType.arrayList))
             .thenReturn(cssEntries);
 
         when(imageConversionService.convert(imageForConversion))
@@ -113,7 +113,7 @@ public class CommandLineRunnerTest {
             .getImagesForConversion(targetImageFile, supportedImageTypes);
 
         verify(objectFactory, times(1))
-            .instance(BeanType.arrayList);
+            .getInstance(BeanType.arrayList);
 
         verify(imageConversionService, times(1))
             .convert(imageForConversion);

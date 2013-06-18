@@ -21,7 +21,7 @@ package com.rf1m.image2css.out;
 import com.rf1m.image2css.cli.Parameters;
 import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.ioc.BeanType;
-import com.rf1m.image2css.cmn.ioc.ObjectFactory;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,17 +29,17 @@ import java.util.List;
 
 public class FileOutput extends AbstractOutput{
     protected static final String NL = "\n";
-    protected final ObjectFactory objectFactory;
+    protected final CliObjectFactory objectFactory;
 
-    public FileOutput(final ObjectFactory objectFactory) {
+    public FileOutput(final CliObjectFactory objectFactory) {
         this.objectFactory = objectFactory;
     }
 
     @Override
     public void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException {
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            final FileWriter fileWriter = this.objectFactory.instance(BeanType.fileWriter, parameters.getCssFile());
-            final StringBuffer stringBuffer = this.objectFactory.instance(BeanType.stringBuffer);
+            final FileWriter fileWriter = this.objectFactory.getInstance(BeanType.fileWriter, parameters.getCssFile());
+            final StringBuffer stringBuffer = this.objectFactory.getInstance(BeanType.stringBuffer);
 
             for(final CssClass cssClass : cssClasses){
                 stringBuffer
