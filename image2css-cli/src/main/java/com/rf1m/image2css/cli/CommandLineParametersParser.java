@@ -30,23 +30,38 @@ import java.io.File;
 import java.util.Set;
 
 public class CommandLineParametersParser {
+    protected final BasicParser basicParser;
+
+    protected final Option optionCssFile;
+    protected final Option optionHtmlFile;
+    protected final Option optionImageFile;
+    protected final Option optionSupportedImageTypes;
+    protected final Option optionSyso;
+
+    protected final Options options;
+
     protected final CliObjectFactory objectFactory;
 
-    public CommandLineParametersParser(final CliObjectFactory objectFactory) {
+    public CommandLineParametersParser(final BasicParser basicParser,
+                                       final Option optionCssFile,
+                                       final Option optionHtmlFile,
+                                       final Option optionImageFile,
+                                       final Option optionSupportedImageTypes,
+                                       final Option optionSyso,
+                                       final Options options,
+                                       final CliObjectFactory objectFactory) {
+
+        this.basicParser = basicParser;
+        this.optionCssFile = optionCssFile;
+        this.optionHtmlFile = optionHtmlFile;
+        this.optionImageFile = optionImageFile;
+        this.optionSupportedImageTypes = optionSupportedImageTypes;
+        this.optionSyso = optionSyso;
+        this.options = options;
         this.objectFactory = objectFactory;
     }
 
     public Parameters parse(final String[] args) throws ParseException {
-        final BasicParser basicParser = objectFactory.getInstance(CliBeanType.basicParser);
-
-        final Option optionCssFile = objectFactory.getInstance(CliBeanType.optionCssFile);
-        final Option optionHtmlFile = objectFactory.getInstance(CliBeanType.optionHtmlFile);
-        final Option optionImageFile = objectFactory.getInstance(CliBeanType.optionImageFile);
-        final Option optionSupportedImageTypes = objectFactory.getInstance(CliBeanType.optionImageTypes);
-        final Option optionSyso = objectFactory.getInstance(CliBeanType.optionSyso);
-
-        final Options options = objectFactory.getInstance(CliBeanType.options);
-
         final CommandLine commandLine = basicParser.parse(options, args);
 
         final File cssFile = this.extractFileFromOption(commandLine, optionCssFile.getOpt());
@@ -56,7 +71,7 @@ public class CommandLineParametersParser {
             this.extractImageTypesFromOption(commandLine, optionSupportedImageTypes.getOpt());
         final boolean syso = commandLine.hasOption(optionSyso.getOpt());
 
-        return objectFactory.getInstance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+        return this.objectFactory.getInstance(CliBeanType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
     }
 
     protected File extractFileFromOption(final CommandLine commandLine, final String option) {

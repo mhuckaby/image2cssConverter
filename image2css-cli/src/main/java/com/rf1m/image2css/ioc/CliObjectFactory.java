@@ -41,8 +41,20 @@ public class CliObjectFactory extends AbstractFactory<CliBeanType> {
             case basicParser:
                 return (T)new BasicParser();
 
-            case commandLineParametersParser:
-                return (T)new CommandLineParametersParser(this);
+            case commandLineParametersParser: {
+                final BasicParser basicParser = this.getInstance(CliBeanType.basicParser);
+
+                final Option optionCssFile = this.getInstance(CliBeanType.optionCssFile);
+                final Option optionHtmlFile = this.getInstance(CliBeanType.optionHtmlFile);
+                final Option optionImageFile = this.getInstance(CliBeanType.optionImageFile);
+                final Option optionSupportedImageTypes = this.getInstance(CliBeanType.optionImageTypes);
+                final Option optionSyso = this.getInstance(CliBeanType.optionSyso);
+
+                final Options options = this.getInstance(CliBeanType.options);
+
+                return (T)new CommandLineParametersParser(basicParser, optionCssFile, optionHtmlFile, optionImageFile, optionSupportedImageTypes,
+                                optionSyso, options, this);
+            }
 
             case commandLineRunner: {
                 final PrintStream printStream = this.getInstance(CliBeanType.defaultPrintStream);
