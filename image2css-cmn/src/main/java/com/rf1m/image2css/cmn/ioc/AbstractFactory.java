@@ -38,7 +38,7 @@ public abstract class AbstractFactory <C extends Enum> {
 
 
     protected AbstractFactory(final AbstractFactory ... factories) {
-        this.factories = new HashSet<AbstractFactory>();
+        this();
         this.factories.addAll(Arrays.asList(factories));
     }
 
