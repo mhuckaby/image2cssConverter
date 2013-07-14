@@ -18,13 +18,12 @@
  */
 package com.rf1m.image2css.cmn.util.bin;
 
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
 // Limits JVM to Sun/Oracle distribution
-//import com.sun.org.apache.xml.internal.security.utils.Base64;
+// import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class Base64Encoder {
     protected final static String NL 		= "\n";
@@ -38,7 +37,7 @@ public class Base64Encoder {
 
     public String base64EncodeBytes(final byte[] bytes) {
         final byte[] encodedBase64Bytes = encodeBase64(bytes, false);
-        final String encoded = this.commonObjectFactory.getInstance(CommonObjectType.string, encodedBase64Bytes);
+        final String encoded = this.commonObjectFactory.newString(encodedBase64Bytes);
 
         return encoded.replaceAll(NL, EMPTY);
     }

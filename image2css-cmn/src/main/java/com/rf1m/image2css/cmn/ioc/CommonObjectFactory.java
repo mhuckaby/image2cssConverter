@@ -22,9 +22,6 @@ import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.service.DefaultImageConversionService;
-import com.rf1m.image2css.cmn.service.ImageConversionService;
-import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -33,141 +30,91 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static java.lang.ClassLoader.getSystemResource;
 
-public class CommonObjectFactory extends AbstractFactory<CommonObjectType> {
-    protected final String cssClassTemplate = ResourceBundle.getBundle("image2css").getString("template.css.class.def");
+public class CommonObjectFactory {
+    protected final FileUtils fileUtils;
 
-    @Override
-    protected Class<CommonObjectType> instanceOfCatalogue() {
-        return CommonObjectType.class;
+    public CommonObjectFactory(final FileUtils fileUtils) {
+        this.fileUtils = fileUtils;
     }
 
-    @Override
-    protected <T> T createInstanceByFactory(final CommonObjectType value, final Object ... args) {
-        switch(value) {
-            case arrayList:
-                return (T)new ArrayList();
+    public List newMutableList() {
+        return new ArrayList();
+    };
 
-            case base64Encoder:
-                return (T)new Base64Encoder(this);
+    public Set newMutableSet() {
+        return new HashSet();
+    }
 
-            case byteArray: {
-                final Number size = (Number)args[0];
-                return (T)new byte[size.intValue()];
-            }
+    public byte[] newByteArray(final long size) {
+        // Ick. File.length() => long, but byte[arg is int].
+        return this.newByteArray((int)size);
+    }
 
-            case conversionFilenameFilter: {
-                final Set supportedImageTypes = (Set<SupportedImageType>)args[0];
-                final FileUtils fileUtils = this.getInstance(CommonObjectType.fileUtils);
+    public byte[] newByteArray(final int size) {
+        return new byte[size];
+    }
 
-                return (T)new ConversionFilenameFilter(fileUtils, supportedImageTypes);
-            }
+    public ConversionFilenameFilter newConversionFilenameFilter(final Set<SupportedImageType> supportedImageTypes) {
+        return new ConversionFilenameFilter(this.fileUtils, supportedImageTypes);
+    }
 
-            case cssClass: {
-                final String name = (String)args[0];
-                final String body = (String)args[1];
+    public CssClass newCssClass(final String name, final String body) {
+        return new CssClass(name, body);
+    }
 
-                return (T)new CssClass(name, body);
-            }
+    public Dimension newDimension(final int width, final int height) {
+        return new Dimension(width, height);
+    }
 
-            case defaultImageConversionService: {
-                final FileUtils fileUtils = this.getInstance(CommonObjectType.fileUtils);
-                final Base64Encoder base64Encoder = this.getInstance(CommonObjectType.base64Encoder);
+    public File newFile(final String filename) {
+        return new File(filename);
+    }
 
-                final ImageConversionService imageConversionService =
-                    new DefaultImageConversionService(fileUtils, base64Encoder, this, cssClassTemplate);
-
-                return (T)imageConversionService;
-            }
-
-            case dimension: {
-                final int width = (Integer)args[0];
-                final int height = (Integer)args[0];
-
-                return (T)new Dimension(width, height);
-            }
-
-            case file: {
-                final String filename = (String)args[0];
-                return (T)new File(filename);
-            }
-
-            case fileArray: {
-                final File[] files = Arrays.copyOf(args, args.length, File[].class);
-                return (T)files;
-            }
-
-            case fileInputStream: {
-                try {
-                    final File file = (File)args[0];
-                    return (T)new FileInputStream(file);
-                }catch(FileNotFoundException e) {
-                    throw new Image2CssException(e, Errors.fileNotFound);
-                }
-            }
-
-            case fileUtils:
-                return (T)new FileUtils(this);
-
-            case fileWriter: {
-                try{
-                    final File file = (File)args[0];
-                    return (T)new FileWriter(file);
-                }catch(final IOException ioException) {
-                    throw new RuntimeException("Unable to create fileWriter", ioException);
-                }
-            }
-
-            case imageIcon: {
-                final byte[] bytes = ((byte[])args[0]).clone();
-                return (T)new ImageIcon(bytes);
-            }
-
-            case pair: {
-                final Pair<?, ?> result = new ImmutablePair(args[0], args[1]);
-                return (T)result;
-            }
-
-            case resourceBundle:
-                return (T)ResourceBundle.getBundle("image2css");
-
-            case set:
-                return (T)new HashSet();
-
-            case string: {
-                final byte[] bytes = ((byte[])args[0]).clone();
-                return (T)new String(bytes, Charset.defaultCharset());
-            }
-
-            case stringArray: {
-                final int size = (Integer)args[0];
-                return (T)new String[size];
-            }
-
-            case stringBuffer:
-                return (T)new StringBuffer();
-
-            case supportedImageTypes: {
-                final Set<SupportedImageType> result = new HashSet<SupportedImageType>();
-                result.add(SupportedImageType.gif);
-                result.add(SupportedImageType.jpg);
-                result.add(SupportedImageType.png);
-
-                return (T)Collections.unmodifiableSet(result);
-            }
-
-            case url: {
-                final String filename = (String)args[0];
-                return (T)getSystemResource(filename);
-            }
-
-            default:
-                throw new Image2CssException(Errors.parameterBeanType, value.name());
+    public FileInputStream newFileInputStream(final File file) {
+        try {
+            return new FileInputStream(file);
+        }catch(final FileNotFoundException e) {
+            throw new Image2CssException(e, Errors.fileNotFound);
         }
+    }
+
+    public FileWriter newFileWriter(final File file) {
+        try {
+            return new FileWriter(file);
+        }catch(final IOException ioException) {
+            throw new RuntimeException("Unable to create fileWriter", ioException);
+        }
+    }
+
+    public ImageIcon newImageIcon(final byte[] content) {
+        final byte[] bytes = content.clone();
+        return new ImageIcon(bytes);
+    }
+
+    public Pair newPair(final Object key, final Object value) {
+        return new ImmutablePair(key, value);
+    }
+
+    public String newString(final byte[] content) {
+        final byte[] bytes = content.clone();
+        return new String(bytes, Charset.defaultCharset());
+    }
+
+    public StringBuffer newStringBuffer() {
+        return new StringBuffer();
+    }
+
+    public URL newUrl(final String url) {
+        return getSystemResource(url);
     }
 
 }

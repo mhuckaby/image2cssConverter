@@ -19,7 +19,6 @@
 package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.cmn.domain.CssClass;
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
@@ -53,7 +52,7 @@ public class DefaultImageConversionService implements ImageConversionService {
         final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
         final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
         final String cssEntry = this.determineCssEntry(cssClassName, fileExtension, base64Bytes, dimension);
-        final CssClass cssClass = this.commonObjectFactory.getInstance(CommonObjectType.cssClass, cssClassName, cssEntry);
+        final CssClass cssClass = this.commonObjectFactory.newCssClass(cssClassName, cssEntry);
 
         return cssClass;
     }
@@ -72,9 +71,9 @@ public class DefaultImageConversionService implements ImageConversionService {
      * @return Pair with left as width and right as height.
      */
     protected Pair<Integer, Integer> getImageDimension(final byte[] bytes){
-        final ImageIcon imageIcon = this.commonObjectFactory.getInstance(CommonObjectType.imageIcon, bytes);
+        final ImageIcon imageIcon = this.commonObjectFactory.newImageIcon(bytes);
         final Pair<Integer, Integer> result =
-            this.commonObjectFactory.getInstance(CommonObjectType.pair, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+            this.commonObjectFactory.newPair(imageIcon.getIconWidth(), imageIcon.getIconHeight());
 
         return result;
     }

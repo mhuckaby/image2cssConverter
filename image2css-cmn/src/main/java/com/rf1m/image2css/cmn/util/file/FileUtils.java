@@ -21,7 +21,6 @@ package com.rf1m.image2css.cmn.util.file;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 
 import java.io.File;
@@ -31,9 +30,13 @@ import java.util.Set;
 
 public class FileUtils {
     protected final CommonObjectFactory commonObjectFactory;
+    protected final Set<SupportedImageType> defaultSupportedImageTypes;
 
-    public FileUtils(final CommonObjectFactory commonObjectFactory) {
+    public FileUtils(final CommonObjectFactory commonObjectFactory,
+                     final Set<SupportedImageType> defaultSupportedImageTypes) {
+
         this.commonObjectFactory = commonObjectFactory;
+        this.defaultSupportedImageTypes = defaultSupportedImageTypes;
     }
 
     /**
@@ -61,8 +64,8 @@ public class FileUtils {
 	 * @throws Exception
 	 */
 	public byte[] getFileBytes(final File file) {
-		final FileInputStream fileInputStream = this.commonObjectFactory.getInstance(CommonObjectType.fileInputStream, file);
-		final byte[] bytes = this.commonObjectFactory.getInstance(CommonObjectType.byteArray, file.length());
+		final FileInputStream fileInputStream = this.commonObjectFactory.newFileInputStream(file);
+		final byte[] bytes = this.commonObjectFactory.newByteArray(file.length());
 
         try {
             fileInputStream.read(bytes);
@@ -81,13 +84,12 @@ public class FileUtils {
 
     public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
         if(imageFile.isDirectory()){
-            final Set<SupportedImageType> defaultSupportedImageTypes = this.commonObjectFactory.getInstance(CommonObjectType.supportedImageTypes);
             final Set<SupportedImageType> supportedTypesToFilterFor = supportedTypes.isEmpty() ? defaultSupportedImageTypes : supportedTypes;
-            final ConversionFilenameFilter filter = this.commonObjectFactory.getInstance(CommonObjectType.conversionFilenameFilter, supportedTypesToFilterFor);
+            final ConversionFilenameFilter filter = this.commonObjectFactory.newConversionFilenameFilter(supportedTypesToFilterFor);
 
             return imageFile.listFiles(filter);
         }else{
-            return this.commonObjectFactory.getInstance(CommonObjectType.fileArray, imageFile);
+            return new File[] {imageFile};
         }
     }
 

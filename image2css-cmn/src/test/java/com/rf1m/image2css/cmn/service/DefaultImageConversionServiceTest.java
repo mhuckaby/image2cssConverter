@@ -19,7 +19,6 @@
 package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.cmn.domain.CssClass;
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
@@ -95,7 +94,7 @@ public class DefaultImageConversionServiceTest {
             .when(defaultImageConversionService)
             .determineCssEntry(cssClassName, fileExtension, base64EncodedBytes, dimension);
 
-        when(commonObjectFactory.getInstance(CommonObjectType.cssClass, cssClassName, cssEntry))
+        when(commonObjectFactory.newCssClass(cssClassName, cssEntry))
             .thenReturn(cssClass);
 
         final CssClass result = defaultImageConversionService.convert(file);
@@ -127,7 +126,7 @@ public class DefaultImageConversionServiceTest {
             .determineCssEntry(cssClassName, fileExtension, base64EncodedBytes, dimension);
 
         inOrder.verify(commonObjectFactory, times(1))
-            .getInstance(CommonObjectType.cssClass, cssClassName, cssEntry);
+            .newCssClass(cssClassName, cssEntry);
     }
 
     @Test
@@ -139,7 +138,7 @@ public class DefaultImageConversionServiceTest {
         final int height = 2;
         final byte[] bytes = {01};
 
-        when(commonObjectFactory.getInstance(CommonObjectType.imageIcon, bytes))
+        when(commonObjectFactory.newImageIcon(bytes))
             .thenReturn(imageIcon);
 
         when(imageIcon.getIconWidth())
@@ -148,7 +147,7 @@ public class DefaultImageConversionServiceTest {
         when(imageIcon.getIconHeight())
             .thenReturn(height);
 
-        when(commonObjectFactory.getInstance(CommonObjectType.pair, width, height))
+        when(commonObjectFactory.newPair(width, height))
             .thenReturn(dimension);
 
         final Pair<Integer, Integer> result = defaultImageConversionService.getImageDimension(bytes);
@@ -156,7 +155,7 @@ public class DefaultImageConversionServiceTest {
         assertThat(result, is(dimension));
 
         verify(commonObjectFactory, times(1))
-            .getInstance(CommonObjectType.imageIcon, bytes);
+            .newImageIcon(bytes);
 
         verify(imageIcon, times(1))
             .getIconWidth();
@@ -165,7 +164,7 @@ public class DefaultImageConversionServiceTest {
             .getIconHeight();
 
         verify(commonObjectFactory, times(1))
-            .getInstance(CommonObjectType.pair, width, height);
+            .newPair(width, height);
     }
 
     @Test

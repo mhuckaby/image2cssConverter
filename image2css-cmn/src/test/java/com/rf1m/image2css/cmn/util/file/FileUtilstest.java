@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.cmn.util.file;
 
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
+import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +29,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -36,9 +37,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TestFileUtils {
+public class FileUtilsTest {
     @Mock
     CommonObjectFactory commonObjectFactory;
+
+    @Mock
+    Set<SupportedImageType> supportedImageTypes;
 
     @Mock
     File file;
@@ -52,15 +56,15 @@ public class TestFileUtils {
 
     @Before
     public void before() throws IOException{
-        fileUtils = new FileUtils(commonObjectFactory);
+        fileUtils = new FileUtils(commonObjectFactory, supportedImageTypes);
 
-        when(commonObjectFactory.getInstance(CommonObjectType.fileInputStream, file))
+        when(commonObjectFactory.newFileInputStream(file))
             .thenReturn(fileInputStream);
 
         when(file.length())
             .thenReturn((long)bytes.length);
 
-        when(commonObjectFactory.getInstance(CommonObjectType.byteArray, (long) bytes.length))
+        when(commonObjectFactory.newByteArray((long)bytes.length))
             .thenReturn(bytes);
 
         when(file.length())
