@@ -4,3 +4,4 @@ debug.sh
 image2css.sh
 image2css.bat
 *.iml
+*DS_Store*

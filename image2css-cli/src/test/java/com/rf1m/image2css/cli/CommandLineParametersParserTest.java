@@ -20,8 +20,6 @@ package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
-import com.rf1m.image2css.ioc.CliObjectType;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -97,7 +95,7 @@ public class CommandLineParametersParserTest {
 
         Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
-        Parameters parameters = mock(Parameters.class);
+        ImmutableParameters parameters = mock(ImmutableParameters.class);
 
         when(basicParser.parse(options, args))
             .thenReturn(commandLine);
@@ -136,12 +134,12 @@ public class CommandLineParametersParserTest {
         when(commandLine.hasOption(optionSysoGetOptValue))
             .thenReturn(syso);
 
-        when(objectFactory.getInstance(CliObjectType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso))
+        when(objectFactory.newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso))
             .thenReturn(parameters);
 
         final Parameters result = commandLineParametersParser.parse(args);
 
-        assertThat(result, is(parameters));
+        assertThat((ImmutableParameters)result, is(parameters));
 
         verify(basicParser, times(1))
             .parse(options, args);
@@ -177,7 +175,7 @@ public class CommandLineParametersParserTest {
             .hasOption(optionSysoGetOptValue);
 
         verify(objectFactory, times(1))
-            .getInstance(CliObjectType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+            .newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso);
     }
 
     @Test
@@ -192,7 +190,7 @@ public class CommandLineParametersParserTest {
         when(commandLine.getOptionValues(option))
             .thenReturn(optionValues);
 
-        when(objectFactory.getInstance(CommonObjectType.file, optionValue))
+        when(objectFactory.newFile(optionValue))
             .thenReturn(file);
 
         final File result = commandLineParametersParser.extractFileFromOption(commandLine, option);
@@ -203,7 +201,7 @@ public class CommandLineParametersParserTest {
             .getOptionValues(option);
 
         verify(objectFactory, times(1))
-            .getInstance(CommonObjectType.file, optionValue);
+            .newFile(optionValue);
     }
 
     @Test
@@ -215,7 +213,7 @@ public class CommandLineParametersParserTest {
 
         Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
-        when(objectFactory.getInstance(CommonObjectType.set))
+        when(objectFactory.newMutableSet())
             .thenReturn(supportedImageTypes);
 
         when(commandLine.getOptionValues(option))
@@ -235,7 +233,7 @@ public class CommandLineParametersParserTest {
         assertThat(result, is(supportedImageTypes));
 
         verify(objectFactory, times(1))
-            .getInstance(CommonObjectType.set);
+            .newMutableSet();
 
         verify(commandLineParametersParser, times(1))
             .determineIncludedImageTypes(optionValues);
@@ -286,7 +284,5 @@ public class CommandLineParametersParserTest {
 
         assertThat(result, is(arguments));
     }
-
-
 
 }

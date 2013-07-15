@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <import resource="image2css-cmn-context.xml"/>
+
+    <context:property-placeholder location="classpath:image2css-cli.properties"/>
+
+    <bean id="image2cssCliObjectFactory" class="com.rf1m.image2css.ioc.CliObjectFactory">
+        <constructor-arg ref="fileUtils"/>
+    </bean>
+
+    <bean id="basicParser" class="org.apache.commons.cli.BasicParser"/>
+
+    <bean id="commandLineParametersParser" class="com.rf1m.image2css.cli.CommandLineParametersParser">
+        <constructor-arg ref="basicParser"/>
+        <constructor-arg ref="optionCssFile"/>
+        <constructor-arg ref="optionHtmlFile"/>
+        <constructor-arg ref="optionImageFile"/>
+        <constructor-arg ref="optionImageTypes"/>
+        <constructor-arg ref="optionSyso"/>
+        <constructor-arg ref="image2cssOptions"/>
+        <constructor-arg ref="image2cssCliObjectFactory"/>
+    </bean>
+
+    <bean id="exceptionHandler" class="com.rf1m.image2css.cli.ExceptionHandler">
+        <constructor-arg ref="helpFormatter"/>
+        <constructor-arg value="${issue.url}"/>
+        <constructor-arg value="${message.abnormal.exit}"/>
+        <constructor-arg value="${format.exception}"/>
+
+    </bean>
+
+    <bean id="systemWrapper" class="com.rf1m.image2css.cli.SystemWrapper"/>
+
+    <bean id="commandLineRunnerValidator" class="com.rf1m.image2css.cli.CommandLineRunnerValidator">
+        <constructor-arg ref="helpFormatter"/>
+        <constructor-arg ref="systemWrapper"/>
+    </bean>
+
+    <bean id="commandLineRunnerOutputManager" class="com.rf1m.image2css.cli.CommandLineRunnerOutputManager">
+        <constructor-arg ref="consoleOutput"/>
+        <constructor-arg ref="cssOutput"/>
+        <constructor-arg ref="htmlOutput"/>
+        <constructor-arg value="${about.project}"/>
+    </bean>
+
+    <bean id="commandLineRunner" class="com.rf1m.image2css.cli.CommandLineRunner">
+        <constructor-arg ref="image2cssCliObjectFactory"/>
+        <constructor-arg ref="commandLineRunnerValidator"/>
+        <constructor-arg ref="commandLineParametersParser"/>
+        <constructor-arg ref="exceptionHandler"/>
+        <constructor-arg ref="fileUtils"/>
+        <constructor-arg ref="defaultImageConversionService"/>
+        <constructor-arg ref="commandLineRunnerOutputManager"/>
+    </bean>
+
+    <bean id="optionCssFile" class="com.rf1m.image2css.cli.Image2CssOption">
+        <constructor-arg value="${command.line.option.cmd.css.output.filename}"/>
+        <constructor-arg value="${command.line.option.description.css.output.filename}"/>
+        <constructor-arg value="true"/>
+        <constructor-arg value="true"/>
+    </bean>
+
+    <bean id="optionHtmlFile" class="com.rf1m.image2css.cli.Image2CssOption">
+        <constructor-arg value="${command.line.option.cmd.html.output.filename}"/>
+        <constructor-arg value="${command.line.option.description.html.output.filename}"/>
+        <constructor-arg value="true"/>
+        <constructor-arg value="true"/>
+    </bean>
+
+    <bean id="optionImageFile" class="com.rf1m.image2css.cli.Image2CssOption">
+        <constructor-arg value="${command.line.option.cmd.target.file.or.directory}"/>
+        <constructor-arg value="${command.line.option.description.target.file.or.directory}"/>
+        <constructor-arg value="true"/>
+        <constructor-arg value="false"/>
+    </bean>
+
+    <bean id="optionImageTypes" class="com.rf1m.image2css.cli.Image2CssOption">
+        <constructor-arg value="${command.line.option.cmd.included.image.types}"/>
+        <constructor-arg value="${command.line.option.description.included.image.types}"/>
+        <constructor-arg value="true"/>
+        <constructor-arg value="false"/>
+        <constructor-arg value=" "/>
+        <constructor-arg value="3"/>
+    </bean>
+
+    <bean id="optionSyso" class="com.rf1m.image2css.cli.Image2CssOption">
+        <constructor-arg value="${command.line.option.cmd.output.to.screen}"/>
+        <constructor-arg value="${command.line.option.description.output.to.screen}"/>
+        <constructor-arg value="false"/>
+        <constructor-arg value="false"/>
+    </bean>
+
+    <bean id="image2cssOptions" class="com.rf1m.image2css.cli.Image2CssOptions">
+        <constructor-arg>
+            <list>
+                <ref bean="optionCssFile"/>
+                <ref bean="optionHtmlFile"/>
+                <ref bean="optionImageFile"/>
+                <ref bean="optionImageTypes"/>
+                <ref bean="optionSyso"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="helpFormatter" class="com.rf1m.image2css.cli.Image2CssHelpFormatter">
+        <constructor-arg value="${command.line.help.text}"/>
+        <constructor-arg ref="image2cssOptions"/>
+        <constructor-arg value="85"/>
+    </bean>
+
+    <bean id="htmlOutput" class="com.rf1m.image2css.out.HtmlFileOutput">
+        <constructor-arg ref="image2cssCliObjectFactory"/>
+        <constructor-arg value="${template.html.css.entry}"/>
+        <constructor-arg value="${template.html.index}"/>
+    </bean>
+
+    <bean id="cssOutput" class="com.rf1m.image2css.out.CssFileOutput">
+        <constructor-arg ref="image2cssCliObjectFactory"/>
+    </bean>
+
+    <bean id="consoleOutput" class="com.rf1m.image2css.out.ConsoleOutput">
+        <constructor-arg value="${message.generated.entry.count}"/>
+        <constructor-arg value="${message.created.css.file}"/>
+        <constructor-arg value="${message.created.html.file}"/>
+    </bean>
+
+</beans>

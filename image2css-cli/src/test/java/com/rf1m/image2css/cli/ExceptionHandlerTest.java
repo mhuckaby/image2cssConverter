@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.PrintStream;
 import java.util.ResourceBundle;
 
 import static org.mockito.Matchers.anyString;
@@ -36,11 +35,12 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ExceptionHandlerTest {
 
-    @Mock
-    Image2CssHelpFormatter helpFormatter;
+    final String issueUrl = "issueUrl";
+    final String abnormalExitTemplate = "abnormalExitTemplate";
+    final String exceptionMessageTemplate = "exceptionMessageTemplate";
 
     @Mock
-    PrintStream printStream;
+    Image2CssHelpFormatter helpFormatter;
 
     @Mock
     ResourceBundle resourceBundle;
@@ -49,48 +49,36 @@ public class ExceptionHandlerTest {
 
     @Before
     public void before() {
-        exceptionHandler = spy(new ExceptionHandler(helpFormatter, printStream, resourceBundle));
+        exceptionHandler = spy(new ExceptionHandler(helpFormatter, issueUrl, abnormalExitTemplate, exceptionMessageTemplate));
+
+        doNothing()
+            .when(exceptionHandler)
+            .println(anyString());
     }
 
     @Test
     public void handleExceptionShouldPrintException() {
-        final String issueUrl = "issueUrl";
-        final String messageTemplate = "messageTemplate";
         final String formattedMessage = "formattedMessage";
         final String message = "message";
 
         Exception exception = mock(Exception.class);
-
-        doReturn(issueUrl)
-            .when(exceptionHandler)
-            .getString("issue.url");
-
-        doReturn(messageTemplate)
-            .when(exceptionHandler)
-            .getString("message.abnormal.exit");
 
         when(exception.getMessage())
             .thenReturn(message);
 
         doReturn(formattedMessage)
             .when(exceptionHandler)
-            .format(messageTemplate, message, issueUrl);
+            .format(abnormalExitTemplate, message, issueUrl);
 
         exceptionHandler.handleException(exception);
-
-        verify(exceptionHandler, times(1))
-            .getString("issue.url");
-
-        verify(exceptionHandler, times(1))
-            .getString("message.abnormal.exit");
 
         verify(exception, times(1))
             .getMessage();
 
         verify(exceptionHandler, times(1))
-            .format(messageTemplate, message, issueUrl);
+            .format(abnormalExitTemplate, message, issueUrl);
 
-        verify(printStream, times(1))
+        verify(exceptionHandler, times(1))
             .println(formattedMessage);
 
         verify(exception, times(1))
@@ -99,73 +87,57 @@ public class ExceptionHandlerTest {
 
     @Test
     public void handleImage2CssExceptionShouldShowExceptionMessage() {
-        final String exceptionFormat = "exceptionFormat";
         final String formattedExceptionMessage = "formattedExceptionMessage";
         final String exceptionMessage = "exceptionMessage";
 
         Image2CssException image2CssException = mock(Image2CssException.class);
-
-        doReturn(exceptionFormat)
-            .when(exceptionHandler)
-            .getString("format.exception");
 
         when(image2CssException.getMessage())
             .thenReturn(exceptionMessage);
 
         doReturn(formattedExceptionMessage)
             .when(exceptionHandler)
-            .format(exceptionFormat, exceptionMessage);
+            .format(exceptionMessageTemplate, exceptionMessage);
 
         exceptionHandler.handleImage2CssException(image2CssException);
-
-        verify(exceptionHandler, times(1))
-            .getString("format.exception");
 
         verify(image2CssException, times(1))
             .getMessage();
 
         verify(exceptionHandler, times(1))
-            .format(exceptionFormat, exceptionMessage);
+            .format(exceptionMessageTemplate, exceptionMessage);
 
-        verify(printStream, times(1))
+        verify(exceptionHandler, times(1))
             .println(anyString());
     }
 
     @Test
     public void handleParseExceptionShouldPrintFormattedErrorMessageAndShowHelp() {
-        final String exceptionFormat = "exceptionFormat";
         final String formattedExceptionMessage = "formattedExceptionMessage";
         final String exceptionMessage = "exceptionMessage";
 
         ParseException parseException = mock(ParseException.class);
-
-        doReturn(exceptionFormat)
-            .when(exceptionHandler)
-            .getString("format.exception");
 
         when(parseException.getMessage())
             .thenReturn(exceptionMessage);
 
         doReturn(formattedExceptionMessage)
             .when(exceptionHandler)
-            .format(exceptionFormat, exceptionMessage);
+            .format(exceptionMessageTemplate, exceptionMessage);
 
         exceptionHandler.handleParseException(parseException);
-
-        verify(exceptionHandler)
-            .getString("format.exception");
 
         verify(parseException, times(1))
             .getMessage();
 
-        verify(printStream, times(1))
+        verify(exceptionHandler, times(1))
             .println(formattedExceptionMessage);
 
         verify(helpFormatter, times(1))
             .showHelp();
 
         verify(exceptionHandler, times(1))
-            .format(exceptionFormat, exceptionMessage);
+            .format(exceptionMessageTemplate, exceptionMessage);
     }
 
 }

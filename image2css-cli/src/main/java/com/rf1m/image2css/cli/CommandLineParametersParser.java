@@ -21,8 +21,6 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
-import com.rf1m.image2css.ioc.CliObjectType;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.*;
 
@@ -71,12 +69,12 @@ public class CommandLineParametersParser {
             this.extractImageTypesFromOption(commandLine, optionSupportedImageTypes.getOpt());
         final boolean syso = commandLine.hasOption(optionSyso.getOpt());
 
-        return this.objectFactory.getInstance(CliObjectType.immutableParameters, imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+        return this.objectFactory.newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso);
     }
 
     protected File extractFileFromOption(final CommandLine commandLine, final String option) {
         final String filename = commandLine.getOptionValues(option)[0];
-        final File file = this.objectFactory.getInstance(CommonObjectType.file, filename);
+        final File file = this.objectFactory.newFile(filename);
 
         return file;
     }
@@ -94,7 +92,7 @@ public class CommandLineParametersParser {
     }
 
     protected Set<SupportedImageType> extractImageTypesFromOption(final CommandLine commandLine, final String option) {
-        final Set<SupportedImageType> result = this.objectFactory.getInstance(CommonObjectType.set);
+        final Set<SupportedImageType> result = this.objectFactory.newMutableSet();
         final String[] optionValues = this.determineIncludedImageTypes(commandLine.getOptionValues(option));
 
         for(final String optionValue : optionValues) {

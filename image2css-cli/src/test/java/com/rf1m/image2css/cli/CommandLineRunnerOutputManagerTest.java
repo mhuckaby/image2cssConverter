@@ -18,6 +18,7 @@
  */
 package com.rf1m.image2css.cli;
 
+import com.rf1m.image2css.out.ConsoleOutput;
 import com.rf1m.image2css.out.Output;
 import com.rf1m.image2css.out.ReportOutput;
 import org.junit.Before;
@@ -26,16 +27,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.PrintStream;
+import java.util.List;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineRunnerOutputManagerTest {
 
     @Mock
-    Output consoleOutput;
+    ConsoleOutput consoleOutput;
 
     @Mock
     Output cssOutput;
@@ -46,24 +46,97 @@ public class CommandLineRunnerOutputManagerTest {
     @Mock
     ReportOutput reportOutput;
 
-    @Mock
-    PrintStream printStream;
-
     final String aboutProject = "aboutProject";
 
     CommandLineRunnerOutputManager commandLineRunnerOutputManager;
 
     @Before
     public void before() {
-        commandLineRunnerOutputManager = spy(new CommandLineRunnerOutputManager(consoleOutput, cssOutput, htmlOutput, reportOutput, printStream, aboutProject));
+        commandLineRunnerOutputManager = spy(new CommandLineRunnerOutputManager(consoleOutput, cssOutput, htmlOutput, aboutProject));
+    }
+
+    @Test
+    public void doOutputShouldNotProduceUndesiredOutput() throws Exception {
+        Parameters parameters = mock(Parameters.class);
+        List cssClasses = mock(List.class);
+
+        when(parameters.isOutputToConsoleDesired())
+            .thenReturn(false);
+
+        when(parameters.isCssFileOutputDesired())
+            .thenReturn(false);
+
+        when(parameters.isHtmlFileOutputDesired())
+            .thenReturn(false);
+
+        commandLineRunnerOutputManager.doOutput(parameters, cssClasses);
+
+        verify(parameters, times(2))
+            .isOutputToConsoleDesired();
+
+        verify(parameters, times(1))
+            .isCssFileOutputDesired();
+
+        verify(parameters, times(1))
+            .isHtmlFileOutputDesired();
+
+        verify(consoleOutput, times(0))
+            .out(parameters, cssClasses);
+
+        verify(consoleOutput, times(0))
+            .generateReportOutput(parameters, cssClasses);
+
+        verify(cssOutput, times(0))
+            .out(parameters, cssClasses);
+
+        verify(htmlOutput, times(0))
+            .out(parameters, cssClasses);
+    }
+
+    @Test
+    public void doOutputShouldProduceDesiredOutput() throws Exception {
+        Parameters parameters = mock(Parameters.class);
+        List cssClasses = mock(List.class);
+
+        when(parameters.isOutputToConsoleDesired())
+            .thenReturn(true);
+
+        when(parameters.isCssFileOutputDesired())
+            .thenReturn(true);
+
+        when(parameters.isHtmlFileOutputDesired())
+            .thenReturn(true);
+
+        commandLineRunnerOutputManager.doOutput(parameters, cssClasses);
+
+        verify(parameters, times(2))
+            .isOutputToConsoleDesired();
+
+        verify(parameters, times(1))
+            .isCssFileOutputDesired();
+
+        verify(parameters, times(1))
+            .isHtmlFileOutputDesired();
+
+        verify(consoleOutput, times(1))
+            .out(parameters, cssClasses);
+
+        verify(consoleOutput, times(1))
+            .generateReportOutput(parameters, cssClasses);
+
+        verify(cssOutput, times(1))
+            .out(parameters, cssClasses);
+
+        verify(htmlOutput, times(1))
+            .out(parameters, cssClasses);
     }
 
     @Test
     public void showAboutShouldPrintAboutStringToPrintWriter() {
         commandLineRunnerOutputManager.showAbout();
 
-        verify(printStream, times(1))
-            .println(anyString());
+        verify(commandLineRunnerOutputManager, times(1))
+            .println(aboutProject);
     }
 
 

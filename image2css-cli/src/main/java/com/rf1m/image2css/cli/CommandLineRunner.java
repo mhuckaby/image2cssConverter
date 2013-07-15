@@ -21,24 +21,19 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
-import com.rf1m.image2css.ioc.CliObjectType;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 public class CommandLineRunner {
     protected final CliObjectFactory objectFactory;
-    protected final PrintStream printStream;
-    protected final ResourceBundle resourceBundle;
     protected final CommandLineRunnerValidator commandLineRunnerValidator;
     protected final CommandLineParametersParser commandLineParametersParser;
     protected final ExceptionHandler exceptionHandler;
@@ -46,15 +41,15 @@ public class CommandLineRunner {
     protected final ImageConversionService imageConversionService;
     protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager;
 
-    public CommandLineRunner(final CliObjectFactory objectFactory, final PrintStream printStream,
-                             final ResourceBundle resourceBundle, final CommandLineRunnerValidator commandLineRunnerValidator,
-                             final CommandLineParametersParser commandLineParametersParser, final ExceptionHandler exceptionHandler,
-                             final FileUtils fileUtils, final ImageConversionService imageConversionService,
+    public CommandLineRunner(final CliObjectFactory objectFactory,
+                             final CommandLineRunnerValidator commandLineRunnerValidator,
+                             final CommandLineParametersParser commandLineParametersParser,
+                             final ExceptionHandler exceptionHandler,
+                             final FileUtils fileUtils,
+                             final ImageConversionService imageConversionService,
                              final CommandLineRunnerOutputManager commandLineRunnerOutputManager) {
 
         this.objectFactory = objectFactory;
-        this.printStream = printStream;
-        this.resourceBundle = resourceBundle;
         this.commandLineRunnerValidator = commandLineRunnerValidator;
         this.commandLineParametersParser = commandLineParametersParser;
         this.exceptionHandler = exceptionHandler;
@@ -64,8 +59,10 @@ public class CommandLineRunner {
     }
 
     public static void main(final String[] arguments) throws Exception {
-        final CliObjectFactory objectFactory = new CliObjectFactory();
-        final CommandLineRunner commandLineRunner = objectFactory.getInstance(CliObjectType.commandLineRunner);
+        final ClassPathXmlApplicationContext applicationContext =
+            new ClassPathXmlApplicationContext("classpath:image2css-cli-context.xml");
+        final CommandLineRunner commandLineRunner = (CommandLineRunner)applicationContext.getBean("commandLineRunner");
+
         commandLineRunner.run(arguments);
     }
 
@@ -96,7 +93,7 @@ public class CommandLineRunner {
         final File targetImageFile = parameters.getImageFile();
         final Set<SupportedImageType> supportedImageTypes = parameters.getSupportedTypes();
         final File[] imageFiles = this.fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes);
-        final List<CssClass> cssEntries = this.objectFactory.getInstance(CommonObjectType.arrayList);
+        final List<CssClass> cssEntries = this.objectFactory.newMutableList();
 
         for(final File imageFile : imageFiles){
             final CssClass cssClass = this.imageConversionService.convert(imageFile);

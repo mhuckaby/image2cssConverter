@@ -21,44 +21,40 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
 import org.apache.commons.cli.ParseException;
 
-import java.io.PrintStream;
-import java.util.ResourceBundle;
-
 public class ExceptionHandler {
     protected final Image2CssHelpFormatter image2CssHelpFormatter;
-    protected final PrintStream printStream;
-    protected final ResourceBundle resourceBundle;
 
+    protected final String issueUrl;
+    protected final String abnormalExitTemplate;
+    protected final String exceptionMessageTemplate;
 
     public ExceptionHandler(final Image2CssHelpFormatter image2CssHelpFormatter,
-                            final PrintStream printStream, final ResourceBundle resourceBundle) {
+                            final String issueUrl,
+                            final String abnormalExitTemplate,
+                            final String exceptionMessageTemplate) {
 
         this.image2CssHelpFormatter = image2CssHelpFormatter;
-        this.printStream = printStream;
-        this.resourceBundle = resourceBundle;
+        this.issueUrl = issueUrl;
+        this.abnormalExitTemplate = abnormalExitTemplate;
+        this.exceptionMessageTemplate = exceptionMessageTemplate;
     }
 
     protected void handleException(final Exception e) {
-        final String issueUrl = this.getString("issue.url");
-        final String messageTemplate = this.getString("message.abnormal.exit");
-        final String formattedMessage = this.format(messageTemplate, e.getMessage(), issueUrl);
+        final String formattedMessage = this.format(abnormalExitTemplate, e.getMessage(), issueUrl);
+        this.println(formattedMessage);
 
-        printStream.println(formattedMessage);
         e.printStackTrace();
     }
 
     protected void handleImage2CssException(final Image2CssException image2CssException) {
-        final String exceptionFormat = this.getString("format.exception");
-        final String formattedExceptionMessage = this.format(exceptionFormat, image2CssException.getMessage());
-
-        printStream.println(formattedExceptionMessage);
+        final String formattedExceptionMessage = this.format(exceptionMessageTemplate, image2CssException.getMessage());
+        this.println(formattedExceptionMessage);
     }
 
     protected void handleParseException(final ParseException parseException) {
-        final String exceptionFormat = this.getString("format.exception");
-        final String formattedExceptionMessage = this.format(exceptionFormat, parseException.getMessage());
+        final String formattedExceptionMessage = this.format(exceptionMessageTemplate, parseException.getMessage());
+        this.println(formattedExceptionMessage);
 
-        printStream.println(formattedExceptionMessage);
         image2CssHelpFormatter.showHelp();
     }
 
@@ -66,8 +62,8 @@ public class ExceptionHandler {
         return String.format(template, param);
     }
 
-    protected String getString(final String key) {
-        return this.resourceBundle.getString(key);
+    protected void println(final String out) {
+        System.out.println(out);
     }
 
 }

@@ -21,7 +21,6 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.ioc.CommonObjectType;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import com.rf1m.image2css.ioc.CliObjectFactory;
@@ -33,9 +32,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
-import java.io.PrintStream;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import static org.mockito.Mockito.*;
@@ -55,9 +52,6 @@ public class CommandLineRunnerTest {
 
     @Mock
     SystemWrapper systemWrapper;
-
-    @Mock
-    PrintStream printStream;
 
     @Mock
     CommandLineParametersParser commandLineParametersParser;
@@ -80,16 +74,17 @@ public class CommandLineRunnerTest {
     @Mock
     CommandLineRunnerOutputManager commandLineRunnerOutputManager;
 
-    ResourceBundle resourceBundle;
     CommandLineRunner commandLineRunner;
 
     @Before
     public void before() throws Exception {
-        resourceBundle = ResourceBundle.getBundle("image2css");
-        commandLineRunner = spy(
-            new CommandLineRunner(objectFactory, printStream, resourceBundle, commandLineRunnerValidator,
-                commandLineParametersParser, exceptionHandler, fileUtils, imageConversionService, commandLineRunnerOutputManager)
-        );
+        commandLineRunner = spy(new CommandLineRunner(objectFactory,
+                                    commandLineRunnerValidator,
+                                    commandLineParametersParser,
+                                    exceptionHandler,
+                                    fileUtils,
+                                    imageConversionService,
+                                    commandLineRunnerOutputManager));
 
         when(commandLineParametersParser.parse(arguments))
             .thenReturn(parameters);
@@ -113,7 +108,7 @@ public class CommandLineRunnerTest {
         when(fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes))
             .thenReturn(imagesForConversion);
 
-        when(objectFactory.getInstance(CommonObjectType.arrayList))
+        when(objectFactory.newMutableList())
             .thenReturn(cssEntries);
 
         when(imageConversionService.convert(imageForConversion))
@@ -131,7 +126,7 @@ public class CommandLineRunnerTest {
             .getImagesForConversion(targetImageFile, supportedImageTypes);
 
         verify(objectFactory, times(1))
-            .getInstance(CommonObjectType.arrayList);
+            .newMutableList();
 
         verify(imageConversionService, times(1))
             .convert(imageForConversion);

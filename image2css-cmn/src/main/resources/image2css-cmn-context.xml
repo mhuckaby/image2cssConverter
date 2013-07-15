@@ -35,7 +35,7 @@
         <constructor-arg ref="fileUtils"/>
         <constructor-arg ref="base64Encoder"/>
         <constructor-arg ref="image2cssCommonObjectFactory"/>
-        <constructor-arg ref="${template.html.css.entry}"/>
+        <constructor-arg value="${template.css.class.def}"/>
     </bean>
 
 </beans>

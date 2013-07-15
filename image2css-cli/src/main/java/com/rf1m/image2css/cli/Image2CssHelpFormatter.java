@@ -25,9 +25,11 @@ public class Image2CssHelpFormatter extends HelpFormatter {
     protected final String helpText;
     protected final Options options;
 
-    public Image2CssHelpFormatter(final String helpText, final Options options) {
+    public Image2CssHelpFormatter(final String helpText, final Options options, final int width) {
         this.helpText = helpText;
         this.options = options;
+
+        this.setWidth(width);
     }
 
     public void showHelp() {

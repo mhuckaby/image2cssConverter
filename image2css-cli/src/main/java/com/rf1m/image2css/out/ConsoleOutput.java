@@ -22,26 +22,29 @@ import com.rf1m.image2css.cli.Parameters;
 import com.rf1m.image2css.cmn.domain.CssClass;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import static java.lang.String.format;
 
 public class ConsoleOutput extends AbstractOutput implements ReportOutput{
-    protected final ResourceBundle resourceBundle;
-    protected final PrintStream consoleOut;
+    protected final String reportCssTotalTemplate;
+    protected final String reportCssFileTemplate;
+    protected final String reportHtmlFileTemplate;
 
-    public ConsoleOutput(final ResourceBundle resourceBundle, final PrintStream consoleOut){
-        this.resourceBundle = resourceBundle;
-        this.consoleOut = consoleOut;
+    public ConsoleOutput(final String reportCssTotalTemplate,
+                         final String reportCssFileTemplate,
+                         final String reportHtmlFileTemplate) {
+
+        this.reportCssTotalTemplate = reportCssTotalTemplate;
+        this.reportCssFileTemplate = reportCssFileTemplate;
+        this.reportHtmlFileTemplate = reportHtmlFileTemplate;
     }
 
     @Override
     public void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException {
         if(isValidParametersAndClassesWithConsoleOutput(parameters, cssClasses)){
 			for(final CssClass cssClass : cssClasses){
-				consoleOut.println(cssClass.getBody());
+				this.println(cssClass.getBody());
 			}
 		}
     }
@@ -49,25 +52,24 @@ public class ConsoleOutput extends AbstractOutput implements ReportOutput{
     @Override
     public void generateReportOutput(final Parameters parameters, final List<CssClass> cssClasses){
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            final String reportCssTotalTemplate = this.resourceBundle.getString("message.generated.entry.count");
-            consoleOut.println(format(reportCssTotalTemplate, cssClasses.size()));
+            this.println(format(reportCssTotalTemplate, cssClasses.size()));
 
-            final String reportCssFileTemplate = this.resourceBundle.getString("message.created.css.file");
             if(null != parameters.getCssFile()){
-                consoleOut.println(format(reportCssFileTemplate, parameters.getCssFile().getName()));
+                this.println(format(reportCssFileTemplate, parameters.getCssFile().getName()));
             }
 
-            final String reportHtmlFileTemplate = this.resourceBundle.getString("message.created.html.file");
             if(null != parameters.getHtmlFile()){
-                consoleOut.println(format(reportHtmlFileTemplate, parameters.getHtmlFile().getName()));
+                this.println(format(reportHtmlFileTemplate, parameters.getHtmlFile().getName()));
             }
         }
 	}
 
     protected boolean isValidParametersAndClassesWithConsoleOutput(final Parameters parameters, final List<CssClass> cssClasses) {
-        return
-            super.isValidParametersAndClasses(parameters, cssClasses) &&
-            parameters.isOutputToConsoleDesired();
+        return super.isValidParametersAndClasses(parameters, cssClasses) && parameters.isOutputToConsoleDesired();
+    }
+
+    protected void println(final String out) {
+        System.out.println(out);
     }
 
 }
