@@ -61,7 +61,7 @@ public class ExceptionHandlerTest {
         final String formattedMessage = "formattedMessage";
         final String message = "message";
 
-        Exception exception = mock(Exception.class);
+        final Exception exception = mock(Exception.class);
 
         when(exception.getMessage())
             .thenReturn(message);
@@ -90,7 +90,7 @@ public class ExceptionHandlerTest {
         final String formattedExceptionMessage = "formattedExceptionMessage";
         final String exceptionMessage = "exceptionMessage";
 
-        Image2CssException image2CssException = mock(Image2CssException.class);
+        final Image2CssException image2CssException = mock(Image2CssException.class);
 
         when(image2CssException.getMessage())
             .thenReturn(exceptionMessage);
@@ -116,7 +116,7 @@ public class ExceptionHandlerTest {
         final String formattedExceptionMessage = "formattedExceptionMessage";
         final String exceptionMessage = "exceptionMessage";
 
-        ParseException parseException = mock(ParseException.class);
+        final ParseException parseException = mock(ParseException.class);
 
         when(parseException.getMessage())
             .thenReturn(exceptionMessage);

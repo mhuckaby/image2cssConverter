@@ -66,9 +66,9 @@ public class DefaultImageConversionServiceTest {
         final String base64EncodedBytes = "base64EncodedBytes";
         final byte[] bytes = {01};
 
-        File file = mock(File.class);
-        Pair<Integer, Integer> dimension = mock(Pair.class);
-        CssClass cssClass = mock(CssClass.class);
+        final File file = mock(File.class);
+        final Pair<Integer, Integer> dimension = mock(Pair.class);
+        final CssClass cssClass = mock(CssClass.class);
 
         when(file.getName())
             .thenReturn(filename);
@@ -132,8 +132,8 @@ public class DefaultImageConversionServiceTest {
 
     @Test
     public void shouldReturnPairWithLeftWidthAndRightHeightOfImageBasedOnBytes() {
-        Pair<Integer, Integer> dimension = mock(Pair.class);
-        ImageIcon imageIcon = mock(ImageIcon.class);
+        final Pair<Integer, Integer> dimension = mock(Pair.class);
+        final ImageIcon imageIcon = mock(ImageIcon.class);
 
         final int width = 1;
         final int height = 2;

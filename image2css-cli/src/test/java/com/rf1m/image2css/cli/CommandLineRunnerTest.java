@@ -95,12 +95,12 @@ public class CommandLineRunnerTest {
 
     @Test
     public void executeShouldParseAndConvert() throws Exception {
-        File targetImageFile = mock(File.class);
-        Set<SupportedImageType> supportedImageTypes = mock(Set.class);
-        File imageForConversion = mock(File.class);
-        File[] imagesForConversion = {imageForConversion};
-        List<CssClass> cssEntries = mock(List.class);
-        CssClass cssClass = mock(CssClass.class);
+        final File targetImageFile = mock(File.class);
+        final Set<SupportedImageType> supportedImageTypes = mock(Set.class);
+        final File imageForConversion = mock(File.class);
+        final File[] imagesForConversion = {imageForConversion};
+        final List<CssClass> cssEntries = mock(List.class);
+        final CssClass cssClass = mock(CssClass.class);
 
         when(parameters.getImageFile())
             .thenReturn(targetImageFile);
@@ -141,7 +141,7 @@ public class CommandLineRunnerTest {
 
     @Test
     public void runShouldInvokeParseExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {
-        ParseException parseException = mock(ParseException.class);
+        final ParseException parseException = mock(ParseException.class);
 
         doThrow(parseException)
             .when(commandLineRunner)
@@ -159,7 +159,7 @@ public class CommandLineRunnerTest {
 
     @Test
     public void executeShouldInvokeImage2CssExceptionHandlerWhenImage2CssExceptionExceptionIsEncountered() throws Exception {
-        Image2CssException image2CssException = mock(Image2CssException.class);
+        final Image2CssException image2CssException = mock(Image2CssException.class);
 
         doNothing()
             .when(commandLineRunnerOutputManager)

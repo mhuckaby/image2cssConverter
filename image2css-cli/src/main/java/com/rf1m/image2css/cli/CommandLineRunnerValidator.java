@@ -40,7 +40,7 @@ public class CommandLineRunnerValidator {
         }
     }
 
-    public void validateParameters(Parameters parameters) throws Image2CssException {
+    public void validateParameters(final Parameters parameters) throws Image2CssException {
         if(null == parameters){
             throw new Image2CssValidationException(parametersObjectCannotBeNull) ;
         }else if(null == parameters.getImageFile()){

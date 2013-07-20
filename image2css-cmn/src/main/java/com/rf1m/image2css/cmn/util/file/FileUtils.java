@@ -26,13 +26,6 @@ import java.util.Set;
 public class FileUtils {
     protected final Set<SupportedImageType> defaultSupportedImageTypes;
 
-    public FileUtils() {
-        this.defaultSupportedImageTypes = new HashSet<SupportedImageType>();
-        this.defaultSupportedImageTypes.add(SupportedImageType.gif);
-        this.defaultSupportedImageTypes.add(SupportedImageType.jpg);
-        this.defaultSupportedImageTypes.add(SupportedImageType.png);
-    }
-
     public FileUtils(final Set<SupportedImageType> defaultSupportedImageTypes) {
         this.defaultSupportedImageTypes = defaultSupportedImageTypes;
     }

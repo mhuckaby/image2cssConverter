@@ -89,13 +89,13 @@ public class CommandLineParametersParserTest {
 
         final boolean syso = false;
 
-        File cssFile = mock(File.class);
-        File htmlFile = mock(File.class);
-        File imageFile = mock(File.class);
+        final File cssFile = mock(File.class);
+        final File htmlFile = mock(File.class);
+        final File imageFile = mock(File.class);
 
-        Set<SupportedImageType> supportedImageTypes = mock(Set.class);
+        final Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
-        ImmutableParameters parameters = mock(ImmutableParameters.class);
+        final ImmutableParameters parameters = mock(ImmutableParameters.class);
 
         when(basicParser.parse(options, args))
             .thenReturn(commandLine);
@@ -185,7 +185,7 @@ public class CommandLineParametersParserTest {
 
         final String[] optionValues = {optionValue};
 
-        File file = mock(File.class);
+        final File file = mock(File.class);
 
         when(commandLine.getOptionValues(option))
             .thenReturn(optionValues);
@@ -211,7 +211,7 @@ public class CommandLineParametersParserTest {
 
         final String[] optionValues = {optionValueGif};
 
-        Set<SupportedImageType> supportedImageTypes = mock(Set.class);
+        final Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
         when(objectFactory.newMutableSet())
             .thenReturn(supportedImageTypes);

@@ -57,8 +57,8 @@ public class CommandLineRunnerOutputManagerTest {
 
     @Test
     public void doOutputShouldNotProduceUndesiredOutput() throws Exception {
-        Parameters parameters = mock(Parameters.class);
-        List cssClasses = mock(List.class);
+        final Parameters parameters = mock(Parameters.class);
+        final List cssClasses = mock(List.class);
 
         when(parameters.isOutputToConsoleDesired())
             .thenReturn(false);
@@ -95,8 +95,8 @@ public class CommandLineRunnerOutputManagerTest {
 
     @Test
     public void doOutputShouldProduceDesiredOutput() throws Exception {
-        Parameters parameters = mock(Parameters.class);
-        List cssClasses = mock(List.class);
+        final Parameters parameters = mock(Parameters.class);
+        final List cssClasses = mock(List.class);
 
         when(parameters.isOutputToConsoleDesired())
             .thenReturn(true);

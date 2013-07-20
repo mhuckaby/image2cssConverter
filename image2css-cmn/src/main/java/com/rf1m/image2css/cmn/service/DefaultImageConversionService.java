@@ -40,7 +40,10 @@ public class DefaultImageConversionService implements ImageConversionService {
     protected final CommonObjectFactory commonObjectFactory;
     protected final String cssClassTemplate;
 
-    public DefaultImageConversionService(FileUtils fileUtils, Base64Encoder base64Encoder, CommonObjectFactory commonObjectFactory, String cssClassTemplate) {
+    public DefaultImageConversionService(final FileUtils fileUtils,
+                                         final Base64Encoder base64Encoder,
+                                         final CommonObjectFactory commonObjectFactory,
+                                         final String cssClassTemplate) {
         this.fileUtils = fileUtils;
         this.base64Encoder = base64Encoder;
         this.commonObjectFactory = commonObjectFactory;
@@ -61,7 +64,10 @@ public class DefaultImageConversionService implements ImageConversionService {
         return cssClass;
     }
 
-    protected String determineCssEntry(final String cssClassName, final String fileExtension, final String base64Bytes, final Pair<Integer, Integer> dimension) {
+    protected String determineCssEntry(final String cssClassName,
+                                       final String fileExtension,
+                                       final String base64Bytes,
+                                       final Pair<Integer, Integer> dimension) {
         return format(cssClassTemplate, cssClassName, fileExtension, base64Bytes, dimension.getLeft(), dimension.getRight());
     }
 
