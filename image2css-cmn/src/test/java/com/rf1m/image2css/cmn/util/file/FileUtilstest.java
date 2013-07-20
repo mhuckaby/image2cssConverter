@@ -33,7 +33,6 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -56,7 +55,7 @@ public class FileUtilsTest {
 
     @Before
     public void before() throws IOException{
-        fileUtils = new FileUtils(commonObjectFactory, supportedImageTypes);
+        fileUtils = new FileUtils(supportedImageTypes);
 
         when(commonObjectFactory.newFileInputStream(file))
             .thenReturn(fileInputStream);
@@ -93,16 +92,6 @@ public class FileUtilsTest {
         final String result = fileUtils.getExtension(pathWithNoExtension);
 
         assertThat(result, is(""));
-    }
-
-    @Test
-    public void getFileBytes() throws IOException{
-        byte[] result = fileUtils.getFileBytes(file);
-
-        verify(fileInputStream).read(bytes);
-        verify(fileInputStream).close();
-
-        assertThat(result, is(bytes));
     }
 
 }

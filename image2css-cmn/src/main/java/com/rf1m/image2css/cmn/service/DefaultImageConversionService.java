@@ -19,6 +19,8 @@
 package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.cmn.domain.CssClass;
+import com.rf1m.image2css.cmn.exception.Errors;
+import com.rf1m.image2css.cmn.exception.Image2CssException;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
@@ -26,6 +28,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import static java.lang.String.format;
 
@@ -48,7 +52,7 @@ public class DefaultImageConversionService implements ImageConversionService {
         final String imageFilename = imageFile.getName();
         final String cssClassName = this.determineCssClassName(imageFilename);
         final String fileExtension = this.fileUtils.getExtension(imageFilename);
-        final byte[] bytes = this.fileUtils.getFileBytes(imageFile);
+        final byte[] bytes = this.getFileBytes(imageFile);
         final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
         final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
         final String cssEntry = this.determineCssEntry(cssClassName, fileExtension, base64Bytes, dimension);
@@ -77,4 +81,30 @@ public class DefaultImageConversionService implements ImageConversionService {
 
         return result;
     }
+
+    /**
+     * Read the bytes of a file into a byte array and return the array.
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public byte[] getFileBytes(final File file) {
+        final FileInputStream fileInputStream = this.commonObjectFactory.newFileInputStream(file);
+        final byte[] bytes = this.commonObjectFactory.newByteArray(file.length());
+
+        try {
+            fileInputStream.read(bytes);
+        }catch(final IOException ioException) {
+            throw new Image2CssException(ioException, Errors.errorReadingFile);
+        }finally {
+            try {
+                fileInputStream.close();
+            }catch(final Exception exception) {
+                throw new Image2CssException(exception, Errors.errorClosingFile);
+            }
+        }
+
+        return bytes;
+    }
+
 }

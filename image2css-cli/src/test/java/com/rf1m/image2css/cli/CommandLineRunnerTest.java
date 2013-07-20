@@ -74,6 +74,8 @@ public class CommandLineRunnerTest {
     @Mock
     CommandLineRunnerOutputManager commandLineRunnerOutputManager;
 
+    Set<SupportedImageType> supportedImageTypes;
+
     CommandLineRunner commandLineRunner;
 
     @Before
@@ -84,7 +86,8 @@ public class CommandLineRunnerTest {
                                     exceptionHandler,
                                     fileUtils,
                                     imageConversionService,
-                                    commandLineRunnerOutputManager));
+                                    commandLineRunnerOutputManager,
+                                    supportedImageTypes));
 
         when(commandLineParametersParser.parse(arguments))
             .thenReturn(parameters);
@@ -105,8 +108,9 @@ public class CommandLineRunnerTest {
         when(parameters.getSupportedTypes())
             .thenReturn(supportedImageTypes);
 
-        when(fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes))
-            .thenReturn(imagesForConversion);
+        doReturn(imagesForConversion)
+            .when(commandLineRunner)
+            .getImagesForConversion(targetImageFile, supportedImageTypes);
 
         when(objectFactory.newMutableList())
             .thenReturn(cssEntries);
@@ -122,7 +126,7 @@ public class CommandLineRunnerTest {
         verify(parameters, times(1))
             .getSupportedTypes();
 
-        verify(fileUtils, times(1))
+        verify(commandLineRunner, times(1))
             .getImagesForConversion(targetImageFile, supportedImageTypes);
 
         verify(objectFactory, times(1))

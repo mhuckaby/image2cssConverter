@@ -87,20 +87,18 @@
 
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
                 <includes>
-                    <include>*.properties</include>
+                    <include>*.xml</include>
                 </includes>
             </resource>
 
             <resource>
-                <directory>src/main/scripts</directory>
-                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
                 <includes>
-                    <include>**/*.sh</include>
-                    <include>**/*.bat</include>
+                    <include>*.properties</include>
                 </includes>
-                <targetPath>../../</targetPath>
             </resource>
 
         </resources>

@@ -22,6 +22,7 @@ import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
+import com.rf1m.image2css.cmn.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
@@ -40,6 +41,7 @@ public class CommandLineRunner {
     protected final FileUtils fileUtils;
     protected final ImageConversionService imageConversionService;
     protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager;
+    protected final Set<SupportedImageType> defaultSupportedImageTypes;
 
     public CommandLineRunner(final CliObjectFactory objectFactory,
                              final CommandLineRunnerValidator commandLineRunnerValidator,
@@ -47,7 +49,8 @@ public class CommandLineRunner {
                              final ExceptionHandler exceptionHandler,
                              final FileUtils fileUtils,
                              final ImageConversionService imageConversionService,
-                             final CommandLineRunnerOutputManager commandLineRunnerOutputManager) {
+                             final CommandLineRunnerOutputManager commandLineRunnerOutputManager,
+                             final Set<SupportedImageType> defaultSupportImageTypes) {
 
         this.objectFactory = objectFactory;
         this.commandLineRunnerValidator = commandLineRunnerValidator;
@@ -56,6 +59,7 @@ public class CommandLineRunner {
         this.fileUtils = fileUtils;
         this.imageConversionService = imageConversionService;
         this.commandLineRunnerOutputManager = commandLineRunnerOutputManager;
+        this.defaultSupportedImageTypes = defaultSupportImageTypes;
     }
 
     public static void main(final String[] arguments) throws Exception {
@@ -92,7 +96,7 @@ public class CommandLineRunner {
     protected void execute(final Parameters parameters) throws IOException {
         final File targetImageFile = parameters.getImageFile();
         final Set<SupportedImageType> supportedImageTypes = parameters.getSupportedTypes();
-        final File[] imageFiles = this.fileUtils.getImagesForConversion(targetImageFile, supportedImageTypes);
+        final File[] imageFiles = this.getImagesForConversion(targetImageFile, supportedImageTypes);
         final List<CssClass> cssEntries = this.objectFactory.newMutableList();
 
         for(final File imageFile : imageFiles){
@@ -102,4 +106,16 @@ public class CommandLineRunner {
 
         this.commandLineRunnerOutputManager.doOutput(parameters, cssEntries);
     }
+
+    public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
+        if(imageFile.isDirectory()){
+            final Set<SupportedImageType> supportedTypesToFilterFor = supportedTypes.isEmpty() ? this.defaultSupportedImageTypes : supportedTypes;
+            final ConversionFilenameFilter filter = this.objectFactory.newConversionFilenameFilter(supportedTypesToFilterFor);
+
+            return imageFile.listFiles(filter);
+        }else{
+            return new File[] {imageFile};
+        }
+    }
+
 }

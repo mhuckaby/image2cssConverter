@@ -80,8 +80,9 @@ public class DefaultImageConversionServiceTest {
         when(fileUtils.getExtension(filename))
             .thenReturn(fileExtension);
 
-        when(fileUtils.getFileBytes(file))
-            .thenReturn(bytes);
+        doReturn(bytes)
+            .when(defaultImageConversionService)
+            .getFileBytes(file);
 
         when(base64Encoder.base64EncodeBytes(bytes))
             .thenReturn(base64EncodedBytes);
@@ -101,7 +102,7 @@ public class DefaultImageConversionServiceTest {
 
         assertThat(result, is(cssClass));
 
-        InOrder inOrder = inOrder(file, defaultImageConversionService, fileUtils, fileUtils, base64Encoder,
+        final InOrder inOrder = inOrder(file, defaultImageConversionService, fileUtils, fileUtils, base64Encoder,
             defaultImageConversionService, defaultImageConversionService, commonObjectFactory);
 
         inOrder.verify(file, times(1))
@@ -113,7 +114,7 @@ public class DefaultImageConversionServiceTest {
         inOrder.verify(fileUtils, times(1))
             .getExtension(filename);
 
-        inOrder.verify(fileUtils, times(1))
+        inOrder.verify(defaultImageConversionService, times(1))
             .getFileBytes(file);
 
         inOrder.verify(base64Encoder, times(1))
