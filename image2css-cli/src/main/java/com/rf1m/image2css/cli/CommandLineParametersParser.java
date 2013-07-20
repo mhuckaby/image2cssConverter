@@ -107,7 +107,7 @@ public class CommandLineParametersParser {
         try {
             return SupportedImageType.valueOf(supportedImageTypeArg.toLowerCase());
         }catch(final IllegalArgumentException illegalArgumentException) {
-            throw new Image2CssValidationException(Errors.parameterUnsupportedImageType);
+            throw this.objectFactory.newImage2CssValidationException(Errors.parameterUnsupportedImageType);
         }
     }
 

@@ -19,6 +19,7 @@
 package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
+import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.BasicParser;
@@ -64,9 +65,11 @@ public class CommandLineParametersParserTest {
     @Mock
     Options options;
 
-
     @Mock
     CommandLine commandLine;
+
+    @Mock
+    Image2CssValidationException image2CssValidationException;
 
     CommandLineParametersParser commandLineParametersParser;
 
@@ -75,6 +78,14 @@ public class CommandLineParametersParserTest {
         commandLineParametersParser =
             spy(new CommandLineParametersParser(basicParser, optionCssFile, optionHtmlFile, optionImageFile, optionSupportedImageTypes,
                     optionSyso, options, objectFactory));
+
+        when(objectFactory.newImage2CssValidationException(any(Errors.class)))
+            .thenReturn(image2CssValidationException);
+
+        // Required to avoid NPE
+        final StackTraceElement[] stackTraceElement = {};
+        when(image2CssValidationException.getStackTrace())
+            .thenReturn(stackTraceElement);
     }
 
     @Test
