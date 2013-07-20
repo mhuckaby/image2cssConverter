@@ -18,8 +18,6 @@
  */
 package com.rf1m.image2css.cmn.exception;
 
-import static java.lang.String.format;
-
 public class Image2CssException extends RuntimeException {
 
     public Image2CssException(final Errors errors) {
@@ -28,14 +26,6 @@ public class Image2CssException extends RuntimeException {
 
     public Image2CssException(final Throwable cause, final Errors errors) {
         super(errors.getMessage(), cause);
-    }
-
-    public Image2CssException(final Throwable cause, final Errors errors, final String ... messageParameters) {
-        super(format(errors.getMessage(), messageParameters), cause);
-    }
-
-    public Image2CssException(final Errors errors, final String ... messageParameters) {
-        super(format(errors.getMessage(), messageParameters));
     }
 
 }

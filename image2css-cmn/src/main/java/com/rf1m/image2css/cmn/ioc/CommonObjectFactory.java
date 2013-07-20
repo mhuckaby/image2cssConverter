@@ -83,7 +83,7 @@ public class CommonObjectFactory {
         try {
             return new FileInputStream(file);
         }catch(final FileNotFoundException e) {
-            throw new Image2CssException(e, Errors.fileNotFound);
+            throw this.newImage2CssException(e, Errors.fileNotFound);
         }
     }
 
@@ -91,7 +91,7 @@ public class CommonObjectFactory {
         try {
             return new FileWriter(file);
         }catch(final IOException ioException) {
-            throw new RuntimeException("Unable to create fileWriter", ioException);
+            throw this.newImage2CssException(ioException, Errors.errorCreatingFileWriter);
         }
     }
 
@@ -115,6 +115,14 @@ public class CommonObjectFactory {
 
     public URL newUrl(final String url) {
         return getSystemResource(url);
+    }
+
+    public Image2CssException newImage2CssException(final Errors errors) {
+        return new Image2CssException(errors);
+    }
+
+    public Image2CssException newImage2CssException(final Throwable cause, final Errors errors) {
+        return new Image2CssException(cause, errors);
     }
 
 }

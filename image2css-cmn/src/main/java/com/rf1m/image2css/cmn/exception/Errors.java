@@ -13,7 +13,8 @@ public enum Errors {
     fileNotFound("File not found"),
 
     errorReadingFile("Error while reading file"),
-    errorClosingFile("Error while closing file");
+    errorClosingFile("Error while closing file"),
+    errorCreatingFileWriter("Unable to create fileWriter");
 
     protected final String message;
 

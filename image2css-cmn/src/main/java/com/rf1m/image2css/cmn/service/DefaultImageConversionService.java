@@ -101,12 +101,12 @@ public class DefaultImageConversionService implements ImageConversionService {
         try {
             fileInputStream.read(bytes);
         }catch(final IOException ioException) {
-            throw new Image2CssException(ioException, Errors.errorReadingFile);
+            throw this.commonObjectFactory.newImage2CssException(ioException, Errors.errorReadingFile);
         }finally {
             try {
                 fileInputStream.close();
             }catch(final Exception exception) {
-                throw new Image2CssException(exception, Errors.errorClosingFile);
+                throw this.commonObjectFactory.newImage2CssException(exception, Errors.errorClosingFile);
             }
         }
 
