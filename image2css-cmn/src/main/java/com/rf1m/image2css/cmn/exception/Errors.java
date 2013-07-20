@@ -1,20 +1,20 @@
 package com.rf1m.image2css.cmn.exception;
 
 public enum Errors {
-    parametersObjectCannotBeNull("Parameters object cannot be null"),
-    parametersObjectMustHaveValidImageInputFileOrDir("Image input file or directory must be specified"),
-    parametersObjectOutputInvalid("At least one output type required: CSS file to write or output to screen"),
-    parametersObjectImageInputFileOrDirNotExists("A valid output to file or screen must be specified for CSS"),
-    parameterHtmlIndexWithNoCssFile("CSS file output is required to produce HTML index"),
+    parametersObjectCannotBeNull("parameters.object.cannot.be.null"),
+    parametersObjectMustHaveValidImageInputFileOrDir("parameters.object.must.have.valid.image.input.file.or.dir"),
+    parametersObjectOutputInvalid("parameters.object.output.invalid"),
+    parametersObjectImageInputFileOrDirNotExists("parameters.object.image.input.file.or.dir.not.exists"),
+    parameterHtmlIndexWithNoCssFile("parameters.html.index.with.no.css.file"),
 
-    parameterCssClassCollectionIsNull("CSS classes collection is null"),
-    parameterUnsupportedImageType("Unsupported image type specified"),
+    parameterCssClassCollectionIsNull("parameters.css.class.collection.is.null"),
+    parameterUnsupportedImageType("parameters.unsupported.imagetype"),
 
-    fileNotFound("File not found"),
+    fileNotFound("file.not.found"),
 
-    errorReadingFile("Error while reading file"),
-    errorClosingFile("Error while closing file"),
-    errorCreatingFileWriter("Unable to create fileWriter");
+    errorReadingFile("error.reading.file"),
+    errorClosingFile("error.closing.file"),
+    errorCreatingFileWriter("error.creating.file.writer");
 
     protected final String message;
 

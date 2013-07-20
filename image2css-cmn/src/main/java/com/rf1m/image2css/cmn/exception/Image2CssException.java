@@ -18,14 +18,17 @@
  */
 package com.rf1m.image2css.cmn.exception;
 
+import java.util.ResourceBundle;
+
 public class Image2CssException extends RuntimeException {
+    protected static final ResourceBundle resourceBundle = ResourceBundle.getBundle("image2css-exception-messages");
 
     public Image2CssException(final Errors errors) {
-        super(errors.getMessage());
+        super(resourceBundle.getString(errors.getMessage()));
     }
 
     public Image2CssException(final Throwable cause, final Errors errors) {
-        super(errors.getMessage(), cause);
+        super(resourceBundle.getString(errors.getMessage()), cause);
     }
 
 }
