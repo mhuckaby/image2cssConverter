@@ -36,7 +36,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FileUtilsTest {
+public class TestFileUtils {
     @Mock
     CommonObjectFactory commonObjectFactory;
 
