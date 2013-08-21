@@ -26,8 +26,8 @@ import static org.apache.commons.codec.binary.Base64.encodeBase64;
 // import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class Base64Encoder {
-    protected final static String NL 		= "\n";
-    protected final static String EMPTY 	= "";
+    protected final static String nl = "\n";
+    protected final static String empty = "";
 
     protected final CommonObjectFactory commonObjectFactory;
 
@@ -39,7 +39,7 @@ public class Base64Encoder {
         final byte[] encodedBase64Bytes = encodeBase64(bytes, false);
         final String encoded = this.commonObjectFactory.newString(encodedBase64Bytes);
 
-        return encoded.replaceAll(NL, EMPTY);
+        return encoded.replaceAll(nl, empty);
     }
 
 }
