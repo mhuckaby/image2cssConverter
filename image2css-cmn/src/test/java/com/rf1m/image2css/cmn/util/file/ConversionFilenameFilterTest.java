@@ -33,11 +33,12 @@ import static com.rf1m.image2css.cmn.domain.SupportedImageType.gif;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConversionFilenameFilterTest {
-    final String filenameExtension = "png";
+    final String imageGifFile = "image.gif";
+    final String extensionGif = "gif";
 
     @Mock
     File directory;
@@ -51,54 +52,76 @@ public class ConversionFilenameFilterTest {
 
     @Before
     public void before(){
-        supportedTypes = new HashSet<SupportedImageType>();
-
-        when(fileUtils.getExtension(anyString()))
-            .thenReturn(filenameExtension);
-
-        conversionFilenameFilter = new ConversionFilenameFilter(fileUtils, supportedTypes);
+        supportedTypes = spy(new HashSet<SupportedImageType>());
+        supportedTypes.add(SupportedImageType.gif);
+        conversionFilenameFilter = spy(new ConversionFilenameFilter(fileUtils, supportedTypes));
     }
 
     @Test
-    public void shouldReturnTrueIfAcceptedFilenameIsSupplied(){
-        final String acceptedFileName = "kite.gif";
+    public void shouldReturnTrueWhenFilenameIsSupportedImageType(){
+        when(fileUtils.getExtension(imageGifFile))
+            .thenReturn(extensionGif);
 
-        when(fileUtils.getExtension(acceptedFileName))
-            .thenReturn(gif.toString());
+        doReturn(true)
+            .when(conversionFilenameFilter)
+            .isSupported(extensionGif);
 
-        supportedTypes.add(gif);
-
-        final boolean result = conversionFilenameFilter.accept(directory, acceptedFileName);
+        final boolean result = conversionFilenameFilter.accept(directory, imageGifFile);
 
         assertTrue(result);
     }
 
     @Test
-    public void shouldRejectIfUnAcceptedFilenamesSupplied(){
-        final String rejectedFileName = "panda.jpg";
+    public void shouldReturnFalseIfFilenameIsNotSupportedImageType(){
+        when(fileUtils.getExtension(imageGifFile))
+            .thenReturn(extensionGif);
 
-        supportedTypes.add(gif);
+        doReturn(false)
+            .when(conversionFilenameFilter)
+            .isSupported(extensionGif);
 
-        final boolean result = conversionFilenameFilter.accept(directory, rejectedFileName);
+        final boolean result = conversionFilenameFilter.accept(directory, imageGifFile);
 
         assertFalse(result);
     }
 
     @Test
-    public void shouldRejectFilesWithNoExtension(){
-        final String rejectedFileNameWithDot = "kite.";
+    public void shouldReturnFalseIfFilenameIsBlank(){
+        final boolean result = conversionFilenameFilter.accept(directory, "");
 
-        supportedTypes.add(gif);
-
-        assertFalse(conversionFilenameFilter.accept(directory, rejectedFileNameWithDot));
-        assertFalse(conversionFilenameFilter.accept(directory, rejectedFileNameWithDot));
+        assertFalse(result);
     }
 
     @Test
-    public void shouldReturnFalseIfThereIsAnIoException() {
-        final String filename = "";
+    public void shouldNotAcceptUnsupportedImageTypeFileExtension(){
+        final String unsupportedImageTypeFileExtension = "jpg";
 
-        final boolean result = conversionFilenameFilter.accept(directory, filename);
+        final boolean result = conversionFilenameFilter.isSupported(unsupportedImageTypeFileExtension);
+
+        assertFalse(result);
     }
+
+    @Test
+    public void shouldAcceptSupportedImageTypeFileExtension() {
+        final boolean result = conversionFilenameFilter.isSupported(extensionGif);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void shouldReturnFalseIfUnknownExtensionIsProvided() {
+        final String unknown = "unknown";
+
+        final IllegalArgumentException illegalArgumentException = mock(IllegalArgumentException.class);
+
+        doThrow(illegalArgumentException)
+            .when(supportedTypes)
+            .contains(unknown);
+
+        final boolean result = conversionFilenameFilter.isSupported(unknown);
+
+        assertFalse(result);
+    }
+
 
 }

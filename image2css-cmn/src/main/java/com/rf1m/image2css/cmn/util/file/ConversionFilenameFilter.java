@@ -25,6 +25,7 @@ import java.io.FilenameFilter;
 import java.util.Set;
 
 import static com.rf1m.image2css.cmn.domain.SupportedImageType.valueOf;
+import static java.util.Collections.unmodifiableSet;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -36,30 +37,20 @@ public class ConversionFilenameFilter implements FilenameFilter{
     protected final FileUtils fileUtils;
 
 	public ConversionFilenameFilter(final FileUtils fileUtils, final Set<SupportedImageType> supportedTypes){
-		this.supportedTypes = supportedTypes;
+		this.supportedTypes = unmodifiableSet(supportedTypes);
         this.fileUtils = fileUtils;
 	}
 	
 	@Override
 	public boolean accept(final File fileDir, final String filename) {
         final String extension = this.fileUtils.getExtension(filename);
-
-		if(isNotBlank(extension)){
-			return isSupported(extension);
-		}else{
-			return false;
-		}
+        return isNotBlank(extension) ? this.isSupported(extension) : false;
 	}
 
     protected boolean isSupported(final String extension) {
         try{
             final SupportedImageType supportedImageType = valueOf(extension);
-
-            if(supportedTypes.contains(supportedImageType)) {
-                return true;
-            }else{
-                return false;
-            }
+            return supportedTypes.contains(supportedImageType);
         }catch(final IllegalArgumentException e){
             return false;
         }
