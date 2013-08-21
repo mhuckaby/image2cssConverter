@@ -31,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Set;
 
+import static com.rf1m.image2css.cmn.util.file.FileUtils.empty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
@@ -60,30 +61,33 @@ public class TestFileUtils {
         when(commonObjectFactory.newFileInputStream(file))
             .thenReturn(fileInputStream);
 
+        when(commonObjectFactory.newByteArray((long) bytes.length))
+            .thenReturn(bytes);
+
         when(file.length())
             .thenReturn((long)bytes.length);
-
-        when(commonObjectFactory.newByteArray((long)bytes.length))
-            .thenReturn(bytes);
 
         when(file.length())
             .thenReturn((long) bytes.length);
     }
 
 	@Test
-	public void testGetExtension() throws Exception{
-        final String path = "/some.file.png";
+	public void shouldReturnTheCharactersAfterLastPeriod() throws Exception{
+        final String expectedExtension = "png";
+        final String path = "/some.file." + expectedExtension;
+
         final String result = fileUtils.getExtension(path);
 
-        assertThat(result, is("png"));
+        assertThat(result, is(expectedExtension));
 	}
 
     @Test
-    public void fileHasNoExtensionShouldReturnEmptyString(){
+    public void shouldReturnAnEmptyStringIfThefileHasNoExtension(){
         final String pathWithNoExtension = "abc";
+
         final String result = fileUtils.getExtension(pathWithNoExtension);
 
-        assertThat(result, is(""));
+        assertThat(result, is(empty));
     }
 
     @Test
@@ -91,7 +95,15 @@ public class TestFileUtils {
         final String pathWithNoExtension = "abc.";
         final String result = fileUtils.getExtension(pathWithNoExtension);
 
-        assertThat(result, is(""));
+        assertThat(result, is(empty));
+    }
+
+    @Test
+    public void shouldReturnEmptyStringWhenAPeriodIsPassed(){
+        final String period = ".";
+        final String result = fileUtils.getExtension(period);
+
+        assertThat(result, is(empty));
     }
 
 }

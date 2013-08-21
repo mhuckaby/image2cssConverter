@@ -20,10 +20,15 @@ package com.rf1m.image2css.cmn.util.file;
 
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class FileUtils {
+    protected static final char period = '.';
+    protected static final int notFound = -1;
+    protected static final int positionsAfterLastIndex = 1;
+
+    protected static final String empty = "";
+
     protected final Set<SupportedImageType> defaultSupportedImageTypes;
 
     public FileUtils(final Set<SupportedImageType> defaultSupportedImageTypes) {
@@ -31,19 +36,17 @@ public class FileUtils {
     }
 
     /**
-	 * Return the file-extension, blank if there is none.
+	 * Return the file-extension, empty if there is none.
 	 * @param path
 	 * @return
 	 */
 	public String getExtension(final String path){
-        final int notFound = -1;
-        final int positionsAfterLastIndex = 1;
-		final int lastIndex = path.lastIndexOf('.');
+		final int lastIndex = path.lastIndexOf(period);
 
-        if(notFound == lastIndex || path.length() == lastIndex){
-			return "";
+        if(notFound == lastIndex){
+			return empty;
 		}else{
-            final int afterLastPeriod = lastIndex + positionsAfterLastIndex;
+            final int afterLastPeriod = (lastIndex + positionsAfterLastIndex);
 			return path.substring(afterLastPeriod).toLowerCase();
 		}
 	}
