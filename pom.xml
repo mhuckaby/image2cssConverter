@@ -12,6 +12,7 @@
     <modules>
         <module>image2css-cli</module>
 		<module>image2css-cmn</module>
+		<module>image2css-web</module>
     </modules>
 
     <properties>

@@ -1,0 +1,10 @@
+body {
+    background-image: url("../img/squared_metal.png");
+    background-repeat: repeat;
+}
+
+#img-logo {
+    height:45px;
+    width:45px;
+
+}
