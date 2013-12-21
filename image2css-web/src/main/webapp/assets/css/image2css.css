@@ -6,5 +6,12 @@ body {
 #img-logo {
     height:45px;
     width:45px;
+}
 
+.row-first-padded {
+    margin-top:5%;
+}
+
+.row-padded {
+    margin-top:1%;
 }
