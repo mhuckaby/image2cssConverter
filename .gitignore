@@ -3,3 +3,5 @@ target
 debug.sh
 *.iml
 *DS_Store*
+image2css-cli/image2css.bat
+image2css-cli/image2css.sh
