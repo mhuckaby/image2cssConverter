@@ -6,8 +6,6 @@
 
         <script type="text/javascript" src="assets/js/jquery-2.0.3.min.js"></script>
         <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="assets/js/less-1.5.0.min.js"></script>
-        <script type="text/javascript" src="assets/js/retina-1.1.0.min.js"></script>
 
     </head>
 
