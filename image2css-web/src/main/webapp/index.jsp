@@ -35,7 +35,7 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="http://" />
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default" tabindex="-1">Convert</button>
+                                    <button id="convertUrl" type="button" class="btn btn-default" tabindex="-1">Convert</button>
                                 </div>
                             </div>
                         </div>
@@ -56,8 +56,24 @@
                 </div>
             </div>
 
+            <div id="demo-result" class="row row-padded" style="display:none;">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span><a href="#">download converted-stuff.zip</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <a href="https://github.com/mhuckaby/image2cssConverter"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
     </body>
+    <script>
+        $(document).ready(function() {
+            $("#convertUrl").click(function() {
+                $("#demo-result").fadeIn(300, function() {});
+            });
+        });
+    </script>
 </html>
