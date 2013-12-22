@@ -28,23 +28,16 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span>Convert an image file (gif, jpg, png) into a CSS data-URI</span>
-                        </div>
-                        <div class="panel-body">
-                            <span>// TODO Convert an image file (gif, jpg, png) into a CSS data-URI</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row row-padded">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
                             <span>Provide a URL to an image file to be converted into a CSS data-URI</span>
                         </div>
+
                         <div class="panel-body">
-                            <span>// TODO Provide a URL to an image file to be converted into a CSS data-URI</span>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="http://" />
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" tabindex="-1">Convert</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,7 +50,7 @@
                             <span>Upload a single image or zip file of images to be converted into a CSS data-URI</span>
                         </div>
                         <div class="panel-body">
-                            <span>// TODO Upload a single image or zip file of images to be converted into a CSS data-URI</span>
+                                <input type="file" class="form-control" />
                         </div>
                     </div>
                 </div>
