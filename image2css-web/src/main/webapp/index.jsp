@@ -16,7 +16,7 @@
             <div class="row row-first-padded">
                 <div class="col-md-12">
                         <a class="" href="https://github.com/mhuckaby/image2cssConverter">
-                            <img id="img-logo" src="assets/img/image2css.png" style="float:left;"/>
+                            <img id="img-logo" src="assets/img/image2css.png" />
                         </a>
                         <span>
                             <h2 style="margin-top:7px;">&nbspimage2css converter</h2>
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <a href="https://github.com/mhuckaby/image2cssConverter"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+        <a href="https://github.com/mhuckaby/image2cssConverter"><img id="git-fork-ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
     </body>
     <script>
         $(document).ready(function() {
