@@ -29,7 +29,7 @@ Sub-module, "image2css-cli":
 
 
 ## Features
-1. Convert a single file or an entire directories of images to data URI CSS
+1. Convert a single local or remote file or an entire local directory of images to data URI CSS
 2. Generate CSS file
 3. Generate HTML demonstrating generated CSS classes
 4. Output data URI to console
@@ -46,13 +46,21 @@ Display the help screen:
 	Windows
 	image2css.bat
 
-Convert PNG-image (ie: boy_with_book.png) to data URI and output to CSS file:
+Convert remote PNG-image (ie: boy_with_book.png) to data URI and output to CSS and HTML files:
 
 	Linux
-	./image2css.sh -f boy_with_book.png -o result.css
+	./image2css.sh -f http://upload.wikimedia.org/wikipedia/commons/0/0f/Spotorno-IMG_1772.JPG -o result.css -h result.html
 	
 	Windows
-	image2css.bat -f boy_with_book.png -o result.css
+	image2css.bat -f http://upload.wikimedia.org/wikipedia/commons/0/0f/Spotorno-IMG_1772.JPG -o result.css -h result.html
+
+Convert PNG-image (ie: boy_with_book.png) to data URI and output to CSS and HTML files:
+
+	Linux
+	./image2css.sh -f boy_with_book.png -o result.css -h result.html
+
+	Windows
+	image2css.bat -f boy_with_book.png -o result.css -h result.html
 
 Convert PNG-image (ie: boy_with_book.png) to data URI and output to console:
 
@@ -62,21 +70,21 @@ Convert PNG-image (ie: boy_with_book.png) to data URI and output to console:
 	Windows
 	image2css.bat -f boy_with_book.png -syso
 	
-Convert PNG-images in directory to data URI and output to CSS file:
+Convert PNG-images in directory to data URI and output to CSS and HTML files:
 
 	Linux
-	./image2css.sh -f ./ -i png -o result.css
+	./image2css.sh -f ./ -i png -o result.css -h result.html
 	
 	Windows
-	image2css.bat -f / -i png -o result.css
+	image2css.bat -f / -i png -o result.css -h result.html
 	
-Convert GIF & JPG images in directory to data URI and output to CSS file:
+Convert GIF & JPG images in directory to data URI and output to CSS and HTML files:
 
 	Linux
-	./image2css.sh -f ./ -i gif jpg -o result.css
+	./image2css.sh -f ./ -i gif jpg -o result.css -h result.html
 	
 	Windows
-	image2css.bat -f / -i gif jpg -o result.css
+	image2css.bat -f / -i gif jpg -o result.css -h result.html
 
 Convert GIF & JPG images in directory to data URI and output to CSS and HTML files:
 	
