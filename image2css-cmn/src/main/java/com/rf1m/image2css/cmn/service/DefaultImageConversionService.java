@@ -20,16 +20,14 @@ package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.exception.Errors;
-import com.rf1m.image2css.cmn.exception.Image2CssException;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 
 import static java.lang.String.format;
 
@@ -64,6 +62,57 @@ public class DefaultImageConversionService implements ImageConversionService {
         return cssClass;
     }
 
+    public CssClass convert(final URL url) {
+        final byte[] bytesRead = this.readStream(url);
+        final String fileExtension = this.fileUtils.getExtension(url.getFile());
+        final String cssClassName = this.determineCssClassName(url.getFile());
+        final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytesRead);
+        final Pair<Integer, Integer> dimension = this.getImageDimension(bytesRead);
+        final String cssEntry = this.determineCssEntry(cssClassName, fileExtension, base64Bytes, dimension);
+        final CssClass cssClass = this.commonObjectFactory.newCssClass(cssClassName, cssEntry);
+
+        return cssClass;
+    }
+
+    protected byte[] readStream(final URL url) {
+        // TODO send HEAD first,
+        // TODO enforce image only
+        // TODO use Content-Length to truncate array and use a larger byte[] ~ result:
+//        Cache-Control →public, max-age=840406
+//        Connection →keep-alive
+//        Content-Length →6820
+//        Content-Type →image/png
+//        Date →Fri, 03 Jan 2014 19:58:27 GMT
+//        ETag →"6386858b-1aa4-4dcd7794cd380"
+//        Expires →Mon, 13 Jan 2014 13:25:13 GMT
+//        Last-Modified →Thu, 16 May 2013 15:25:18 GMT
+//        Server →Apache/2.2.3 (CentOS)
+//        X-Varnish →86995181
+        // TODO
+//        File.toURL() :
+//        it just preppends "file:/" to the filepath. it doesn't try to escape any special characters in the filepath
+//
+//        File.toURI().toURL() :
+//        it gives correct output, escaping any special characters in the filepath.
+
+        try {
+            final InputStream inputStream = url.openStream();
+
+            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+            final byte[] chunk = new byte[1];
+            int bytesReadCount = 0 ;
+
+            while( (bytesReadCount = inputStream.read(chunk)) > 0 ) {
+                byteArrayOutputStream.write(chunk);
+            }
+
+            return byteArrayOutputStream.toByteArray();
+        } catch(final IOException e) {
+            throw this.commonObjectFactory.newImage2CssException(e, Errors.errorRetrievingRemoteResource);
+        }
+    }
+
     protected String determineCssEntry(final String cssClassName,
                                        final String fileExtension,
                                        final String base64Bytes,
@@ -72,7 +121,7 @@ public class DefaultImageConversionService implements ImageConversionService {
     }
 
     protected String determineCssClassName(final String fileName) {
-        return fileName.replaceAll("\\.","_");
+        return fileName.replaceAll("[\\.]|[/]","_");
     }
 
     /**

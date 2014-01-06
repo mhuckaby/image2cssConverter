@@ -5,6 +5,7 @@ public enum Errors {
     parametersObjectMustHaveValidImageInputFileOrDir("parameters.object.must.have.valid.image.input.file.or.dir"),
     parametersObjectOutputInvalid("parameters.object.output.invalid"),
     parametersObjectImageInputFileOrDirNotExists("parameters.object.image.input.file.or.dir.not.exists"),
+    parametersUrlCannotBeNull("parameters.object.image.input.url"),
     parameterHtmlIndexWithNoCssFile("parameters.html.index.with.no.css.file"),
 
     parameterCssClassCollectionIsNull("parameters.css.class.collection.is.null"),
@@ -14,7 +15,9 @@ public enum Errors {
 
     errorReadingFile("error.reading.file"),
     errorClosingFile("error.closing.file"),
-    errorCreatingFileWriter("error.creating.file.writer");
+    errorCreatingFileWriter("error.creating.file.writer"),
+    errorParsingUrlParameter("error.parsing.url.parameter"),
+    errorRetrievingRemoteResource("error.retrieving.remote.resource");
 
     protected final String message;
 

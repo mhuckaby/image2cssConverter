@@ -21,6 +21,7 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Collections;
 import java.util.Set;
 
@@ -29,20 +30,26 @@ public class ImmutableParameters implements Parameters {
 	protected final File cssFile;
 	protected final File htmlFile;
 	protected final Set<SupportedImageType> supportedTypes;
-	protected boolean outputToScreen;
-	
+	protected final boolean outputToScreen;
+	protected final boolean isLocalResource;
+	protected final URL url;
+
 	public ImmutableParameters(
             final File imageFile,
             final File cssFile,
             final File htmlFile,
             final Set<SupportedImageType> supportedTypes,
-            final boolean outputToScreen) {
+            final boolean outputToScreen,
+            final boolean isLocalResource,
+            final URL url) {
 
 		this.imageFile = imageFile;
 		this.cssFile = cssFile;
 		this.htmlFile = htmlFile;
 		this.supportedTypes = null == supportedTypes ? null : Collections.unmodifiableSet(supportedTypes);
 		this.outputToScreen = outputToScreen;
+        this.isLocalResource = isLocalResource;
+        this.url = url;
 	}
 	
 	@Override
@@ -85,4 +92,13 @@ public class ImmutableParameters implements Parameters {
         return null != this.htmlFile;
     }
 
+    @Override
+    public boolean isLocalResource() {
+        return this.isLocalResource;
+    }
+
+    @Override
+    public URL getURL() {
+        return this.url;
+    }
 }

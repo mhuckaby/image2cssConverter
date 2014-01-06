@@ -43,10 +43,12 @@ public class CommandLineRunnerValidator {
     public void validateParameters(final Parameters parameters) throws Image2CssException {
         if(null == parameters){
             throw new Image2CssValidationException(parametersObjectCannotBeNull) ;
-        }else if(null == parameters.getImageFile()){
+        }else if(parameters.isLocalResource() && null == parameters.getImageFile()){
             throw new Image2CssValidationException(parametersObjectMustHaveValidImageInputFileOrDir);
-        }else if(!parameters.getImageFile().exists()){
+        }else if(parameters.isLocalResource() && !parameters.getImageFile().exists()){
             throw new Image2CssValidationException(parametersObjectImageInputFileOrDirNotExists);
+        }else if(!parameters.isLocalResource() && null == parameters.getURL()) {
+            throw new Image2CssValidationException(parametersUrlCannotBeNull);
         }else if(!parameters.isOutputValid()){
             throw new Image2CssValidationException(parametersObjectOutputInvalid);
         }else if(parameters.isHtmlFileOutputDesired() && !parameters.isCssFileOutputDesired()) {

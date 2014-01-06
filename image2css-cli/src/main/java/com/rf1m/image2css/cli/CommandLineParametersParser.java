@@ -20,14 +20,18 @@ package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
-import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.*;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommandLineParametersParser {
+    protected final Pattern patternHttp = Pattern.compile("http[s]?://");
     protected final BasicParser basicParser;
 
     protected final Option optionCssFile;
@@ -64,12 +68,21 @@ public class CommandLineParametersParser {
 
         final File cssFile = this.extractFileFromOption(commandLine, optionCssFile.getOpt());
         final File htmlFile = this.extractFileFromOption(commandLine, optionHtmlFile.getOpt());
-        final File imageFile = this.extractFileFromOption(commandLine, optionImageFile.getOpt());
+        final boolean isLocalResource = this.isALocalResource(commandLine, optionImageFile.getOpt());
+        final File imageFile = isLocalResource ? this.extractFileFromOption(commandLine, optionImageFile.getOpt()) : null;
+        final URL url = !isLocalResource ? this.extractURLFromOption(commandLine, optionImageFile.getOpt()) : null;
         final Set<SupportedImageType> supportedImageTypes =
             this.extractImageTypesFromOption(commandLine, optionSupportedImageTypes.getOpt());
         final boolean syso = commandLine.hasOption(optionSyso.getOpt());
 
-        return this.objectFactory.newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+        return this.objectFactory.newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso, isLocalResource, url);
+    }
+
+    protected boolean isALocalResource(final CommandLine commandLine, final String option) {
+        final String filename = commandLine.getOptionValues(option)[0];
+        final Matcher matcher = patternHttp.matcher(filename);
+
+        return !matcher.find();
     }
 
     protected File extractFileFromOption(final CommandLine commandLine, final String option) {
@@ -77,6 +90,16 @@ public class CommandLineParametersParser {
         final File file = this.objectFactory.newFile(filename);
 
         return file;
+    }
+
+    protected URL extractURLFromOption(final CommandLine commandLine, final String option) {
+        final String urlValue = commandLine.getOptionValues(option)[0];
+        try {
+            final URL url = new URL(urlValue);
+            return url;
+        }catch(final MalformedURLException e) {
+            throw this.objectFactory.newImage2CssException(e, Errors.errorParsingUrlParameter);
+        }
     }
 
     protected String[] determineIncludedImageTypes(final String[] optionValues) {

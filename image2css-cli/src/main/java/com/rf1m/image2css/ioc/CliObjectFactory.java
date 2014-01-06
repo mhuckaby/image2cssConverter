@@ -26,6 +26,7 @@ import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Set;
 
 
@@ -39,9 +40,11 @@ public class CliObjectFactory extends CommonObjectFactory {
                                                       final File cssFile,
                                                       final File htmlFile,
                                                       final Set<SupportedImageType> supportedImageTypes,
-                                                      final boolean outputToScreen) {
+                                                      final boolean outputToScreen,
+                                                      final boolean isLocalResource,
+                                                      final URL url) {
 
-        return new ImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, outputToScreen);
+        return new ImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, outputToScreen, isLocalResource, url);
     }
 
     public Image2CssValidationException newImage2CssValidationException(final Errors errors) {

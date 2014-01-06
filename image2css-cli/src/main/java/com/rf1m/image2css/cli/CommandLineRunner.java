@@ -94,6 +94,21 @@ public class CommandLineRunner {
     }
 
     protected void execute(final Parameters parameters) throws IOException {
+        final List<CssClass> cssEntries = parameters.isLocalResource() ?
+            this.handleLocal(parameters) : this.handleRemote(parameters);
+        this.commandLineRunnerOutputManager.doOutput(parameters, cssEntries);
+    }
+
+    protected List<CssClass> handleRemote(final Parameters parameters) {
+        final List<CssClass> cssEntries = this.objectFactory.newMutableList();
+        final CssClass cssClass = this.imageConversionService.convert(parameters.getURL());
+
+        cssEntries.add(cssClass);
+
+        return cssEntries;
+    }
+
+    protected List<CssClass> handleLocal(final Parameters parameters) throws IOException {
         final File targetImageFile = parameters.getImageFile();
         final Set<SupportedImageType> supportedImageTypes = parameters.getSupportedTypes();
         final File[] imageFiles = this.getImagesForConversion(targetImageFile, supportedImageTypes);
@@ -104,7 +119,7 @@ public class CommandLineRunner {
             cssEntries.add(cssClass);
         }
 
-        this.commandLineRunnerOutputManager.doOutput(parameters, cssEntries);
+        return cssEntries;
     }
 
     public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {

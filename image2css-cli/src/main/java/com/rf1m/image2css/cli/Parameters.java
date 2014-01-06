@@ -21,6 +21,7 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Set;
 
 public interface Parameters{
@@ -72,5 +73,16 @@ public interface Parameters{
      * @return boolean,
      */
     boolean isOutputToConsoleDesired();
+
+    /**
+     * @return True, if the resource to be converted is located on local file system, false if the resource is remote.
+     */
+    boolean isLocalResource();
+
+    /**
+     * Holds url for remote resource.
+     * @return
+     */
+    URL getURL();
 
 }

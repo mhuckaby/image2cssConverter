@@ -32,8 +32,11 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Set;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -104,6 +107,8 @@ public class CommandLineParametersParserTest {
         final File htmlFile = mock(File.class);
         final File imageFile = mock(File.class);
 
+        final boolean isLocalResource = true;
+        final URL url = null; // Since isLocalResource is true, the url will be set to null
         final Set<SupportedImageType> supportedImageTypes = mock(Set.class);
 
         final ImmutableParameters parameters = mock(ImmutableParameters.class);
@@ -125,6 +130,10 @@ public class CommandLineParametersParserTest {
             .when(commandLineParametersParser)
             .extractFileFromOption(commandLine, optionHtmlFileGetOptValue);
 
+        doReturn(isLocalResource)
+            .when(commandLineParametersParser)
+            .isALocalResource(commandLine, optionImageFileGetOptValue);
+
         when(optionImageFile.getOpt())
             .thenReturn(optionImageFileGetOptValue);
 
@@ -145,7 +154,7 @@ public class CommandLineParametersParserTest {
         when(commandLine.hasOption(optionSysoGetOptValue))
             .thenReturn(syso);
 
-        when(objectFactory.newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso))
+        when(objectFactory.newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso, isLocalResource, url))
             .thenReturn(parameters);
 
         final Parameters result = commandLineParametersParser.parse(args);
@@ -167,11 +176,17 @@ public class CommandLineParametersParserTest {
         verify(commandLineParametersParser, times(1))
             .extractFileFromOption(commandLine, optionHtmlFileGetOptValue);
 
-        verify(optionImageFile, times(1))
+        verify(commandLineParametersParser, times(1))
+            .isALocalResource(commandLine, optionImageFileGetOptValue);
+
+        verify(optionImageFile, times(2))
             .getOpt();
 
         verify(commandLineParametersParser, times(1))
             .extractFileFromOption(commandLine, optionImageFileGetOptValue);
+
+        verify(commandLineParametersParser, times(0))
+            .extractURLFromOption(commandLine, optionCssFileGetOptValue);
 
         verify(optionSupportedImageTypes, times(1))
             .getOpt();
@@ -186,7 +201,7 @@ public class CommandLineParametersParserTest {
             .hasOption(optionSysoGetOptValue);
 
         verify(objectFactory, times(1))
-            .newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso);
+            .newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso, isLocalResource, url);
     }
 
     @Test
@@ -294,6 +309,58 @@ public class CommandLineParametersParserTest {
         final String[] result = commandLineParametersParser.determineIncludedImageTypes(arguments);
 
         assertThat(result, is(arguments));
+    }
+
+    @Test
+    public void shouldDetermineHttpUrlToBeARemoteResource() {
+        final String optionImageFileGetOptValue = "optionImageFileGetOptValue";
+        final String[] optionValues = {"http://a.fsdn.com/sd/topics/science_64.png"};
+
+        when(commandLine.getOptionValues(optionImageFileGetOptValue))
+            .thenReturn(optionValues);
+
+        final boolean result = commandLineParametersParser.isALocalResource(commandLine, optionImageFileGetOptValue);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void shouldDetermineHttpsUrlToBeARemoteResource() {
+        final String optionImageFileGetOptValue = "optionImageFileGetOptValue";
+        final String[] optionValues = {"https://a.fsdn.com/sd/topics/science_64.png"};
+
+        when(commandLine.getOptionValues(optionImageFileGetOptValue))
+            .thenReturn(optionValues);
+
+        final boolean result = commandLineParametersParser.isALocalResource(commandLine, optionImageFileGetOptValue);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void shouldDetermineWinDosPathToBeARemoteResource() {
+        final String optionImageFileGetOptValue = "optionImageFileGetOptValue";
+        final String[] optionValues = {"c:\\science_64.png"};
+
+        when(commandLine.getOptionValues(optionImageFileGetOptValue))
+            .thenReturn(optionValues);
+
+        final boolean result = commandLineParametersParser.isALocalResource(commandLine, optionImageFileGetOptValue);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void shouldDetermineLinuxPathToBeARemoteResource() {
+        final String optionImageFileGetOptValue = "optionImageFileGetOptValue";
+        final String[] optionValues = {"/tmp/science_64.png"};
+
+        when(commandLine.getOptionValues(optionImageFileGetOptValue))
+            .thenReturn(optionValues);
+
+        final boolean result = commandLineParametersParser.isALocalResource(commandLine, optionImageFileGetOptValue);
+
+        assertTrue(result);
     }
 
 }

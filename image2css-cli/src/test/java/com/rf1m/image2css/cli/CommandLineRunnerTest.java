@@ -94,7 +94,7 @@ public class CommandLineRunnerTest {
     }
 
     @Test
-    public void executeShouldParseAndConvert() throws Exception {
+    public void handleLocalShouldParseAndConvert() throws Exception {
         final File targetImageFile = mock(File.class);
         final Set<SupportedImageType> supportedImageTypes = mock(Set.class);
         final File imageForConversion = mock(File.class);
@@ -118,7 +118,7 @@ public class CommandLineRunnerTest {
         when(imageConversionService.convert(imageForConversion))
             .thenReturn(cssClass);
 
-        commandLineRunner.execute(parameters);
+        commandLineRunner.handleLocal(parameters);
 
         verify(parameters, times(1))
             .getImageFile();
@@ -138,6 +138,53 @@ public class CommandLineRunnerTest {
         verify(cssEntries, times(1))
             .add(cssClass);
     }
+
+    @Test
+    public void executeShouldDelegateToHandleLocalWhenIsLocalResourceParameterIsTrue() throws Exception {
+        List<CssClass> returnValue = mock(List.class);
+
+        when(parameters.isLocalResource())
+            .thenReturn(true);
+
+        doReturn(returnValue)
+            .when(commandLineRunner)
+            .handleLocal(parameters);
+
+        commandLineRunner.execute(parameters);
+
+        verify(parameters, times(1))
+            .isLocalResource();
+
+        verify(commandLineRunner, times(1))
+            .handleLocal(parameters);
+
+        verify(commandLineRunner, times(0))
+            .handleRemote(parameters);
+    }
+
+    @Test
+    public void executeShouldDelegateToHandleRemoteWhenIsLocalResourceParameterIsFalse() throws Exception {
+        List<CssClass> returnValue = mock(List.class);
+
+        when(parameters.isLocalResource())
+            .thenReturn(false);
+
+        doReturn(returnValue)
+            .when(commandLineRunner)
+            .handleLocal(parameters);
+
+        commandLineRunner.execute(parameters);
+
+        verify(parameters, times(1))
+            .isLocalResource();
+
+        verify(commandLineRunner, times(0))
+            .handleLocal(parameters);
+
+        verify(commandLineRunner, times(1))
+            .handleRemote(parameters);
+    }
+
 
     @Test
     public void runShouldInvokeParseExceptionHandlerWhenThatExceptionIsEncountered() throws Exception {

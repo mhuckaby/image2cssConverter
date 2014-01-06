@@ -169,9 +169,19 @@ public class DefaultImageConversionServiceTest {
     }
 
     @Test
-    public void shouldConvertFilename() {
+    public void shouldReplaceAllDotsWithUnderscores() {
         final String before = "a.b.c";
         final String expected = "a_b_c";
+
+        final String result = defaultImageConversionService.determineCssClassName(before);
+
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    public void shouldReplaceAllForwardSlashesWithUnderscores() {
+        final String before = "/sd/topics/science_64.png";
+        final String expected = "_sd_topics_science_64_png";
 
         final String result = defaultImageConversionService.determineCssClassName(before);
 
