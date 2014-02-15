@@ -20,7 +20,6 @@ package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.exception.Errors;
-import com.rf1m.image2css.cmn.exception.Image2CssException;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
@@ -34,6 +33,7 @@ import static com.rf1m.image2css.cmn.exception.Errors.errorOpeningStream;
 import static java.lang.String.format;
 
 public class DefaultImageConversionService implements ImageConversionService {
+    protected static final String underscore = "_";
 
     protected final FileUtils fileUtils;
     protected final Base64Encoder base64Encoder;
@@ -72,7 +72,10 @@ public class DefaultImageConversionService implements ImageConversionService {
     }
 
     protected String determineCssClassName(final String fileName) {
-        return fileName.replaceAll("\\.","_");
+        return fileName
+                .replaceAll("\\.", underscore)
+                .replaceAll("\\\\", underscore)
+                .replaceAll("/", underscore);
     }
 
     /**

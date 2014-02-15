@@ -170,8 +170,8 @@ public class DefaultImageConversionServiceTest {
 
     @Test
     public void shouldConvertFilename() {
-        final String before = "a.b.c";
-        final String expected = "a_b_c";
+        final String before = "a\\b/c.d";
+        final String expected = "a_b_c_d";
 
         final String result = defaultImageConversionService.determineCssClassName(before);
 
