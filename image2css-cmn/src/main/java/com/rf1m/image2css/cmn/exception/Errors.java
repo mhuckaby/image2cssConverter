@@ -14,7 +14,8 @@ public enum Errors {
 
     errorReadingFile("error.reading.file"),
     errorClosingFile("error.closing.file"),
-    errorCreatingFileWriter("error.creating.file.writer");
+    errorCreatingFileWriter("error.creating.file.writer"),
+    errorOpeningStream("error.opening.stream");
 
     protected final String message;
 

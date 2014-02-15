@@ -37,6 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.rf1m.image2css.cmn.exception.Errors.errorOpeningStream;
 import static java.lang.ClassLoader.getSystemResource;
 
 public class CommonObjectFactory {
@@ -123,6 +124,18 @@ public class CommonObjectFactory {
 
     public Image2CssException newImage2CssException(final Throwable cause, final Errors errors) {
         return new Image2CssException(cause, errors);
+    }
+
+    public BufferedInputStream newBufferedInputStream(final URL url) throws Image2CssException {
+        try {
+            return new BufferedInputStream(url.openStream());
+        }catch(final IOException e) {
+            throw this.newImage2CssException(e, errorOpeningStream);
+        }
+    }
+
+    public ByteArrayOutputStream newByteArrayOutputStream() {
+        return new ByteArrayOutputStream();
     }
 
 }

@@ -27,10 +27,10 @@ import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 
+import static com.rf1m.image2css.cmn.exception.Errors.errorOpeningStream;
 import static java.lang.String.format;
 
 public class DefaultImageConversionService implements ImageConversionService {
@@ -111,6 +111,43 @@ public class DefaultImageConversionService implements ImageConversionService {
         }
 
         return bytes;
+    }
+
+    @Override
+    public CssClass convert(final URL url) {
+        // TODO Validate parameter
+        final String imageFilename = url.getFile();
+
+        // TODO redundant now, consolidate; see this.convert(final File imageFile) {
+        final String cssClassName = this.determineCssClassName(imageFilename);
+        final String fileExtension = this.fileUtils.getExtension(imageFilename);
+        //.
+
+        final BufferedInputStream bufferedInputStream = this.commonObjectFactory.newBufferedInputStream(url);
+        final byte[] bytes = this.readInputStreamToBytes(bufferedInputStream);
+
+        // TODO redundant now, consolidate; see this.convert(final File imageFile) {
+        final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
+        final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
+        final String cssEntry = this.determineCssEntry(cssClassName, fileExtension, base64Bytes, dimension);
+        final CssClass cssClass = this.commonObjectFactory.newCssClass(cssClassName, cssEntry);
+        return cssClass;
+        //.
+    }
+
+    protected byte[] readInputStreamToBytes(final BufferedInputStream bufferedInputStream) {
+        final ByteArrayOutputStream byteArrayOutputStream = this.commonObjectFactory.newByteArrayOutputStream();
+        final byte[] buffer = this.commonObjectFactory.newByteArray(1);
+
+        try {
+            int len;
+            while((len = bufferedInputStream.read(buffer)) > 0) {
+                byteArrayOutputStream.write(buffer, 0, len);
+            }
+            return byteArrayOutputStream.toByteArray();
+        }catch(final IOException e) {
+            throw this.commonObjectFactory.newImage2CssException(e, errorOpeningStream);
+        }
     }
 
 }
