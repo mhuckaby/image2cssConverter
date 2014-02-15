@@ -30,6 +30,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.rf1m.image2css.cmn.exception.Errors.errorCreatingUrlFromStringValue;
 import static com.rf1m.image2css.cmn.exception.Errors.errorOpeningStream;
-import static java.lang.ClassLoader.getSystemResource;
 
 public class CommonObjectFactory {
     protected final FileUtils fileUtils;
@@ -115,7 +116,11 @@ public class CommonObjectFactory {
     }
 
     public URL newUrl(final String url) {
-        return getSystemResource(url);
+        try {
+            return new URL(url);
+        }catch(final MalformedURLException e) {
+            throw this.newImage2CssException(e, errorCreatingUrlFromStringValue);
+        }
     }
 
     public Image2CssException newImage2CssException(final Errors errors) {

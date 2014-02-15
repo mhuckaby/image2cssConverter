@@ -114,6 +114,12 @@ public class DefaultImageConversionService implements ImageConversionService {
     }
 
     @Override
+    public CssClass convertUrlAsString(final String urlAsString) {
+        final URL url = this.commonObjectFactory.newUrl(urlAsString);
+        return this.convert(url);
+    }
+
+    @Override
     public CssClass convert(final URL url) {
         // TODO Validate parameter
         final String imageFilename = url.getFile();
