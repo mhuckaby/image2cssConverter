@@ -1,4 +1,4 @@
-var context = function(jq, apiRoot) {
+var context = function(jq, apiRoot, responseFormatterCallback) {
     var internal;
 
     internal = {
@@ -52,6 +52,7 @@ var context = function(jq, apiRoot) {
 
             ,"requestConversionDisplaySuccessResponse": function(data) {
                 internal.pageElements.$conversionRequestResponseBody()[0].innerHTML = data.body;
+                responseFormatterCallback();
             }
 
             ,"requestConversionDisplayFailureResponse": function(data) {

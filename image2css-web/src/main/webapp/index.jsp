@@ -56,7 +56,7 @@
                         </div>
                         <div class="panel-body" style="overflow-x:auto">
                             <div id="responseStatus"></div>
-                            <pre id="responseBody" class="prettyprint"></pre>
+                            <pre id="responseBody" class="prettyprint lang-css"></pre>
                         </div>
                     </div>
                 </div>
@@ -66,6 +66,6 @@
         <a href="https://github.com/mhuckaby/image2cssConverter"><img id="git-fork-ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
     </body>
     <script>
-        context($, "c");
+        context($, "c", prettyPrint);
     </script>
 </html>
