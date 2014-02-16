@@ -57,7 +57,8 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
             }
 
             ,"requestConversionDisplayFailureResponse": function(data) {
-
+                var message = JSON.parse(data.responseText).message;
+                internal.pageElements.$conversionRequestResponseBody()[0].innerHTML = message;
             }
 
             ,"urlEnterHandler": function(event) {

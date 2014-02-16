@@ -1,6 +1,6 @@
 package com.rf1m.image2css.ioc;
 
-import com.rf1m.image2css.web.domain.ErrorResponse;
+import com.rf1m.image2css.domain.ErrorResponse;
 
 public class WebObjectFactory {
 

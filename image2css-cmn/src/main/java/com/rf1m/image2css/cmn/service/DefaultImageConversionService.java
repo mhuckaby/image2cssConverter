@@ -24,8 +24,6 @@ import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
