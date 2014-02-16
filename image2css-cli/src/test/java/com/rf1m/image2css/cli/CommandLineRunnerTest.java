@@ -20,7 +20,7 @@ package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.cmn.exception.Image2CssException;
+import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import com.rf1m.image2css.ioc.CliObjectFactory;

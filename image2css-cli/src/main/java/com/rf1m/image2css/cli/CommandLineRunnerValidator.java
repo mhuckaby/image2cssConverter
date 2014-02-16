@@ -18,10 +18,10 @@
  */
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
+import com.rf1m.image2css.exception.Image2CssException;
+import com.rf1m.image2css.exception.Image2CssValidationException;
 
-import static com.rf1m.image2css.cmn.exception.Errors.*;
+import static com.rf1m.image2css.exception.Errors.*;
 
 public class CommandLineRunnerValidator {
 

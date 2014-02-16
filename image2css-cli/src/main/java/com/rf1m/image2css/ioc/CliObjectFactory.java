@@ -20,8 +20,8 @@ package com.rf1m.image2css.ioc;
 
 import com.rf1m.image2css.cli.ImmutableParameters;
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.cmn.exception.Errors;
-import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
+import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 
 import java.io.File;

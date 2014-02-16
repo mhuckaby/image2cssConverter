@@ -16,7 +16,7 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cmn.exception;
+package com.rf1m.image2css.exception;
 
 public class Image2CssValidationException extends Image2CssException {
     public Image2CssValidationException(Throwable cause, Errors errors) {

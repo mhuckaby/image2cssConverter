@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.cmn.exception.Image2CssException;
+import com.rf1m.image2css.exception.Image2CssException;
 import org.apache.commons.cli.ParseException;
 
 public class ExceptionHandler {

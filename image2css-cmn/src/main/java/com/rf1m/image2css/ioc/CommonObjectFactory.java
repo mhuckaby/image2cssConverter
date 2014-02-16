@@ -20,9 +20,9 @@ package com.rf1m.image2css.ioc;
 
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.cmn.exception.Errors;
-import com.rf1m.image2css.cmn.exception.Image2CssException;
-import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
+import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Image2CssException;
+import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.cmn.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -39,8 +39,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.rf1m.image2css.cmn.exception.Errors.errorCreatingUrlFromStringValue;
-import static com.rf1m.image2css.cmn.exception.Errors.errorOpeningStream;
+import static com.rf1m.image2css.exception.Errors.errorCreatingUrlFromStringValue;
+import static com.rf1m.image2css.exception.Errors.errorOpeningStream;
 
 public class CommonObjectFactory {
     protected final FileUtils fileUtils;

@@ -1,4 +1,4 @@
-package com.rf1m.image2css.cmn.exception;
+package com.rf1m.image2css.exception;
 
 public enum Errors {
     parametersObjectCannotBeNull("parameters.object.cannot.be.null"),

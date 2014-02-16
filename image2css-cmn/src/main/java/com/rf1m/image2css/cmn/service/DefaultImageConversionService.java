@@ -20,7 +20,7 @@ package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.cmn.exception.Errors;
+import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
@@ -31,7 +31,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static com.rf1m.image2css.cmn.exception.Errors.*;
+import static com.rf1m.image2css.exception.Errors.*;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.StringUtils.*;
