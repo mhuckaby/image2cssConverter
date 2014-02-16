@@ -103,10 +103,6 @@ public class CommonObjectFactory {
         return new ImageIcon(bytes);
     }
 
-    public Pair newPair(final Object key, final Object value) {
-        return new ImmutablePair(key, value);
-    }
-
     public String newString(final byte[] content) {
         final byte[] bytes = content.clone();
         return new String(bytes, Charset.defaultCharset());
@@ -114,6 +110,10 @@ public class CommonObjectFactory {
 
     public StringBuffer newStringBuffer() {
         return new StringBuffer();
+    }
+
+    public StringBuilder newStringBuilder(final String initialValue) {
+        return new StringBuilder(initialValue);
     }
 
     public URL newUrl(final String url) {
@@ -132,10 +132,6 @@ public class CommonObjectFactory {
         return new Image2CssValidationException(cause, errors);
     }
 
-    public Image2CssException newImage2CssException(final Errors errors) {
-        return new Image2CssException(errors);
-    }
-
     public Image2CssException newImage2CssException(final Throwable cause, final Errors errors) {
         return new Image2CssException(cause, errors);
     }
@@ -150,6 +146,10 @@ public class CommonObjectFactory {
 
     public ByteArrayOutputStream newByteArrayOutputStream() {
         return new ByteArrayOutputStream();
+    }
+
+    public <L, R> Pair<L, R> newPair(L l, R r) {
+        return new ImmutablePair<L, R>(l, r);
     }
 
 }

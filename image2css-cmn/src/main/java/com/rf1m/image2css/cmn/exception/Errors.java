@@ -5,8 +5,10 @@ public enum Errors {
     parametersObjectMustHaveValidImageInputFileOrDir("parameters.object.must.have.valid.image.input.file.or.dir"),
     parametersObjectOutputInvalid("parameters.object.output.invalid"),
     parametersObjectImageInputFileOrDirNotExists("parameters.object.image.input.file.or.dir.not.exists"),
+    parameterFileCannotBeNull("parameter.file.cannot.be.null"),
     parameterHtmlIndexWithNoCssFile("parameters.html.index.with.no.css.file"),
     parameterUrlCannotBeEmpty("parameters.url.cannot.be.empty"),
+    parameterUrlDidNotResolveToAnImageResource("parameter.url.did.not.resolve.to.an.image.resource"),
     parameterCannotDetermineFilenameFromUrl("parameters.cannot.determine.filename.from.url"),
 
     parameterCssClassCollectionIsNull("parameters.css.class.collection.is.null"),

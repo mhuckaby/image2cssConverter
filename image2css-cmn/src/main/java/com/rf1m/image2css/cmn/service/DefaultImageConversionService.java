@@ -28,16 +28,17 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static com.rf1m.image2css.cmn.exception.Errors.*;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class DefaultImageConversionService implements ImageConversionService {
     protected static final String underscore = "_";
+    protected static final String http = "http://";
 
     protected final FileUtils fileUtils;
     protected final Base64Encoder base64Encoder;
@@ -54,18 +55,47 @@ public class DefaultImageConversionService implements ImageConversionService {
         this.cssClassTemplate = cssClassTemplate;
     }
 
+    @Override
     public CssClass convert(final File imageFile) {
-        // TODO Validate parameter
-        final String imageFilename = imageFile.getName();
-        final String cssClassName = this.determineCssClassName(imageFilename);
-        final String fileExtension = this.fileUtils.getExtension(imageFilename);
+        this.validateFile(imageFile);
+        final Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(imageFile);
+        final String cssClassName = this.determineCssClassName(validatedFilenameAndExtension.getLeft());
         final byte[] bytes = this.getFileBytes(imageFile);
         final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
         final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
-        final String cssEntry = this.determineCssEntry(cssClassName, fileExtension, base64Bytes, dimension);
+        final String cssEntry = this.determineCssEntry(cssClassName, validatedFilenameAndExtension.getRight(), base64Bytes, dimension);
         final CssClass cssClass = this.commonObjectFactory.newCssClass(cssClassName, cssEntry);
 
         return cssClass;
+    }
+
+    @Override
+    public CssClass convert(final URL url) {
+        this.validateUrl(url);
+        final Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(url);
+        final String determinedCssClassName = this.determineCssClassName(validatedFilenameAndExtension.getLeft());
+        final BufferedInputStream bufferedInputStream = this.commonObjectFactory.newBufferedInputStream(url);
+        final byte[] bytes = this.readInputStreamToBytes(bufferedInputStream);
+        final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
+        final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
+        final String cssEntry = this.determineCssEntry(determinedCssClassName, validatedFilenameAndExtension.getRight(), base64Bytes, dimension);
+        final CssClass cssClass = this.commonObjectFactory.newCssClass(determinedCssClassName, cssEntry);
+
+        return cssClass;
+    }
+
+    @Override
+    public CssClass convertUrlAsString(final String urlAsString) {
+        if(isEmpty(urlAsString)) {
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
+        }
+
+        final String urlStringWithProtocol = startsWith(urlAsString.toLowerCase(), http) ?
+                urlAsString : this.commonObjectFactory.newStringBuilder(http).append(urlAsString).toString();
+
+        final URL url = this.commonObjectFactory.newUrl(urlStringWithProtocol);
+
+        return this.convert(url);
     }
 
     protected String determineCssEntry(final String cssClassName,
@@ -76,10 +106,13 @@ public class DefaultImageConversionService implements ImageConversionService {
     }
 
     protected String determineCssClassName(final String fileName) {
-        return fileName
+        final String candidate =
+            fileName
                 .replaceAll("\\.", underscore)
                 .replaceAll("\\\\", underscore)
                 .replaceAll("/", underscore);
+
+        return isNotEmpty(candidate) ? candidate : randomAlphabetic(7);
     }
 
     /**
@@ -101,7 +134,7 @@ public class DefaultImageConversionService implements ImageConversionService {
      * @return
      * @throws Exception
      */
-    public byte[] getFileBytes(final File file) {
+    protected byte[] getFileBytes(final File file) {
         final FileInputStream fileInputStream = this.commonObjectFactory.newFileInputStream(file);
         final byte[] bytes = this.commonObjectFactory.newByteArray(file.length());
 
@@ -120,22 +153,24 @@ public class DefaultImageConversionService implements ImageConversionService {
         return bytes;
     }
 
-    @Override
-    public CssClass convertUrlAsString(final String urlAsString) {
-        if(isEmpty(urlAsString)) {
-            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
+    protected void validateFile(final File file) {
+        if(null == file) {
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterFileCannotBeNull);
         }
-
-        final URL url = this.commonObjectFactory.newUrl(urlAsString);
-        return this.convert(url);
     }
 
-    @Override
-    public CssClass convert(final URL url) {
-        if(null == url) {
-            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
+    protected Pair<String, String> validateFilenameAndExtension(final File file) {
+        final String imageFilename = file.getName();
+        final String fileExtension = this.fileUtils.getExtension(imageFilename);
+
+        if(!SupportedImageType.isSupportedImageType(fileExtension)){
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType);
         }
 
+        return this.commonObjectFactory.newPair(imageFilename, fileExtension);
+    }
+
+    protected Pair<String, String> validateFilenameAndExtension(final URL url) {
         final String imageFilename = url.getFile();
 
         if(isEmpty(imageFilename)) {
@@ -150,18 +185,24 @@ public class DefaultImageConversionService implements ImageConversionService {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType);
         }
 
-        final String determinedCssClassName = this.determineCssClassName(imageFilename);
-        final String cssClassName = isNotEmpty(determinedCssClassName) ? determinedCssClassName : randomAlphabetic(7);
-        final BufferedInputStream bufferedInputStream = this.commonObjectFactory.newBufferedInputStream(url);
-        final byte[] bytes = this.readInputStreamToBytes(bufferedInputStream);
+        return this.commonObjectFactory.newPair(imageFilename, fileExtension);
+    }
 
-        // TODO redundant now, consolidate; see this.convert(final File imageFile) {
-        final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
-        final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
-        final String cssEntry = this.determineCssEntry(cssClassName, fileExtension, base64Bytes, dimension);
-        final CssClass cssClass = this.commonObjectFactory.newCssClass(cssClassName, cssEntry);
-        return cssClass;
-        //.
+    protected void validateUrl(final URL url) {
+        if(null == url) {
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
+        }
+
+        try {
+            final HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.connect();
+            if(200 != httpURLConnection.getResponseCode()) {
+                throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlDidNotResolveToAnImageResource);
+            }
+        }catch(final IOException e) {
+            throw this.commonObjectFactory.newImage2CssValidationException(e, parameterUrlDidNotResolveToAnImageResource);
+        }
     }
 
     protected byte[] readInputStreamToBytes(final BufferedInputStream bufferedInputStream) {
