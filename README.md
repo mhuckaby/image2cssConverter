@@ -23,6 +23,10 @@ Parent module, "image2css":
 
     mvn clean install
 
+Sub-module, "image2css-web":
+
+    mvn jetty:run
+
 Sub-module, "image2css-cli":
 
     mvn clean install assembly:single
@@ -34,6 +38,7 @@ Sub-module, "image2css-cli":
 3. Generate HTML demonstrating generated CSS classes
 4. Output data URI to console
 5. Shell and bat scripts included
+6. Simple web interface
 
 
 ## Example command line usage
