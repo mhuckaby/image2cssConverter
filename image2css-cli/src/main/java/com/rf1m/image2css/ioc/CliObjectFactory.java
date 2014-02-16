@@ -22,7 +22,6 @@ import com.rf1m.image2css.cli.ImmutableParameters;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
-import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 
 import java.io.File;

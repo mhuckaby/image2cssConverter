@@ -1,4 +1,4 @@
-package com.rf1m.image2css.cmn.ioc;
+package com.rf1m.image2css.ioc;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

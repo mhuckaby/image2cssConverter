@@ -16,7 +16,7 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cmn.ioc;
+package com.rf1m.image2css.ioc;
 
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;

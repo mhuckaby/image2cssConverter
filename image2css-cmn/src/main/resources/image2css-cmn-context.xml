@@ -20,7 +20,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="image2cssCommonObjectFactory" class="com.rf1m.image2css.cmn.ioc.CommonObjectFactory">
+    <bean id="image2cssCommonObjectFactory" class="com.rf1m.image2css.ioc.CommonObjectFactory">
         <constructor-arg ref="fileUtils"/>
     </bean>
 

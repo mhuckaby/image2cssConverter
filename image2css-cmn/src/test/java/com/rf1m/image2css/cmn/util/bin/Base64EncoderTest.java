@@ -1,6 +1,6 @@
 package com.rf1m.image2css.cmn.util.bin;
 
-import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
+import com.rf1m.image2css.ioc.CommonObjectFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

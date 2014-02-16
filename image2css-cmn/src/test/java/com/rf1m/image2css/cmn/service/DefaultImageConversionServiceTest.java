@@ -19,7 +19,7 @@
 package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
+import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;

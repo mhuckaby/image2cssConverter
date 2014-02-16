@@ -19,7 +19,7 @@
 package com.rf1m.image2css.cmn.util.file;
 
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
+import com.rf1m.image2css.ioc.CommonObjectFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
