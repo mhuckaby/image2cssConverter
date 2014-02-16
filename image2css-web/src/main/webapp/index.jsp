@@ -23,7 +23,7 @@
                         <img id="img-logo" src="assets/img/image2css.png" />
                     </a>
                     <span>
-                        <h2 style="margin-top:7px;">&nbspimage2css converter</h2>
+                        <h2 style="margin-top:7px;">&nbsp;image2css converter</h2>
                     </span>
                 </div>
             </div>
