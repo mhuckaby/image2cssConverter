@@ -46,19 +46,21 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
             ,"requestConversion": function() {
                 internal.eventHandlers.resetForRequest(function() {
                     internal.pageElements.$result().fadeIn(internal.etc.fadeDelay,
-                        internal.eventHandlers.conversionRequestStatusIndicator(true, internal.transport.getConversion()
-                    ));
+                        internal.eventHandlers.conversionRequestStatusIndicator(true, internal.transport.getConversion)
+                    );
                 });
             }
 
             ,"requestConversionDisplaySuccessResponse": function(data) {
                 var responseContent = responseFormatterCallback ? responseFormatterCallback(data.body) : data.body;
                 internal.pageElements.$conversionRequestResponseBody()[0].innerHTML = responseFormatterCallback(responseContent);
+                internal.pageElements.$conversionRequestResponseBody().fadeIn(internal.etc.fadeDelay);
             }
 
             ,"requestConversionDisplayFailureResponse": function(data) {
                 var message = JSON.parse(data.responseText).message;
                 internal.pageElements.$conversionRequestResponseBody()[0].innerHTML = message;
+                internal.pageElements.$conversionRequestResponseBody().fadeIn(internal.etc.fadeDelay);
             }
 
             ,"urlEnterHandler": function(event) {
@@ -74,7 +76,7 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
                     internal.pageElements.$conversionRequestAwaitingResponse().fadeOut(internal.etc.fadeDelay, function() {
                         internal.pageElements.$conversionRequestReceivedResponse().hide();
                         internal.pageElements.$conversionRequestReceivedResponse().removeClass("hidden");
-                        internal.pageElements.$conversionRequestReceivedResponse().fadeIn(internal.etc.fadeDelay);
+                        internal.pageElements.$conversionRequestReceivedResponse().fadeIn(internal.etc.fadeDelay, callback);
                     });
                 }
             }
@@ -90,12 +92,17 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
 
             ,"getConversion": function() {
                 var targetUrlValue = internal.pageElements.$targetUrl()[0].value;
-
+                internal.pageElements.$conversionRequestResponseBody().hide();
                 $.get(internal.transport.routes.conversionService(targetUrlValue))
-                    .done(internal.eventHandlers.requestConversionDisplaySuccessResponse)
-                    .fail(internal.eventHandlers.requestConversionDisplayFailureResponse)
-                    .always(function() {
-                        internal.eventHandlers.conversionRequestStatusIndicator(false);
+                    .done(function(data) {
+                        internal.eventHandlers.conversionRequestStatusIndicator(false, function() {
+                            internal.eventHandlers.requestConversionDisplaySuccessResponse(data);
+                        })
+                    })
+                    .fail(function(data) {
+                        internal.eventHandlers.conversionRequestStatusIndicator(false, function() {
+                            internal.eventHandlers.requestConversionDisplayFailureResponse(data);
+                        });
                     });
             }
 
