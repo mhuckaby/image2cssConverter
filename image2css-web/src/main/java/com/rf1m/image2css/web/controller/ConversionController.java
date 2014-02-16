@@ -41,7 +41,7 @@ public class ConversionController {
         return this.webObjectFactory.newErrorResponse(image2CssValidationException.getMessage());
     }
 
-    @ExceptionHandler(Image2CssException.class)
+    @ExceptionHandler(value = {Image2CssException.class, Exception.class})
     @ResponseStatus(value = INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorResponse handleInternalServerError(final Image2CssException image2cssException) {
