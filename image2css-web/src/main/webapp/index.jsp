@@ -51,7 +51,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span id="conversionRequestAwaitingResponse"><img src="assets/img/ajax-loader.gif">&nbspOne moment, please ...</span>
+                            <span id="conversionRequestAwaitingResponse"><img src="assets/img/ajax-loader.gif">&nbsp;One moment, please ...</span>
                             <span id="conversionRequestReceivedResponse" class="hidden">Conversion Result</span>
                         </div>
                         <div class="panel-body" style="overflow-x:auto">
