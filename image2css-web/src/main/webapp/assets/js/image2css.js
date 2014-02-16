@@ -38,6 +38,7 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
             "resetForRequest": function(callback) {
                 internal.pageElements.$result().fadeOut(internal.etc.fadeDelay, function() {
                     internal.pageElements.$conversionRequestReceivedResponse().hide();
+                    internal.pageElements.$conversionRequestResponseBody()[0].innerHTML = "";
                     callback();
                 });
             }
@@ -51,8 +52,8 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
             }
 
             ,"requestConversionDisplaySuccessResponse": function(data) {
-                internal.pageElements.$conversionRequestResponseBody()[0].innerHTML = data.body;
-                responseFormatterCallback();
+                var responseContent = responseFormatterCallback ? responseFormatterCallback(data.body) : data.body;
+                internal.pageElements.$conversionRequestResponseBody()[0].innerHTML = responseFormatterCallback(responseContent);
             }
 
             ,"requestConversionDisplayFailureResponse": function(data) {

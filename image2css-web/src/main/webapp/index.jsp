@@ -66,6 +66,6 @@
         <a href="https://github.com/mhuckaby/image2cssConverter"><img id="git-fork-ribbon" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
     </body>
     <script>
-        context($, "c", prettyPrint);
+        context($, "c", prettyPrintOne);
     </script>
 </html>
