@@ -22,6 +22,7 @@ import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
+import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
 import com.rf1m.image2css.cmn.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -30,6 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -37,7 +39,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.lang.ClassLoader.getSystemResource;
+import static com.rf1m.image2css.cmn.exception.Errors.errorCreatingUrlFromStringValue;
+import static com.rf1m.image2css.cmn.exception.Errors.errorOpeningStream;
 
 public class CommonObjectFactory {
     protected final FileUtils fileUtils;
@@ -100,10 +103,6 @@ public class CommonObjectFactory {
         return new ImageIcon(bytes);
     }
 
-    public Pair newPair(final Object key, final Object value) {
-        return new ImmutablePair(key, value);
-    }
-
     public String newString(final byte[] content) {
         final byte[] bytes = content.clone();
         return new String(bytes, Charset.defaultCharset());
@@ -113,16 +112,44 @@ public class CommonObjectFactory {
         return new StringBuffer();
     }
 
-    public URL newUrl(final String url) {
-        return getSystemResource(url);
+    public StringBuilder newStringBuilder(final String initialValue) {
+        return new StringBuilder(initialValue);
     }
 
-    public Image2CssException newImage2CssException(final Errors errors) {
-        return new Image2CssException(errors);
+    public URL newUrl(final String url) {
+        try {
+            return new URL(url);
+        }catch(final MalformedURLException e) {
+            throw this.newImage2CssValidationException(e, errorCreatingUrlFromStringValue);
+        }
+    }
+
+    public Image2CssException newImage2CssValidationException(final Errors errors) {
+        return new Image2CssValidationException(errors);
+    }
+
+    public Image2CssException newImage2CssValidationException(final Throwable cause, final Errors errors) {
+        return new Image2CssValidationException(cause, errors);
     }
 
     public Image2CssException newImage2CssException(final Throwable cause, final Errors errors) {
         return new Image2CssException(cause, errors);
+    }
+
+    public BufferedInputStream newBufferedInputStream(final URL url) throws Image2CssException {
+        try {
+            return new BufferedInputStream(url.openStream());
+        }catch(final IOException e) {
+            throw this.newImage2CssException(e, errorOpeningStream);
+        }
+    }
+
+    public ByteArrayOutputStream newByteArrayOutputStream() {
+        return new ByteArrayOutputStream();
+    }
+
+    public <L, R> Pair<L, R> newPair(L l, R r) {
+        return new ImmutablePair<L, R>(l, r);
     }
 
 }

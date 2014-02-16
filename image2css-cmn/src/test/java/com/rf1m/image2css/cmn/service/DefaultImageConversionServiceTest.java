@@ -31,7 +31,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.swing.*;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.net.URL;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -68,17 +70,26 @@ public class DefaultImageConversionServiceTest {
 
         final File file = mock(File.class);
         final Pair<Integer, Integer> dimension = mock(Pair.class);
+        final Pair<String, String> filenameAndExtension = mock(Pair.class);
         final CssClass cssClass = mock(CssClass.class);
 
-        when(file.getName())
+        doNothing()
+            .when(defaultImageConversionService)
+            .validateFile(file);
+
+        doReturn(filenameAndExtension)
+            .when(defaultImageConversionService)
+            .validateFilenameAndExtension(file);
+
+        when(filenameAndExtension.getLeft())
             .thenReturn(filename);
+
+        when(filenameAndExtension.getRight())
+            .thenReturn(fileExtension);
 
         doReturn(cssClassName)
             .when(defaultImageConversionService)
             .determineCssClassName(filename);
-
-        when(fileUtils.getExtension(filename))
-            .thenReturn(fileExtension);
 
         doReturn(bytes)
             .when(defaultImageConversionService)
@@ -102,17 +113,16 @@ public class DefaultImageConversionServiceTest {
 
         assertThat(result, is(cssClass));
 
-        final InOrder inOrder = inOrder(file, defaultImageConversionService, fileUtils, fileUtils, base64Encoder,
-            defaultImageConversionService, defaultImageConversionService, commonObjectFactory);
+        final InOrder inOrder = inOrder(file, defaultImageConversionService, fileUtils, base64Encoder, commonObjectFactory);
 
-        inOrder.verify(file, times(1))
-            .getName();
+        inOrder.verify(defaultImageConversionService, times(1))
+            .validateFile(file);
+
+        inOrder.verify(defaultImageConversionService, times(1))
+            .validateFilenameAndExtension(file);
 
         inOrder.verify(defaultImageConversionService, times(1))
             .determineCssClassName(filename);
-
-        inOrder.verify(fileUtils, times(1))
-            .getExtension(filename);
 
         inOrder.verify(defaultImageConversionService, times(1))
             .getFileBytes(file);
@@ -169,9 +179,9 @@ public class DefaultImageConversionServiceTest {
     }
 
     @Test
-    public void shouldReplaceAllDotsWithUnderscores() {
-        final String before = "a.b.c";
-        final String expected = "a_b_c";
+    public void shouldConvertFilename() {
+        final String before = "a\\b/c.d";
+        final String expected = "a_b_c_d";
 
         final String result = defaultImageConversionService.determineCssClassName(before);
 
@@ -179,13 +189,91 @@ public class DefaultImageConversionServiceTest {
     }
 
     @Test
-    public void shouldReplaceAllForwardSlashesWithUnderscores() {
-        final String before = "/sd/topics/science_64.png";
-        final String expected = "_sd_topics_science_64_png";
+    public void convertUrlShouldConvertFileToBase64EncodedBytes() throws Exception {
+        final URL url = new URL("http://a.fsdn.com/sd/topics/android_64.png");
+        final String filename = "/sd/topics/android_64.png";
+        final String fileExtension = "png";
+        final String cssClassName = "android_64_png";
+        final String cssEntry = "cssEntry";
+        final String base64EncodedBytes = "base64EncodedBytes";
+        final byte[] bytes = {01};
 
-        final String result = defaultImageConversionService.determineCssClassName(before);
+        final BufferedInputStream bufferedInputStream = mock(BufferedInputStream.class);
+        final Pair<Integer, Integer> dimension = mock(Pair.class);
+        final Pair<String, String> filenameAndExtension = mock(Pair.class);
+        final CssClass cssClass = mock(CssClass.class);
 
-        assertThat(result, is(expected));
+        doNothing()
+            .when(defaultImageConversionService)
+            .validateUrl(url);
+
+        doReturn(filenameAndExtension)
+            .when(defaultImageConversionService)
+            .validateFilenameAndExtension(url);
+
+        when(filenameAndExtension.getLeft())
+            .thenReturn(filename);
+
+        when(filenameAndExtension.getRight())
+            .thenReturn(fileExtension);
+
+        doReturn(cssClassName)
+            .when(defaultImageConversionService)
+            .determineCssClassName(filename);
+
+        when(commonObjectFactory.newBufferedInputStream(any(URL.class)))
+            .thenReturn(bufferedInputStream);
+
+        doReturn(bytes)
+            .when(defaultImageConversionService)
+            .readInputStreamToBytes(bufferedInputStream);
+
+        when(base64Encoder.base64EncodeBytes(bytes))
+            .thenReturn(base64EncodedBytes);
+
+        doReturn(dimension)
+            .when(defaultImageConversionService)
+            .getImageDimension(bytes);
+
+        doReturn(cssEntry)
+            .when(defaultImageConversionService)
+            .determineCssEntry(cssClassName, fileExtension, base64EncodedBytes, dimension);
+
+        when(commonObjectFactory.newCssClass(cssClassName, cssEntry))
+            .thenReturn(cssClass);
+
+        final CssClass result = defaultImageConversionService.convert(url);
+
+        assertThat(result, is(cssClass));
+
+        final InOrder inOrder = inOrder(defaultImageConversionService, fileUtils, base64Encoder, commonObjectFactory);
+
+        inOrder.verify(defaultImageConversionService, times(1))
+            .validateUrl(url);
+
+        inOrder.verify(defaultImageConversionService, times(1))
+            .validateFilenameAndExtension(url);
+
+        inOrder.verify(defaultImageConversionService, times(1))
+            .determineCssClassName(filename);
+
+        inOrder.verify(commonObjectFactory, times(1))
+            .newBufferedInputStream(any(URL.class));
+
+        inOrder.verify(defaultImageConversionService, times(1))
+            .readInputStreamToBytes(bufferedInputStream);
+
+        inOrder.verify(base64Encoder, times(1))
+            .base64EncodeBytes(bytes);
+
+        inOrder.verify(defaultImageConversionService, times(1))
+            .getImageDimension(bytes);
+
+        inOrder.verify(defaultImageConversionService, times(1))
+            .determineCssEntry(cssClassName, fileExtension, base64EncodedBytes, dimension);
+
+        inOrder.verify(commonObjectFactory, times(1))
+            .newCssClass(cssClassName, cssEntry);
     }
 
 }

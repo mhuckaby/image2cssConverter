@@ -1,0 +1,26 @@
+body {
+    /*background-image: url("../img/squared_metal.png");*/
+    background-image: url("../img/grey_wash_wall.png");
+    background-repeat: repeat;
+}
+
+#img-logo {
+    float:left;
+    height:45px;
+    width:45px;
+}
+
+.row-first-padded {
+    margin-top:5%;
+}
+
+.row-padded {
+    margin-top:1%;
+}
+
+#git-fork-ribbon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+}
