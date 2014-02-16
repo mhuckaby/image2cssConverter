@@ -24,7 +24,7 @@ public class ConversionController {
     @RequestMapping(value = "/convert", produces = {APPLICATION_JSON_VALUE})
     @ResponseBody
     public CssClass convertUrl(@RequestParam final String url) {
-        logger.debug("convertUrl=" + url);
+        logger.info("convertUrl=" + url);
         return this.imageConversionService.convertUrlAsString(url);
     }
 }
