@@ -7,19 +7,19 @@
     <modelVersion>4.0.0</modelVersion>
     <name>image2css-web</name>
     <packaging>war</packaging>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
 
     <parent>
         <groupId>com.rf1m</groupId>
         <artifactId>image2css</artifactId>
-        <version>1.1.2-SNAPSHOT</version>
+        <version>1.2.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>com.rf1m</groupId>
             <artifactId>image2css-cmn</artifactId>
-            <version>1.1.2-SNAPSHOT</version>
+            <version>1.2.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
