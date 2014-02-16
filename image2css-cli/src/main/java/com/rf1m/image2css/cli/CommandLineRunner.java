@@ -18,8 +18,8 @@
  */
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.cmn.domain.CssClass;
-import com.rf1m.image2css.cmn.domain.SupportedImageType;
+import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
 import com.rf1m.image2css.cmn.service.ImageConversionService;
 import com.rf1m.image2css.cmn.util.file.ConversionFilenameFilter;

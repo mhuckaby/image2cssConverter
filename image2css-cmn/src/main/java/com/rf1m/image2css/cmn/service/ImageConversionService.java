@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.cmn.service;
 
-import com.rf1m.image2css.cmn.domain.CssClass;
+import com.rf1m.image2css.domain.CssClass;
 
 import java.io.File;
 import java.net.URL;

@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.cmn.util.file;
 
-import com.rf1m.image2css.cmn.domain.SupportedImageType;
+import com.rf1m.image2css.domain.SupportedImageType;
 
 import java.util.Set;
 

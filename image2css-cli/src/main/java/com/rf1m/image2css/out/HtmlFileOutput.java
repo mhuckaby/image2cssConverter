@@ -19,7 +19,7 @@
 package com.rf1m.image2css.out;
 
 import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.cmn.domain.CssClass;
+import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 
 import java.io.FileWriter;

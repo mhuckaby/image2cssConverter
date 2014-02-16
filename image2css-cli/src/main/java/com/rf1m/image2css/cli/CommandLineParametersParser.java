@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.cli;
 
-import com.rf1m.image2css.cmn.domain.SupportedImageType;
+import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.*;

@@ -16,7 +16,7 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cmn.domain;
+package com.rf1m.image2css.domain;
 
 public class CssClass {
 	protected final String name;
