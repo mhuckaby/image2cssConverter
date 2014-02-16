@@ -22,6 +22,7 @@ import com.rf1m.image2css.cmn.domain.CssClass;
 import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.exception.Image2CssException;
+import com.rf1m.image2css.cmn.exception.Image2CssValidationException;
 import com.rf1m.image2css.cmn.util.file.ConversionFilenameFilter;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -119,8 +120,16 @@ public class CommonObjectFactory {
         try {
             return new URL(url);
         }catch(final MalformedURLException e) {
-            throw this.newImage2CssException(e, errorCreatingUrlFromStringValue);
+            throw this.newImage2CssValidationException(e, errorCreatingUrlFromStringValue);
         }
+    }
+
+    public Image2CssException newImage2CssValidationException(final Errors errors) {
+        return new Image2CssValidationException(errors);
+    }
+
+    public Image2CssException newImage2CssValidationException(final Throwable cause, final Errors errors) {
+        return new Image2CssValidationException(cause, errors);
     }
 
     public Image2CssException newImage2CssException(final Errors errors) {

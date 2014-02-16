@@ -19,18 +19,24 @@
 package com.rf1m.image2css.cmn.service;
 
 import com.rf1m.image2css.cmn.domain.CssClass;
+import com.rf1m.image2css.cmn.domain.SupportedImageType;
 import com.rf1m.image2css.cmn.exception.Errors;
 import com.rf1m.image2css.cmn.ioc.CommonObjectFactory;
 import com.rf1m.image2css.cmn.util.bin.Base64Encoder;
 import com.rf1m.image2css.cmn.util.file.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 
-import static com.rf1m.image2css.cmn.exception.Errors.errorOpeningStream;
+import static com.rf1m.image2css.cmn.exception.Errors.*;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 public class DefaultImageConversionService implements ImageConversionService {
     protected static final String underscore = "_";
@@ -118,20 +124,36 @@ public class DefaultImageConversionService implements ImageConversionService {
 
     @Override
     public CssClass convertUrlAsString(final String urlAsString) {
+        if(isEmpty(urlAsString)) {
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
+        }
+
         final URL url = this.commonObjectFactory.newUrl(urlAsString);
         return this.convert(url);
     }
 
     @Override
     public CssClass convert(final URL url) {
-        // TODO Validate parameter
+        if(null == url) {
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
+        }
+
         final String imageFilename = url.getFile();
 
-        // TODO redundant now, consolidate; see this.convert(final File imageFile) {
-        final String cssClassName = this.determineCssClassName(imageFilename);
-        final String fileExtension = this.fileUtils.getExtension(imageFilename);
-        //.
+        if(isEmpty(imageFilename)) {
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterCannotDetermineFilenameFromUrl);
+        }
 
+        final String fileExtension = this.fileUtils.getExtension(imageFilename);
+
+        if(isEmpty(fileExtension)) {
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
+        }else if(!SupportedImageType.isSupportedImageType(fileExtension)){
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType);
+        }
+
+        final String determinedCssClassName = this.determineCssClassName(imageFilename);
+        final String cssClassName = isNotEmpty(determinedCssClassName) ? determinedCssClassName : randomAlphabetic(7);
         final BufferedInputStream bufferedInputStream = this.commonObjectFactory.newBufferedInputStream(url);
         final byte[] bytes = this.readInputStreamToBytes(bufferedInputStream);
 

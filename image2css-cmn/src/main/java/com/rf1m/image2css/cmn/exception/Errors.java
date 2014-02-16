@@ -6,6 +6,8 @@ public enum Errors {
     parametersObjectOutputInvalid("parameters.object.output.invalid"),
     parametersObjectImageInputFileOrDirNotExists("parameters.object.image.input.file.or.dir.not.exists"),
     parameterHtmlIndexWithNoCssFile("parameters.html.index.with.no.css.file"),
+    parameterUrlCannotBeEmpty("parameters.url.cannot.be.empty"),
+    parameterCannotDetermineFilenameFromUrl("parameters.cannot.determine.filename.from.url"),
 
     parameterCssClassCollectionIsNull("parameters.css.class.collection.is.null"),
     parameterUnsupportedImageType("parameters.unsupported.imagetype"),

@@ -19,6 +19,9 @@
 package com.rf1m.image2css.cmn.exception;
 
 public class Image2CssValidationException extends Image2CssException {
+    public Image2CssValidationException(Throwable cause, Errors errors) {
+        super(cause, errors);
+    }
 
     public Image2CssValidationException(final Errors errors) {
         super(errors);
