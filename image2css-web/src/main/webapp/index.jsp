@@ -20,7 +20,7 @@
             <div class="row row-first-padded">
                 <div class="col-md-12">
                     <a class="" href="https://github.com/mhuckaby/image2cssConverter">
-                        <img id="img-logo" src="assets/img/image2css.png" />
+                        <img src="assets/img/image2css.png" />
                     </a>
                     <span>
                         <h2 style="margin-top:7px;">&nbsp;image2css converter</h2>

@@ -1,13 +1,12 @@
 body {
-    /*background-image: url("../img/squared_metal.png");*/
     background-image: url("../img/grey_wash_wall.png");
     background-repeat: repeat;
 }
 
-#img-logo {
-    float:left;
-    height:45px;
-    width:45px;
+.row-first-padded div a img {
+	float: left;
+	height: 45px;
+	width:45px;
 }
 
 .row-first-padded {
