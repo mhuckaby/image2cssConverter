@@ -3,7 +3,7 @@ body {
     background-repeat: repeat;
 }
 
-.row-first-padded div a img {
+body .container div:first-of-type div a img {
 	float: left;
 	height: 45px;
 	width:45px;
