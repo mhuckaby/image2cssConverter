@@ -1,4 +1,4 @@
-var context = function(jq, apiRoot, responseFormatterCallback) {
+var context = function($, apiRoot, responseFormatterCallback) {
     var internal;
 
     internal = {
@@ -9,11 +9,11 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
         ,"pageElements": {
 
             "$conversionRequestResponseBody": function() {
-                return jq("#responseBody");
+                return $("#responseBody");
             }
 
             ,"$convertButton": function() {
-                return jq("#convertUrl")
+                return $("#convertUrl")
             }
 
             ,"$conversionRequestAwaitingResponse": function() {
@@ -29,7 +29,7 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
             }
 
             ,"$targetUrl": function() {
-                return jq("#targetUrl")
+                return $("#targetUrl")
             }
 
         }
@@ -114,7 +114,7 @@ var context = function(jq, apiRoot, responseFormatterCallback) {
         }
     };
 
-    jq(document).ready(function() {
+    $(document).ready(function() {
         internal.registerEventHandlers();
     });
 
