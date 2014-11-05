@@ -51,7 +51,7 @@ Display the help screen:
 	Windows
 	image2css.bat
 
-Convert remote PNG-image (ie: boy_with_book.png) to data URI and output to CSS and HTML files:
+Convert remote PNG-image to data URI and output to CSS and HTML files:
 
 	Linux
 	./image2css.sh -f http://upload.wikimedia.org/wikipedia/commons/0/0f/Spotorno-IMG_1772.JPG -o result.css -h result.html
@@ -59,21 +59,21 @@ Convert remote PNG-image (ie: boy_with_book.png) to data URI and output to CSS a
 	Windows
 	image2css.bat -f http://upload.wikimedia.org/wikipedia/commons/0/0f/Spotorno-IMG_1772.JPG -o result.css -h result.html
 
-Convert PNG-image (ie: boy_with_book.png) to data URI and output to CSS and HTML files:
+Convert PNG-image to data URI and output to CSS and HTML files:
 
 	Linux
-	./image2css.sh -f boy_with_book.png -o result.css -h result.html
+	./image2css.sh -f image.png -o result.css -h result.html
 
 	Windows
-	image2css.bat -f boy_with_book.png -o result.css -h result.html
+	image2css.bat -f image.png -o result.css -h result.html
 
-Convert PNG-image (ie: boy_with_book.png) to data URI and output to console:
+Convert PNG-image to data URI and output to console:
 
 	Linux
-	./image2css.sh -f boy_with_book.png -syso
+	./image2css.sh -f image.png -syso
 	
 	Windows
-	image2css.bat -f boy_with_book.png -syso
+	image2css.bat -f image.png -syso
 	
 Convert PNG-images in directory to data URI and output to CSS and HTML files:
 
