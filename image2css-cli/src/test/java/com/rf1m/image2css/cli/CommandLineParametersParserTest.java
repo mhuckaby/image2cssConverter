@@ -37,6 +37,7 @@ import java.net.URL;
 import java.util.Set;
 
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -225,6 +226,25 @@ public class CommandLineParametersParserTest {
 
         verify(objectFactory, times(1))
             .newFile(optionValue);
+    }
+
+    @Test
+    public void extractFileFromOptionsShouldReturnNullWhenNoParameterValueIsSupplied() {
+        final String option = "option";
+        final String[] optionValues = {};
+
+        when(commandLine.getOptionValues(option))
+            .thenReturn(optionValues);
+
+        final File result = commandLineParametersParser.extractFileFromOption(commandLine, option);
+
+        assertNull(result);
+
+        verify(commandLine, times(1))
+            .getOptionValues(option);
+
+        verify(objectFactory, never())
+            .newFile(anyString());
     }
 
     @Test

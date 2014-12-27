@@ -122,7 +122,12 @@ public class CommandLineParametersParser {
     }
 
     protected File extractFileFromOption(final CommandLine commandLine, final String option) {
-        final String filename = commandLine.getOptionValues(option)[0];
+        final String[] optionValues = commandLine.getOptionValues(option);
+        if(optionValues == null || optionValues.length == 0) {
+            return null;
+        }
+
+        final String filename = optionValues[0];
         final File file = this.objectFactory.newFile(filename);
 
         return file;

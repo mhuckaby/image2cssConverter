@@ -41,6 +41,7 @@
 
     <bean id="commandLineRunnerValidator" class="com.rf1m.image2css.cli.CommandLineRunnerValidator">
         <constructor-arg ref="helpFormatter"/>
+        <constructor-arg ref="commandLineRunnerOutputManager"/>
         <constructor-arg ref="systemWrapper"/>
     </bean>
 

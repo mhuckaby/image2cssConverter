@@ -26,15 +26,21 @@ import static com.rf1m.image2css.exception.Errors.*;
 public class CommandLineRunnerValidator {
 
     protected final Image2CssHelpFormatter image2CssHelpFormatter;
+    protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager;
     protected final SystemWrapper systemWrapper;
 
-    public CommandLineRunnerValidator(final Image2CssHelpFormatter image2CssHelpFormatter, final SystemWrapper systemWrapper) {
+    public CommandLineRunnerValidator(final Image2CssHelpFormatter image2CssHelpFormatter,
+                                      final CommandLineRunnerOutputManager commandLineRunnerOutputManager,
+                                      final SystemWrapper systemWrapper) {
+
         this.image2CssHelpFormatter = image2CssHelpFormatter;
+        this.commandLineRunnerOutputManager = commandLineRunnerOutputManager;
         this.systemWrapper = systemWrapper;
     }
 
     protected void argumentLengthCheck(final String[] arguments) {
         if(0 == arguments.length){
+            this.commandLineRunnerOutputManager.showAbout();
             this.image2CssHelpFormatter.showHelp();
             this.systemWrapper.exit();
         }

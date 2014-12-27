@@ -35,13 +35,17 @@ public class CommandLineRunnerValidatorTest {
     Image2CssHelpFormatter image2CssHelpFormatter;
 
     @Mock
+    CommandLineRunnerOutputManager commandLineRunnerOutputManager;
+
+    @Mock
     SystemWrapper systemWrapper;
 
     CommandLineRunnerValidator commandLineRunnerValidator;
 
     @Before
     public void before() {
-        commandLineRunnerValidator = new CommandLineRunnerValidator(image2CssHelpFormatter, systemWrapper);
+        commandLineRunnerValidator =
+            new CommandLineRunnerValidator(image2CssHelpFormatter, commandLineRunnerOutputManager, systemWrapper);
     }
 
     @Test

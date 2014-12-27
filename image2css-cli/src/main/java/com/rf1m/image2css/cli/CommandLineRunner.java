@@ -84,7 +84,6 @@ public class CommandLineRunner {
     }
 
     protected Parameters initialize(final String[] arguments) throws ParseException {
-        this.commandLineRunnerOutputManager.showAbout();
         this.commandLineRunnerValidator.argumentLengthCheck(arguments);
 
         final Parameters parameters = this.commandLineParametersParser.parse(arguments);

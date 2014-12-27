@@ -52,13 +52,15 @@ public class ConsoleOutput extends AbstractOutput implements ReportOutput{
     @Override
     public void generateReportOutput(final Parameters parameters, final List<CssClass> cssClasses){
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            this.println(format(reportCssTotalTemplate, cssClasses.size()));
-
+            if(!parameters.isOutputToConsoleDesired()) {
+                this.println(format(reportCssTotalTemplate, cssClasses.size()));
+            }
             if(null != parameters.getCssFile()){
                 this.println(format(reportCssFileTemplate, parameters.getCssFile().getName()));
             }
 
             if(null != parameters.getHtmlFile()){
+
                 this.println(format(reportHtmlFileTemplate, parameters.getHtmlFile().getName()));
             }
         }
