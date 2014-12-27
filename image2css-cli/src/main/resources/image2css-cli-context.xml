@@ -79,7 +79,7 @@
         <constructor-arg value="${command.line.option.cmd.html.output.filename}"/>
         <constructor-arg value="${command.line.option.description.html.output.filename}"/>
         <constructor-arg value="true"/>
-        <constructor-arg value="true"/>
+        <constructor-arg value="false"/>
     </bean>
 
     <bean id="optionImageFile" class="com.rf1m.image2css.cli.Image2CssOption">
