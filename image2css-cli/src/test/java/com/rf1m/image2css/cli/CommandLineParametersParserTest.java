@@ -29,6 +29,7 @@ import org.apache.commons.cli.Options;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
@@ -40,7 +41,6 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.Mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineParametersParserTest {
@@ -159,7 +159,7 @@ public class CommandLineParametersParserTest {
 
         final Parameters result = commandLineParametersParser.parse(args);
 
-        assertThat((ImmutableParameters)result, is(parameters));
+        assertThat(result, is(parameters));
 
         verify(basicParser, times(1))
             .parse(options, args);
@@ -196,9 +196,6 @@ public class CommandLineParametersParserTest {
 
         verify(optionSyso, times(1))
             .getOpt();
-
-        verify(commandLine, times(1))
-            .hasOption(optionSysoGetOptValue);
 
         verify(objectFactory, times(1))
             .newImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, syso, isLocalResource, url);

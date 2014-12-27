@@ -197,8 +197,9 @@ public class DefaultImageConversionService implements ImageConversionService {
             final HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setRequestMethod("HEAD");
             httpURLConnection.connect();
-            if(200 != httpURLConnection.getResponseCode()) {
-                throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlDidNotResolveToAnImageResource);
+            final int statusCode = httpURLConnection.getResponseCode();
+            if(200 != statusCode) {
+                throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlDidNotResolveToAnImageResource, statusCode);
             }
         }catch(final IOException e) {
             throw this.commonObjectFactory.newImage2CssValidationException(e, parameterUrlDidNotResolveToAnImageResource);

@@ -20,6 +20,8 @@ package com.rf1m.image2css.exception;
 
 import java.util.ResourceBundle;
 
+import static java.lang.String.format;
+
 public class Image2CssException extends RuntimeException {
     protected static final ResourceBundle resourceBundle = ResourceBundle.getBundle("image2css-exception-messages");
 
@@ -29,6 +31,10 @@ public class Image2CssException extends RuntimeException {
 
     public Image2CssException(final Throwable cause, final Errors errors) {
         super(resourceBundle.getString(errors.getMessage()), cause);
+    }
+
+    public Image2CssException(final Errors errors, final Object ... parameters) {
+        super(format(resourceBundle.getString(errors.getMessage()), parameters));
     }
 
 }

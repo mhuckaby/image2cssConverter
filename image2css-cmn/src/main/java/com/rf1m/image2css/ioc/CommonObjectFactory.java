@@ -124,6 +124,10 @@ public class CommonObjectFactory {
         }
     }
 
+    public Image2CssException newImage2CssValidationException(final Errors errors, final Object ... parameters) {
+        return new Image2CssValidationException(errors, parameters);
+    }
+
     public Image2CssException newImage2CssValidationException(final Errors errors) {
         return new Image2CssValidationException(errors);
     }
