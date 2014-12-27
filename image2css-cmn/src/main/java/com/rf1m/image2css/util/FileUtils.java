@@ -16,30 +16,39 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cmn.util.bin;
+package com.rf1m.image2css.util;
 
-import com.rf1m.image2css.ioc.CommonObjectFactory;
+import com.rf1m.image2css.domain.SupportedImageType;
 
-import static org.apache.commons.codec.binary.Base64.encodeBase64;
+import java.util.Set;
 
-// Limits JVM to Sun/Oracle distribution
-// import com.sun.org.apache.xml.internal.security.utils.Base64;
+public class FileUtils {
+    protected static final char period = '.';
+    protected static final int notFound = -1;
+    protected static final int positionsAfterLastIndex = 1;
 
-public class Base64Encoder {
-    protected final static String nl = "\n";
-    protected final static String empty = "";
+    protected static final String empty = "";
 
-    protected final CommonObjectFactory commonObjectFactory;
+    protected final Set<SupportedImageType> defaultSupportedImageTypes;
 
-    public Base64Encoder(final CommonObjectFactory commonObjectFactory) {
-        this.commonObjectFactory = commonObjectFactory;
+    public FileUtils(final Set<SupportedImageType> defaultSupportedImageTypes) {
+        this.defaultSupportedImageTypes = defaultSupportedImageTypes;
     }
 
-    public String base64EncodeBytes(final byte[] bytes) {
-        final byte[] encodedBase64Bytes = encodeBase64(bytes, false);
-        final String encoded = this.commonObjectFactory.newString(encodedBase64Bytes);
+    /**
+	 * Return the file-extension, empty if there is none.
+	 * @param path
+	 * @return
+	 */
+	public String getExtension(final String path){
+		final int lastIndex = path.lastIndexOf(period);
 
-        return encoded.replaceAll(nl, empty);
-    }
+        if(notFound == lastIndex){
+			return empty;
+		}else{
+            final int afterLastPeriod = (lastIndex + positionsAfterLastIndex);
+			return path.substring(afterLastPeriod).toLowerCase();
+		}
+	}
 
 }

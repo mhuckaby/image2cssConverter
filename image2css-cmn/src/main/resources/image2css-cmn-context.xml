@@ -10,7 +10,7 @@
             ignore-unresolvable="true"
             system-properties-mode="OVERRIDE"/>
 
-    <bean id="fileUtils" class="com.rf1m.image2css.cmn.util.file.FileUtils">
+    <bean id="fileUtils" class="com.rf1m.image2css.util.FileUtils">
         <constructor-arg>
             <set>
                 <value>gif</value>
@@ -24,11 +24,11 @@
         <constructor-arg ref="fileUtils"/>
     </bean>
 
-    <bean id="base64Encoder" class="com.rf1m.image2css.cmn.util.bin.Base64Encoder">
+    <bean id="base64Encoder" class="com.rf1m.image2css.util.Base64Encoder">
         <constructor-arg ref="image2cssCommonObjectFactory"/>
     </bean>
 
-    <bean id="defaultImageConversionService" class="com.rf1m.image2css.cmn.service.DefaultImageConversionService">
+    <bean id="defaultImageConversionService" class="com.rf1m.image2css.service.DefaultImageConversionService">
         <constructor-arg ref="fileUtils"/>
         <constructor-arg ref="base64Encoder"/>
         <constructor-arg ref="image2cssCommonObjectFactory"/>

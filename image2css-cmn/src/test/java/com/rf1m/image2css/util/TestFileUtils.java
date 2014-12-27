@@ -16,8 +16,9 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cmn.util.file;
+package com.rf1m.image2css.util;
 
+import com.rf1m.image2css.util.FileUtils;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import org.junit.Before;
@@ -31,7 +32,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Set;
 
-import static com.rf1m.image2css.cmn.util.file.FileUtils.empty;
+import static com.rf1m.image2css.util.FileUtils.empty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;

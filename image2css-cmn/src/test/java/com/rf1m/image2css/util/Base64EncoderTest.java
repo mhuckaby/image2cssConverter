@@ -1,5 +1,6 @@
-package com.rf1m.image2css.cmn.util.bin;
+package com.rf1m.image2css.util;
 
+import com.rf1m.image2css.util.Base64Encoder;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import org.junit.Before;
 import org.junit.Test;

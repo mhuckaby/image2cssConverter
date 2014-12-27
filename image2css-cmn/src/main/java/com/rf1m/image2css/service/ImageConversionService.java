@@ -16,39 +16,17 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cmn.util.file;
+package com.rf1m.image2css.service;
 
-import com.rf1m.image2css.domain.SupportedImageType;
+import com.rf1m.image2css.domain.CssClass;
 
-import java.util.Set;
+import java.io.File;
+import java.net.URL;
 
-public class FileUtils {
-    protected static final char period = '.';
-    protected static final int notFound = -1;
-    protected static final int positionsAfterLastIndex = 1;
+public interface ImageConversionService {
 
-    protected static final String empty = "";
-
-    protected final Set<SupportedImageType> defaultSupportedImageTypes;
-
-    public FileUtils(final Set<SupportedImageType> defaultSupportedImageTypes) {
-        this.defaultSupportedImageTypes = defaultSupportedImageTypes;
-    }
-
-    /**
-	 * Return the file-extension, empty if there is none.
-	 * @param path
-	 * @return
-	 */
-	public String getExtension(final String path){
-		final int lastIndex = path.lastIndexOf(period);
-
-        if(notFound == lastIndex){
-			return empty;
-		}else{
-            final int afterLastPeriod = (lastIndex + positionsAfterLastIndex);
-			return path.substring(afterLastPeriod).toLowerCase();
-		}
-	}
+    CssClass convert(final File imageFile);
+    CssClass convert(final URL url);
+    CssClass convertUrlAsString(final String urlAsString);
 
 }

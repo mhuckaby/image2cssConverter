@@ -16,17 +16,30 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cmn.service;
+package com.rf1m.image2css.util;
 
-import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.ioc.CommonObjectFactory;
 
-import java.io.File;
-import java.net.URL;
+import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
-public interface ImageConversionService {
+// Limits JVM to Sun/Oracle distribution
+// import com.sun.org.apache.xml.internal.security.utils.Base64;
 
-    CssClass convert(final File imageFile);
-    CssClass convert(final URL url);
-    CssClass convertUrlAsString(final String urlAsString);
+public class Base64Encoder {
+    protected final static String nl = "\n";
+    protected final static String empty = "";
+
+    protected final CommonObjectFactory commonObjectFactory;
+
+    public Base64Encoder(final CommonObjectFactory commonObjectFactory) {
+        this.commonObjectFactory = commonObjectFactory;
+    }
+
+    public String base64EncodeBytes(final byte[] bytes) {
+        final byte[] encodedBase64Bytes = encodeBase64(bytes, false);
+        final String encoded = this.commonObjectFactory.newString(encodedBase64Bytes);
+
+        return encoded.replaceAll(nl, empty);
+    }
 
 }
