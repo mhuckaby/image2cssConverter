@@ -18,8 +18,6 @@
  */
 package com.rf1m.image2css.util;
 
-import com.rf1m.image2css.util.ConversionFilenameFilter;
-import com.rf1m.image2css.util.FileUtils;
 import com.rf1m.image2css.domain.SupportedImageType;
 import org.junit.Before;
 import org.junit.Test;

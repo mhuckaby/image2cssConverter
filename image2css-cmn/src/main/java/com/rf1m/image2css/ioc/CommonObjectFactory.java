@@ -31,6 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -140,9 +141,9 @@ public class CommonObjectFactory {
         return new Image2CssException(cause, errors);
     }
 
-    public BufferedInputStream newBufferedInputStream(final URL url) throws Image2CssException {
+    public BufferedInputStream newBufferedInputStream(final HttpURLConnection urlConn) throws Image2CssException {
         try {
-            return new BufferedInputStream(url.openStream());
+            return new BufferedInputStream(urlConn.getInputStream());
         }catch(final IOException e) {
             throw this.newImage2CssException(e, errorOpeningStream);
         }

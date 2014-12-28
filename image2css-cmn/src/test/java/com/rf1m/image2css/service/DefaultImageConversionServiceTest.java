@@ -33,6 +33,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -221,7 +222,7 @@ public class DefaultImageConversionServiceTest {
             .when(defaultImageConversionService)
             .determineCssClassName(filename);
 
-        when(commonObjectFactory.newBufferedInputStream(any(URL.class)))
+        when(commonObjectFactory.newBufferedInputStream(any(HttpURLConnection.class)))
             .thenReturn(bufferedInputStream);
 
         doReturn(bytes)
@@ -258,7 +259,7 @@ public class DefaultImageConversionServiceTest {
             .determineCssClassName(filename);
 
         inOrder.verify(commonObjectFactory, times(1))
-            .newBufferedInputStream(any(URL.class));
+            .newBufferedInputStream(any(HttpURLConnection.class));
 
         inOrder.verify(defaultImageConversionService, times(1))
             .readInputStreamToBytes(bufferedInputStream);

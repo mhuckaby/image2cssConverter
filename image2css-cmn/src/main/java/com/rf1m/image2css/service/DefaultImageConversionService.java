@@ -71,17 +71,25 @@ public class DefaultImageConversionService implements ImageConversionService {
 
     @Override
     public CssClass convert(final URL url) {
-        this.validateUrl(url);
-        final Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(url);
-        final String determinedCssClassName = this.determineCssClassName(validatedFilenameAndExtension.getLeft());
-        final BufferedInputStream bufferedInputStream = this.commonObjectFactory.newBufferedInputStream(url);
-        final byte[] bytes = this.readInputStreamToBytes(bufferedInputStream);
-        final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
-        final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
-        final String cssEntry = this.determineCssEntry(determinedCssClassName, validatedFilenameAndExtension.getRight(), base64Bytes, dimension);
-        final CssClass cssClass = this.commonObjectFactory.newCssClass(determinedCssClassName, cssEntry);
+        try {
+            validateUrl(url);
+            final HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            // TODO define a better user agent
+            httpURLConnection.addRequestProperty("User-Agent", "java-client");
+            final Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(url);
+            final String determinedCssClassName = this.determineCssClassName(validatedFilenameAndExtension.getLeft());
+            final BufferedInputStream inputStream = this.commonObjectFactory.newBufferedInputStream(httpURLConnection);
+            final byte[] bytes = this.readInputStreamToBytes(inputStream);
+            final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
+            final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
+            final String cssEntry =
+                this.determineCssEntry(determinedCssClassName, validatedFilenameAndExtension.getRight(), base64Bytes, dimension);
 
-        return cssClass;
+            return this.commonObjectFactory.newCssClass(determinedCssClassName, cssEntry);
+        }catch(final IOException e) {
+            throw this.commonObjectFactory.newImage2CssException(e, errorRetrievingRemoteResource);
+        }
     }
 
     @Override
@@ -196,11 +204,13 @@ public class DefaultImageConversionService implements ImageConversionService {
         try {
             final HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setRequestMethod("HEAD");
+            httpURLConnection.addRequestProperty("User-Agent", "java-client");
             httpURLConnection.connect();
             final int statusCode = httpURLConnection.getResponseCode();
             if(200 != statusCode) {
                 throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlDidNotResolveToAnImageResource, statusCode);
             }
+            // TODO size check httpURLConnection.getContentLength()
         }catch(final IOException e) {
             throw this.commonObjectFactory.newImage2CssValidationException(e, parameterUrlDidNotResolveToAnImageResource);
         }

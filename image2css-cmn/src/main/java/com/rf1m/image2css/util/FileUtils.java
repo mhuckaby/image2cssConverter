@@ -51,4 +51,7 @@ public class FileUtils {
 		}
 	}
 
+    public Set<SupportedImageType> getDefaultSupportedImageTypes() {
+        return defaultSupportedImageTypes;
+    }
 }

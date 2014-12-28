@@ -1,11 +1,11 @@
 package com.rf1m.image2css.web.controller;
 
 import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.domain.ErrorResponse;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
-import com.rf1m.image2css.service.ImageConversionService;
-import com.rf1m.image2css.domain.ErrorResponse;
 import com.rf1m.image2css.ioc.WebObjectFactory;
+import com.rf1m.image2css.service.ImageConversionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

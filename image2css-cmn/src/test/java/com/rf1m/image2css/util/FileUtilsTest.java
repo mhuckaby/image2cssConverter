@@ -18,7 +18,6 @@
  */
 package com.rf1m.image2css.util;
 
-import com.rf1m.image2css.util.FileUtils;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import org.junit.Before;
@@ -38,7 +37,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TestFileUtils {
+public class FileUtilsTest {
     @Mock
     CommonObjectFactory commonObjectFactory;
 
