@@ -21,9 +21,9 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssException;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 import com.rf1m.image2css.service.ImageConversionService;
 import com.rf1m.image2css.util.FileUtils;
-import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,14 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandLineRunnerTest {

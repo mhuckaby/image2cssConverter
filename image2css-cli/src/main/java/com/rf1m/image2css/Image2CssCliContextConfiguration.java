@@ -1,6 +1,14 @@
 package com.rf1m.image2css;
 
-import com.rf1m.image2css.cli.*;
+import com.rf1m.image2css.cli.CommandLineParametersParser;
+import com.rf1m.image2css.cli.CommandLineRunner;
+import com.rf1m.image2css.cli.CommandLineRunnerOutputManager;
+import com.rf1m.image2css.cli.CommandLineRunnerValidator;
+import com.rf1m.image2css.cli.ExceptionHandler;
+import com.rf1m.image2css.cli.Image2CssHelpFormatter;
+import com.rf1m.image2css.cli.Image2CssOption;
+import com.rf1m.image2css.cli.Image2CssOptions;
+import com.rf1m.image2css.cli.SystemWrapper;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import com.rf1m.image2css.out.ConsoleOutput;
 import com.rf1m.image2css.out.CssFileOutput;

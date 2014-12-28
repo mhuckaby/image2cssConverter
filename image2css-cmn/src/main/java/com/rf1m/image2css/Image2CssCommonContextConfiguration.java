@@ -5,7 +5,6 @@ import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.service.DefaultImageConversionService;
 import com.rf1m.image2css.util.Base64Encoder;
 import com.rf1m.image2css.util.FileUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

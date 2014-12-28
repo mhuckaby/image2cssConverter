@@ -21,10 +21,10 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssException;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 import com.rf1m.image2css.service.ImageConversionService;
 import com.rf1m.image2css.util.ConversionFilenameFilter;
 import com.rf1m.image2css.util.FileUtils;
-import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

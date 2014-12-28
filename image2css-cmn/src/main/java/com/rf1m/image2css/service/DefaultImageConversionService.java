@@ -27,14 +27,26 @@ import com.rf1m.image2css.util.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static com.rf1m.image2css.exception.Errors.*;
+import static com.rf1m.image2css.exception.Errors.errorOpeningStream;
+import static com.rf1m.image2css.exception.Errors.errorRetrievingRemoteResource;
+import static com.rf1m.image2css.exception.Errors.parameterCannotDetermineFilenameFromUrl;
+import static com.rf1m.image2css.exception.Errors.parameterFileCannotBeNull;
+import static com.rf1m.image2css.exception.Errors.parameterUnsupportedImageType;
+import static com.rf1m.image2css.exception.Errors.parameterUrlCannotBeEmpty;
+import static com.rf1m.image2css.exception.Errors.parameterUrlDidNotResolveToAnImageResource;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public class DefaultImageConversionService implements ImageConversionService {
     protected static final String underscore = "_";

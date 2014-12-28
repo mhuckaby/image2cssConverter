@@ -21,7 +21,12 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 
-import static com.rf1m.image2css.exception.Errors.*;
+import static com.rf1m.image2css.exception.Errors.parameterHtmlIndexWithNoCssFile;
+import static com.rf1m.image2css.exception.Errors.parametersObjectCannotBeNull;
+import static com.rf1m.image2css.exception.Errors.parametersObjectImageInputFileOrDirNotExists;
+import static com.rf1m.image2css.exception.Errors.parametersObjectMustHaveValidImageInputFileOrDir;
+import static com.rf1m.image2css.exception.Errors.parametersObjectOutputInvalid;
+import static com.rf1m.image2css.exception.Errors.parametersUrlCannotBeNull;
 
 public class CommandLineRunnerValidator {
 
