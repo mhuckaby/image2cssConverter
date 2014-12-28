@@ -21,13 +21,13 @@ package com.rf1m.image2css.service;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.util.Base64Encoder;
-import com.rf1m.image2css.util.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.swing.*;
@@ -58,14 +58,11 @@ public class DefaultImageConversionServiceTest {
     @Mock
     Base64Encoder base64Encoder;
 
-    @Mock
-    FileUtils fileUtils;
-
     DefaultImageConversionService defaultImageConversionService;
 
     @Before
     public void before() {
-        defaultImageConversionService = spy(new DefaultImageConversionService(fileUtils, base64Encoder, commonObjectFactory, cssClassTemplate));
+        defaultImageConversionService = spy(new DefaultImageConversionService(base64Encoder, commonObjectFactory, cssClassTemplate));
     }
 
     @Test
@@ -122,7 +119,7 @@ public class DefaultImageConversionServiceTest {
 
         assertThat(result, is(cssClass));
 
-        final InOrder inOrder = inOrder(file, defaultImageConversionService, fileUtils, base64Encoder, commonObjectFactory);
+        final InOrder inOrder = Mockito.inOrder(file, defaultImageConversionService, base64Encoder, commonObjectFactory);
 
         inOrder.verify(defaultImageConversionService, times(1))
             .validateFile(file);
@@ -255,7 +252,7 @@ public class DefaultImageConversionServiceTest {
 
         assertThat(result, is(cssClass));
 
-        final InOrder inOrder = inOrder(defaultImageConversionService, fileUtils, base64Encoder, commonObjectFactory);
+        final InOrder inOrder = inOrder(defaultImageConversionService, base64Encoder, commonObjectFactory);
 
         inOrder.verify(defaultImageConversionService, times(1))
             .validateUrl(url);

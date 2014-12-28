@@ -35,7 +35,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConversionFilenameFilterTest {
@@ -45,9 +44,6 @@ public class ConversionFilenameFilterTest {
     @Mock
     File directory;
 
-    @Mock
-    FileUtils fileUtils;
-
     ConversionFilenameFilter conversionFilenameFilter;
 
     Set<SupportedImageType> supportedTypes;
@@ -56,14 +52,11 @@ public class ConversionFilenameFilterTest {
     public void before(){
         supportedTypes = spy(new HashSet<SupportedImageType>());
         supportedTypes.add(SupportedImageType.gif);
-        conversionFilenameFilter = spy(new ConversionFilenameFilter(fileUtils, supportedTypes));
+        conversionFilenameFilter = spy(new ConversionFilenameFilter(supportedTypes));
     }
 
     @Test
     public void shouldReturnTrueWhenFilenameIsSupportedImageType(){
-        when(fileUtils.getExtension(imageGifFile))
-            .thenReturn(extensionGif);
-
         doReturn(true)
             .when(conversionFilenameFilter)
             .isSupported(extensionGif);
@@ -75,9 +68,6 @@ public class ConversionFilenameFilterTest {
 
     @Test
     public void shouldReturnFalseIfFilenameIsNotSupportedImageType(){
-        when(fileUtils.getExtension(imageGifFile))
-            .thenReturn(extensionGif);
-
         doReturn(false)
             .when(conversionFilenameFilter)
             .isSupported(extensionGif);

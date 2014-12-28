@@ -19,6 +19,7 @@
 package com.rf1m.image2css.util;
 
 import com.rf1m.image2css.domain.SupportedImageType;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -34,16 +35,14 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class ConversionFilenameFilter implements FilenameFilter{
     protected final Set<SupportedImageType> supportedTypes;
-    protected final FileUtils fileUtils;
 
-	public ConversionFilenameFilter(final FileUtils fileUtils, final Set<SupportedImageType> supportedTypes){
+	public ConversionFilenameFilter(final Set<SupportedImageType> supportedTypes){
 		this.supportedTypes = unmodifiableSet(supportedTypes);
-        this.fileUtils = fileUtils;
 	}
 	
 	@Override
 	public boolean accept(final File fileDir, final String filename) {
-        final String extension = this.fileUtils.getExtension(filename);
+        final String extension = FilenameUtils.getExtension(filename);
         return isNotBlank(extension) ? this.isSupported(extension) : false;
 	}
 

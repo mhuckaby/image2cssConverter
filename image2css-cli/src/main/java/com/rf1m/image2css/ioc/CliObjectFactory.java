@@ -22,7 +22,6 @@ import com.rf1m.image2css.cli.ImmutableParameters;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssValidationException;
-import com.rf1m.image2css.util.FileUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -31,9 +30,6 @@ import java.util.Set;
 
 public class CliObjectFactory extends CommonObjectFactory {
 
-    public CliObjectFactory(final FileUtils fileUtils) {
-        super(fileUtils);
-    }
 
     public ImmutableParameters newImmutableParameters(final File imageFile,
                                                       final File cssFile,

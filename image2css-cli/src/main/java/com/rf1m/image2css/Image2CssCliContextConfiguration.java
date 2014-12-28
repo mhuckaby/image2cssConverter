@@ -14,7 +14,6 @@ import com.rf1m.image2css.out.ConsoleOutput;
 import com.rf1m.image2css.out.CssFileOutput;
 import com.rf1m.image2css.out.HtmlFileOutput;
 import com.rf1m.image2css.service.DefaultImageConversionService;
-import com.rf1m.image2css.util.FileUtils;
 import org.apache.commons.cli.BasicParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +21,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+
+import static com.rf1m.image2css.Image2CssCommonContextConfiguration.defaultSupportedImageTypes;
 
 @Configuration
 @Import(Image2CssCommonContextConfiguration.class)
@@ -32,14 +33,11 @@ public class Image2CssCliContextConfiguration {
     private Environment environment;
 
     @Autowired
-    FileUtils fileUtils;
-
-    @Autowired
     DefaultImageConversionService defaultImageConversionService;
 
     @Bean
     public CliObjectFactory cliObjectFactory() {
-        return new CliObjectFactory(fileUtils);
+        return new CliObjectFactory();
     }
 
     @Bean
@@ -132,7 +130,7 @@ public class Image2CssCliContextConfiguration {
     @Bean
     public CommandLineRunner commandLineRunner() {
         return new CommandLineRunner(cliObjectFactory(), commandLineRunnerValidator(), commandLineParametersParser(),
-                exceptionHandler(), fileUtils, defaultImageConversionService, commandLineRunnerOutputManager(),
-                fileUtils.getDefaultSupportedImageTypes());
+                exceptionHandler(), defaultImageConversionService, commandLineRunnerOutputManager(),
+                defaultSupportedImageTypes);
     }
 }

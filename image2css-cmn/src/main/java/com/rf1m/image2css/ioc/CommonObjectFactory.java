@@ -24,7 +24,6 @@ import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.util.ConversionFilenameFilter;
-import com.rf1m.image2css.util.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -50,11 +49,6 @@ import static com.rf1m.image2css.exception.Errors.errorCreatingUrlFromStringValu
 import static com.rf1m.image2css.exception.Errors.errorOpeningStream;
 
 public class CommonObjectFactory {
-    protected final FileUtils fileUtils;
-
-    public CommonObjectFactory(final FileUtils fileUtils) {
-        this.fileUtils = fileUtils;
-    }
 
     public List newMutableList() {
         return new ArrayList();
@@ -74,7 +68,7 @@ public class CommonObjectFactory {
     }
 
     public ConversionFilenameFilter newConversionFilenameFilter(final Set<SupportedImageType> supportedImageTypes) {
-        return new ConversionFilenameFilter(this.fileUtils, supportedImageTypes);
+        return new ConversionFilenameFilter(supportedImageTypes);
     }
 
     public CssClass newCssClass(final String name, final String body) {

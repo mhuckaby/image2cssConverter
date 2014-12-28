@@ -78,6 +78,11 @@
             <version>1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
         <!-- Testing -->
 
         <dependency>
@@ -99,6 +104,7 @@
         </dependency>
 
         <!-- Logging -->
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

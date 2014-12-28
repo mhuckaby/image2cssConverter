@@ -23,7 +23,7 @@ import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.util.Base64Encoder;
-import com.rf1m.image2css.util.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
@@ -52,16 +52,13 @@ public class DefaultImageConversionService implements ImageConversionService {
     protected static final String underscore = "_";
     protected static final String http = "http://";
 
-    protected final FileUtils fileUtils;
     protected final Base64Encoder base64Encoder;
     protected final CommonObjectFactory commonObjectFactory;
     protected final String cssClassTemplate;
 
-    public DefaultImageConversionService(final FileUtils fileUtils,
-                                         final Base64Encoder base64Encoder,
+    public DefaultImageConversionService(final Base64Encoder base64Encoder,
                                          final CommonObjectFactory commonObjectFactory,
                                          final String cssClassTemplate) {
-        this.fileUtils = fileUtils;
         this.base64Encoder = base64Encoder;
         this.commonObjectFactory = commonObjectFactory;
         this.cssClassTemplate = cssClassTemplate;
@@ -181,7 +178,7 @@ public class DefaultImageConversionService implements ImageConversionService {
 
     protected Pair<String, String> validateFilenameAndExtension(final File file) {
         final String imageFilename = file.getName();
-        final String fileExtension = this.fileUtils.getExtension(imageFilename);
+        final String fileExtension = FilenameUtils.getExtension(imageFilename);
 
         if(!SupportedImageType.isSupportedImageType(fileExtension)){
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType);
@@ -197,7 +194,7 @@ public class DefaultImageConversionService implements ImageConversionService {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterCannotDetermineFilenameFromUrl);
         }
 
-        final String fileExtension = this.fileUtils.getExtension(imageFilename);
+        final String fileExtension = FilenameUtils.getExtension(imageFilename);
 
         if(isEmpty(fileExtension)) {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);

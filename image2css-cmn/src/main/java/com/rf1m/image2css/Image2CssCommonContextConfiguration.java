@@ -4,7 +4,6 @@ import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.service.DefaultImageConversionService;
 import com.rf1m.image2css.util.Base64Encoder;
-import com.rf1m.image2css.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,29 +13,25 @@ import org.springframework.core.env.Environment;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.rf1m.image2css.domain.SupportedImageType.gif;
+import static com.rf1m.image2css.domain.SupportedImageType.jpg;
+import static com.rf1m.image2css.domain.SupportedImageType.png;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableSet;
+
 @Configuration()
 @PropertySource(value = {"classpath:/image2css-cmn.properties", "classpath:/image2css-exception-messages.properties"})
 public class Image2CssCommonContextConfiguration {
 
+    public static final Set<SupportedImageType> defaultSupportedImageTypes =
+        unmodifiableSet(new HashSet(asList(new SupportedImageType[]{ gif, jpg, png })));
+
     @Autowired
     private Environment environment;
 
-    @Bean(name = "fileUtils")
-    public FileUtils fileUtils() {
-        return new FileUtils(defaultSupportedImageTypes());
-    }
-
-    public Set<SupportedImageType> defaultSupportedImageTypes() {
-        final Set<SupportedImageType> defaultSupportedImageTypes = new HashSet();
-        defaultSupportedImageTypes.add(SupportedImageType.gif);
-        defaultSupportedImageTypes.add(SupportedImageType.jpg);
-        defaultSupportedImageTypes.add(SupportedImageType.png);
-        return defaultSupportedImageTypes;
-    }
-
     @Bean
     public CommonObjectFactory commonObjectFactory() {
-        return new CommonObjectFactory(fileUtils());
+        return new CommonObjectFactory();
     }
 
     @Bean
@@ -46,7 +41,7 @@ public class Image2CssCommonContextConfiguration {
 
     @Bean
     public DefaultImageConversionService defaultImageConversionService() {
-        return new DefaultImageConversionService(fileUtils(), base64Encoder(), commonObjectFactory(), environment.getProperty("template.css.class.def"));
+        return new DefaultImageConversionService(base64Encoder(), commonObjectFactory(), environment.getProperty("template.css.class.def"));
     }
 }
 

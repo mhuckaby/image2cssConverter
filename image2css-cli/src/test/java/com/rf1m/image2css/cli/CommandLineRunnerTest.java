@@ -23,7 +23,6 @@ import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import com.rf1m.image2css.service.ImageConversionService;
-import com.rf1m.image2css.util.FileUtils;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,9 +72,6 @@ public class CommandLineRunnerTest {
     Parameters parameters;
 
     @Mock
-    FileUtils fileUtils;
-
-    @Mock
     ImageConversionService imageConversionService;
 
     @Mock
@@ -91,7 +87,6 @@ public class CommandLineRunnerTest {
                                     commandLineRunnerValidator,
                                     commandLineParametersParser,
                                     exceptionHandler,
-                                    fileUtils,
                                     imageConversionService,
                                     commandLineRunnerOutputManager,
                                     supportedImageTypes));
