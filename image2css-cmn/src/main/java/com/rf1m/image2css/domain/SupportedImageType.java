@@ -24,6 +24,10 @@ public enum SupportedImageType {
     jpeg,
     png;
 
+    public static boolean isUnsupportedImageType(final String value) {
+        return !isSupportedImageType(value);
+    }
+
     public static boolean isSupportedImageType(final String value) {
         for(final SupportedImageType supportedImageType : SupportedImageType.values()) {
             if(supportedImageType.toString().equalsIgnoreCase(value)) {

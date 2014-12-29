@@ -3,7 +3,6 @@ package com.rf1m.image2css;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.service.DefaultImageConversionService;
-import com.rf1m.image2css.util.Base64Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,13 +34,8 @@ public class Image2CssCommonContextConfiguration {
     }
 
     @Bean
-    public Base64Encoder base64Encoder() {
-        return new Base64Encoder(commonObjectFactory());
-    }
-
-    @Bean
     public DefaultImageConversionService defaultImageConversionService() {
-        return new DefaultImageConversionService(base64Encoder(), commonObjectFactory(), environment.getProperty("template.css.class.def"));
+        return new DefaultImageConversionService(commonObjectFactory(), environment.getProperty("template.css.class.def"));
     }
 }
 

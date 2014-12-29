@@ -6,7 +6,7 @@ public enum Errors {
     parametersObjectOutputInvalid("parameters.object.output.invalid"),
     parametersObjectImageInputFileOrDirNotExists("parameters.object.image.input.file.or.dir.not.exists"),
     parametersUrlCannotBeNull("parameters.object.image.input.url"),
-    parameterFileCannotBeNull("parameter.file.cannot.be.null"),
+    parameterFileMustBeNonNullAndNonDirectory("parameter.file.must.be.nn.ndir"),
     parameterHtmlIndexWithNoCssFile("parameters.html.index.with.no.css.file"),
     parameterUrlCannotBeEmpty("parameters.url.cannot.be.empty"),
     parameterUrlDidNotResolveToAnImageResource("parameter.url.did.not.resolve.to.an.image.resource"),
