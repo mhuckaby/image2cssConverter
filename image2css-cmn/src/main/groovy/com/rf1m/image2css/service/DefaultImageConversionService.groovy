@@ -18,8 +18,8 @@ import static org.apache.commons.lang3.StringUtils.startsWith
 class DefaultImageConversionService implements ImageConversionService {
     protected static final String UNDERSCORE = "_"
     protected static final String http = "http://"
-    protected static final String NL = "\n";
-    protected static final String EMPTY = "";
+    protected static final String NL = "\n"
+    protected static final String EMPTY = ""
     protected static final String GET = "GET"
     protected static final String USER_AGENT = "User-Agent"
     protected static final String JAVA_CLIENT = "java-client"
@@ -28,8 +28,8 @@ class DefaultImageConversionService implements ImageConversionService {
     protected final String cssClassTemplate
 
     public DefaultImageConversionService(final CommonObjectFactory commonObjectFactory, final String cssClassTemplate) {
-        this.commonObjectFactory = commonObjectFactory;
-        this.cssClassTemplate = cssClassTemplate;
+        this.commonObjectFactory = commonObjectFactory
+        this.cssClassTemplate = cssClassTemplate
     }
 
     @Override
@@ -51,7 +51,7 @@ class DefaultImageConversionService implements ImageConversionService {
     @Override
     public CssClass convert(final URL url) {
         if(!url) {
-            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
         }
 
         try {
@@ -103,7 +103,7 @@ class DefaultImageConversionService implements ImageConversionService {
                                        final String base64Bytes,
                                        final Pair<Integer, Integer> dimension) {
 
-        format(cssClassTemplate, cssClassName, fileExtension, base64Bytes, dimension.left, dimension.right);
+        format(cssClassTemplate, cssClassName, fileExtension, base64Bytes, dimension.left, dimension.right)
     }
 
     protected String determineCssClassName(final String fileName) {
