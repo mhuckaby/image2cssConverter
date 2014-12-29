@@ -99,16 +99,6 @@ public class CommonObjectFactory {
         }
     }
 
-    public ImageIcon newImageIcon(final byte[] content) {
-        final byte[] bytes = content.clone();
-        return new ImageIcon(bytes);
-    }
-
-    public String newString(final byte[] content) {
-        final byte[] bytes = content.clone();
-        return new String(bytes, Charset.defaultCharset());
-    }
-
     public StringBuffer newStringBuffer() {
         return new StringBuffer();
     }
@@ -123,10 +113,6 @@ public class CommonObjectFactory {
         }catch(final MalformedURLException e) {
             throw this.newImage2CssValidationException(e, errorCreatingUrlFromStringValue);
         }
-    }
-
-    public Image2CssException newImage2CssValidationException(final Errors errors, final Object ... parameters) {
-        return new Image2CssValidationException(errors, parameters);
     }
 
     public Image2CssException newImage2CssValidationException(final Errors errors) {
