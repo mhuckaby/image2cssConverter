@@ -23,33 +23,42 @@ import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.util.Base64Encoder;
-import com.rf1m.image2css.util.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static com.rf1m.image2css.exception.Errors.*;
+import static com.rf1m.image2css.exception.Errors.errorOpeningStream;
+import static com.rf1m.image2css.exception.Errors.errorRetrievingRemoteResource;
+import static com.rf1m.image2css.exception.Errors.parameterCannotDetermineFilenameFromUrl;
+import static com.rf1m.image2css.exception.Errors.parameterFileCannotBeNull;
+import static com.rf1m.image2css.exception.Errors.parameterUnsupportedImageType;
+import static com.rf1m.image2css.exception.Errors.parameterUrlCannotBeEmpty;
+import static com.rf1m.image2css.exception.Errors.parameterUrlDidNotResolveToAnImageResource;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.startsWith;
 
 public class DefaultImageConversionService implements ImageConversionService {
     protected static final String underscore = "_";
     protected static final String http = "http://";
 
-    protected final FileUtils fileUtils;
     protected final Base64Encoder base64Encoder;
     protected final CommonObjectFactory commonObjectFactory;
     protected final String cssClassTemplate;
 
-    public DefaultImageConversionService(final FileUtils fileUtils,
-                                         final Base64Encoder base64Encoder,
+    public DefaultImageConversionService(final Base64Encoder base64Encoder,
                                          final CommonObjectFactory commonObjectFactory,
                                          final String cssClassTemplate) {
-        this.fileUtils = fileUtils;
         this.base64Encoder = base64Encoder;
         this.commonObjectFactory = commonObjectFactory;
         this.cssClassTemplate = cssClassTemplate;
@@ -71,17 +80,25 @@ public class DefaultImageConversionService implements ImageConversionService {
 
     @Override
     public CssClass convert(final URL url) {
-        this.validateUrl(url);
-        final Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(url);
-        final String determinedCssClassName = this.determineCssClassName(validatedFilenameAndExtension.getLeft());
-        final BufferedInputStream bufferedInputStream = this.commonObjectFactory.newBufferedInputStream(url);
-        final byte[] bytes = this.readInputStreamToBytes(bufferedInputStream);
-        final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
-        final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
-        final String cssEntry = this.determineCssEntry(determinedCssClassName, validatedFilenameAndExtension.getRight(), base64Bytes, dimension);
-        final CssClass cssClass = this.commonObjectFactory.newCssClass(determinedCssClassName, cssEntry);
+        try {
+            validateUrl(url);
+            final HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            // TODO define a better user agent
+            httpURLConnection.addRequestProperty("User-Agent", "java-client");
+            final Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(url);
+            final String determinedCssClassName = this.determineCssClassName(validatedFilenameAndExtension.getLeft());
+            final BufferedInputStream inputStream = this.commonObjectFactory.newBufferedInputStream(httpURLConnection);
+            final byte[] bytes = this.readInputStreamToBytes(inputStream);
+            final String base64Bytes = this.base64Encoder.base64EncodeBytes(bytes);
+            final Pair<Integer, Integer> dimension = this.getImageDimension(bytes);
+            final String cssEntry =
+                this.determineCssEntry(determinedCssClassName, validatedFilenameAndExtension.getRight(), base64Bytes, dimension);
 
-        return cssClass;
+            return this.commonObjectFactory.newCssClass(determinedCssClassName, cssEntry);
+        }catch(final IOException e) {
+            throw this.commonObjectFactory.newImage2CssException(e, errorRetrievingRemoteResource);
+        }
     }
 
     @Override
@@ -161,7 +178,7 @@ public class DefaultImageConversionService implements ImageConversionService {
 
     protected Pair<String, String> validateFilenameAndExtension(final File file) {
         final String imageFilename = file.getName();
-        final String fileExtension = this.fileUtils.getExtension(imageFilename);
+        final String fileExtension = FilenameUtils.getExtension(imageFilename);
 
         if(!SupportedImageType.isSupportedImageType(fileExtension)){
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType);
@@ -177,7 +194,7 @@ public class DefaultImageConversionService implements ImageConversionService {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterCannotDetermineFilenameFromUrl);
         }
 
-        final String fileExtension = this.fileUtils.getExtension(imageFilename);
+        final String fileExtension = FilenameUtils.getExtension(imageFilename);
 
         if(isEmpty(fileExtension)) {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty);
@@ -196,11 +213,13 @@ public class DefaultImageConversionService implements ImageConversionService {
         try {
             final HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
             httpURLConnection.setRequestMethod("HEAD");
+            httpURLConnection.addRequestProperty("User-Agent", "java-client");
             httpURLConnection.connect();
             final int statusCode = httpURLConnection.getResponseCode();
             if(200 != statusCode) {
                 throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlDidNotResolveToAnImageResource, statusCode);
             }
+            // TODO size check httpURLConnection.getContentLength()
         }catch(final IOException e) {
             throw this.commonObjectFactory.newImage2CssValidationException(e, parameterUrlDidNotResolveToAnImageResource);
         }

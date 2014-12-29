@@ -21,7 +21,11 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.ioc.CliObjectFactory;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 import java.io.File;
 import java.net.MalformedURLException;

@@ -18,8 +18,6 @@
  */
 package com.rf1m.image2css.util;
 
-import com.rf1m.image2css.util.ConversionFilenameFilter;
-import com.rf1m.image2css.util.FileUtils;
 import com.rf1m.image2css.domain.SupportedImageType;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +31,10 @@ import java.util.Set;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConversionFilenameFilterTest {
@@ -43,9 +44,6 @@ public class ConversionFilenameFilterTest {
     @Mock
     File directory;
 
-    @Mock
-    FileUtils fileUtils;
-
     ConversionFilenameFilter conversionFilenameFilter;
 
     Set<SupportedImageType> supportedTypes;
@@ -54,14 +52,11 @@ public class ConversionFilenameFilterTest {
     public void before(){
         supportedTypes = spy(new HashSet<SupportedImageType>());
         supportedTypes.add(SupportedImageType.gif);
-        conversionFilenameFilter = spy(new ConversionFilenameFilter(fileUtils, supportedTypes));
+        conversionFilenameFilter = spy(new ConversionFilenameFilter(supportedTypes));
     }
 
     @Test
     public void shouldReturnTrueWhenFilenameIsSupportedImageType(){
-        when(fileUtils.getExtension(imageGifFile))
-            .thenReturn(extensionGif);
-
         doReturn(true)
             .when(conversionFilenameFilter)
             .isSupported(extensionGif);
@@ -73,9 +68,6 @@ public class ConversionFilenameFilterTest {
 
     @Test
     public void shouldReturnFalseIfFilenameIsNotSupportedImageType(){
-        when(fileUtils.getExtension(imageGifFile))
-            .thenReturn(extensionGif);
-
         doReturn(false)
             .when(conversionFilenameFilter)
             .isSupported(extensionGif);

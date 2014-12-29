@@ -21,10 +21,9 @@ package com.rf1m.image2css.cli;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssException;
+import com.rf1m.image2css.ioc.CliObjectFactory;
 import com.rf1m.image2css.service.ImageConversionService;
 import com.rf1m.image2css.util.ConversionFilenameFilter;
-import com.rf1m.image2css.util.FileUtils;
-import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.ParseException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -38,7 +37,6 @@ public class CommandLineRunner {
     protected final CommandLineRunnerValidator commandLineRunnerValidator;
     protected final CommandLineParametersParser commandLineParametersParser;
     protected final ExceptionHandler exceptionHandler;
-    protected final FileUtils fileUtils;
     protected final ImageConversionService imageConversionService;
     protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager;
     protected final Set<SupportedImageType> defaultSupportedImageTypes;
@@ -47,7 +45,6 @@ public class CommandLineRunner {
                              final CommandLineRunnerValidator commandLineRunnerValidator,
                              final CommandLineParametersParser commandLineParametersParser,
                              final ExceptionHandler exceptionHandler,
-                             final FileUtils fileUtils,
                              final ImageConversionService imageConversionService,
                              final CommandLineRunnerOutputManager commandLineRunnerOutputManager,
                              final Set<SupportedImageType> defaultSupportImageTypes) {
@@ -56,7 +53,6 @@ public class CommandLineRunner {
         this.commandLineRunnerValidator = commandLineRunnerValidator;
         this.commandLineParametersParser = commandLineParametersParser;
         this.exceptionHandler = exceptionHandler;
-        this.fileUtils = fileUtils;
         this.imageConversionService = imageConversionService;
         this.commandLineRunnerOutputManager = commandLineRunnerOutputManager;
         this.defaultSupportedImageTypes = defaultSupportImageTypes;

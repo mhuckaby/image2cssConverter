@@ -21,23 +21,32 @@ package com.rf1m.image2css.service;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.ioc.CommonObjectFactory;
 import com.rf1m.image2css.util.Base64Encoder;
-import com.rf1m.image2css.util.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultImageConversionServiceTest {
@@ -49,14 +58,11 @@ public class DefaultImageConversionServiceTest {
     @Mock
     Base64Encoder base64Encoder;
 
-    @Mock
-    FileUtils fileUtils;
-
     DefaultImageConversionService defaultImageConversionService;
 
     @Before
     public void before() {
-        defaultImageConversionService = spy(new DefaultImageConversionService(fileUtils, base64Encoder, commonObjectFactory, cssClassTemplate));
+        defaultImageConversionService = spy(new DefaultImageConversionService(base64Encoder, commonObjectFactory, cssClassTemplate));
     }
 
     @Test
@@ -113,7 +119,7 @@ public class DefaultImageConversionServiceTest {
 
         assertThat(result, is(cssClass));
 
-        final InOrder inOrder = inOrder(file, defaultImageConversionService, fileUtils, base64Encoder, commonObjectFactory);
+        final InOrder inOrder = Mockito.inOrder(file, defaultImageConversionService, base64Encoder, commonObjectFactory);
 
         inOrder.verify(defaultImageConversionService, times(1))
             .validateFile(file);
@@ -221,7 +227,7 @@ public class DefaultImageConversionServiceTest {
             .when(defaultImageConversionService)
             .determineCssClassName(filename);
 
-        when(commonObjectFactory.newBufferedInputStream(any(URL.class)))
+        when(commonObjectFactory.newBufferedInputStream(any(HttpURLConnection.class)))
             .thenReturn(bufferedInputStream);
 
         doReturn(bytes)
@@ -246,7 +252,7 @@ public class DefaultImageConversionServiceTest {
 
         assertThat(result, is(cssClass));
 
-        final InOrder inOrder = inOrder(defaultImageConversionService, fileUtils, base64Encoder, commonObjectFactory);
+        final InOrder inOrder = inOrder(defaultImageConversionService, base64Encoder, commonObjectFactory);
 
         inOrder.verify(defaultImageConversionService, times(1))
             .validateUrl(url);
@@ -258,7 +264,7 @@ public class DefaultImageConversionServiceTest {
             .determineCssClassName(filename);
 
         inOrder.verify(commonObjectFactory, times(1))
-            .newBufferedInputStream(any(URL.class));
+            .newBufferedInputStream(any(HttpURLConnection.class));
 
         inOrder.verify(defaultImageConversionService, times(1))
             .readInputStreamToBytes(bufferedInputStream);

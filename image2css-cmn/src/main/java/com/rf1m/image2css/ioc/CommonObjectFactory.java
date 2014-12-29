@@ -24,13 +24,19 @@ import com.rf1m.image2css.exception.Errors;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.util.ConversionFilenameFilter;
-import com.rf1m.image2css.util.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -43,11 +49,6 @@ import static com.rf1m.image2css.exception.Errors.errorCreatingUrlFromStringValu
 import static com.rf1m.image2css.exception.Errors.errorOpeningStream;
 
 public class CommonObjectFactory {
-    protected final FileUtils fileUtils;
-
-    public CommonObjectFactory(final FileUtils fileUtils) {
-        this.fileUtils = fileUtils;
-    }
 
     public List newMutableList() {
         return new ArrayList();
@@ -67,7 +68,7 @@ public class CommonObjectFactory {
     }
 
     public ConversionFilenameFilter newConversionFilenameFilter(final Set<SupportedImageType> supportedImageTypes) {
-        return new ConversionFilenameFilter(this.fileUtils, supportedImageTypes);
+        return new ConversionFilenameFilter(supportedImageTypes);
     }
 
     public CssClass newCssClass(final String name, final String body) {
@@ -140,9 +141,9 @@ public class CommonObjectFactory {
         return new Image2CssException(cause, errors);
     }
 
-    public BufferedInputStream newBufferedInputStream(final URL url) throws Image2CssException {
+    public BufferedInputStream newBufferedInputStream(final HttpURLConnection urlConn) throws Image2CssException {
         try {
-            return new BufferedInputStream(url.openStream());
+            return new BufferedInputStream(urlConn.getInputStream());
         }catch(final IOException e) {
             throw this.newImage2CssException(e, errorOpeningStream);
         }
