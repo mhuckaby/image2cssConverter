@@ -78,7 +78,9 @@ class DefaultImageConversionService implements ImageConversionService {
         }(new ImageIcon(bytes))
 
         String cssClassName = this.determineCssClassName(filename)
-        String cssEntry = determineCssEntry(cssClassName, extension, base64EncodeBytes(bytes), dimension)
+        String b64Bytes = new String(encodeBase64(bytes, false)).replaceAll(NL, EMPTY)
+        String cssEntry =
+            format(cssClassTemplate, cssClassName, extension, b64Bytes(bytes), dimension.left, dimension.right)
 
         return new CssClass(cssClassName, cssEntry)
     }
@@ -101,18 +103,6 @@ class DefaultImageConversionService implements ImageConversionService {
         }()
 
         return this.convert(url)
-    }
-
-    public String base64EncodeBytes(final byte[] bytes) {
-        new String(encodeBase64(bytes, false)).replaceAll(NL, EMPTY)
-    }
-
-    protected String determineCssEntry(final String cssClassName,
-                                       final String fileExtension,
-                                       final String base64Bytes,
-                                       final Pair<Integer, Integer> dimension) {
-
-        format(cssClassTemplate, cssClassName, fileExtension, base64Bytes, dimension.left, dimension.right)
     }
 
     protected String determineCssClassName(final String fileName) {
