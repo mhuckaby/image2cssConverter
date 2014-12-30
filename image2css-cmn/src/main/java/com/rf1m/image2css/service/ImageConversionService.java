@@ -27,6 +27,6 @@ public interface ImageConversionService {
 
     CssClass convert(final File imageFile);
     CssClass convert(final URL url);
-    CssClass convertUrlAsString(final String urlAsString);
+    CssClass convert(final String urlAsString);
 
 }

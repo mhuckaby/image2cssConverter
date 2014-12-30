@@ -35,7 +35,7 @@ public class ConversionController {
     @ResponseBody
     public CssClass convertUrl(@RequestParam final String url) {
         logger.info("convertUrl=" + url);
-        return this.imageConversionService.convertUrlAsString(url);
+        return this.imageConversionService.convert(url);
     }
 
     @ExceptionHandler(Image2CssValidationException.class)

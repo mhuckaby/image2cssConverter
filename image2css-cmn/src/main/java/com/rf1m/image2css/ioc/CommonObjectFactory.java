@@ -107,14 +107,6 @@ public class CommonObjectFactory {
         return new StringBuilder(initialValue);
     }
 
-    public URL newUrl(final String url) {
-        try {
-            return new URL(url);
-        }catch(final MalformedURLException e) {
-            throw this.newImage2CssValidationException(e, errorCreatingUrlFromStringValue);
-        }
-    }
-
     public Image2CssException newImage2CssValidationException(final Errors errors) {
         return new Image2CssValidationException(errors);
     }

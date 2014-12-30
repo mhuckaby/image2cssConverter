@@ -81,7 +81,7 @@ class DefaultImageConversionService implements ImageConversionService {
     }
 
     @Override
-    public CssClass convertUrlAsString(final String urlAsString) {
+    public CssClass convert(final String urlAsString) {
         if(!urlAsString) {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
         }
@@ -89,7 +89,13 @@ class DefaultImageConversionService implements ImageConversionService {
         String urlStringWithProtocol = startsWith(urlAsString.toLowerCase(), http) ?
             urlAsString : this.commonObjectFactory.newStringBuilder(http).append(urlAsString).toString()
 
-        URL url = this.commonObjectFactory.newUrl(urlStringWithProtocol)
+        URL url = {
+            try {
+                new URL(urlStringWithProtocol)
+            }catch(MalformedURLException e) {
+                throw this.commonObjectFactory.newImage2CssValidationException(e, errorCreatingUrlFromStringValue)
+            }
+        }()
 
         return this.convert(url)
     }
