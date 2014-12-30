@@ -86,7 +86,7 @@ class DefaultImageConversionService implements ImageConversionService {
             }
         }()
 
-        return this.convert(url)
+        this.convert(url)
     }
 
     protected CssClass bytesToCssClass(final byte[] bytes, final String filename, final String extension) {
@@ -101,7 +101,7 @@ class DefaultImageConversionService implements ImageConversionService {
     protected String determineCssClassName(final String fileName) {
         String candidate =
             fileName.replaceAll("\\.", UNDERSCORE).replaceAll("\\\\", UNDERSCORE).replaceAll("/", UNDERSCORE)
-        return candidate ? candidate : randomAlphabetic(7)
+        candidate ? candidate : randomAlphabetic(7)
     }
 
     protected Pair<String, String> validateFilenameAndExtension(final URL url) {
