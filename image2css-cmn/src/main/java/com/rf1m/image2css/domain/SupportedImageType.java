@@ -19,10 +19,16 @@
 package com.rf1m.image2css.domain;
 
 public enum SupportedImageType {
-	gif,
-    jpg,
-    jpeg,
-    png;
+	gif("image/gif"),
+    jpg("image/jpg"),
+    jpeg("image/jpeg"),
+    png("image/png");
+
+    private final String contentType;
+
+    SupportedImageType(final String contentType) {
+        this.contentType = contentType;
+    }
 
     public static boolean isUnsupportedImageType(final String value) {
         return !isSupportedImageType(value);
@@ -38,4 +44,16 @@ public enum SupportedImageType {
         }
         return false;
     }
+
+    public static SupportedImageType byContentType(final String value) {
+        for(final SupportedImageType supportedImageType : SupportedImageType.values()) {
+            if(supportedImageType.contentType.equalsIgnoreCase(value)) {
+                return supportedImageType;
+            }else {
+                continue;
+            }
+        }
+        return null;
+    }
+
 }

@@ -9,16 +9,12 @@ public enum Errors {
     parameterFileMustBeNonNullAndNonDirectory("parameter.file.must.be.nn.ndir"),
     parameterHtmlIndexWithNoCssFile("parameters.html.index.with.no.css.file"),
     parameterUrlCannotBeEmpty("parameters.url.cannot.be.empty"),
-    parameterUrlDidNotResolveToAnImageResource("parameter.url.did.not.resolve.to.an.image.resource"),
-    parameterCannotDetermineFilenameFromUrl("parameters.cannot.determine.filename.from.url"),
-
     parameterCssClassCollectionIsNull("parameters.css.class.collection.is.null"),
     parameterUnsupportedImageType("parameters.unsupported.imagetype"),
 
     fileNotFound("file.not.found"),
 
     errorReadingFile("error.reading.file"),
-    errorClosingFile("error.closing.file"),
     errorCreatingFileWriter("error.creating.file.writer"),
     errorParsingUrlParameter("error.parsing.url.parameter"),
     errorRetrievingRemoteResource("error.retrieving.remote.resource"),
