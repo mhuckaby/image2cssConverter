@@ -38,14 +38,17 @@ class DefaultImageConversionService implements ImageConversionService {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterFileMustBeNonNullAndNonDirectory)
         }
 
-        def extension = getExtension(imageFile)
+        String extension = getExtension(imageFile)
 
         if(isUnsupportedImageType(extension)){
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType)
         }
 
-        byte[] bytes = this.getFileBytes(imageFile)
-        bytesToCssClass(bytes, imageFile.name, extension)
+        try {
+            bytesToCssClass(imageFile.readBytes(), imageFile.name, extension)
+        }catch(final IOException ioException) {
+            throw this.commonObjectFactory.newImage2CssException(ioException, Errors.errorReadingFile)
+        }
     }
 
     @Override
@@ -118,29 +121,19 @@ class DefaultImageConversionService implements ImageConversionService {
         return candidate ? candidate : randomAlphabetic(7)
     }
 
-    /**
-     * Read the bytes of a file into a byte array and return the array.
-     * @param file
-     * @return
-     * @throws Exception
-     */
-    protected byte[] getFileBytes(final File file) {
-        FileInputStream fileInputStream = this.commonObjectFactory.newFileInputStream(file)
-        byte[] bytes = this.commonObjectFactory.newByteArray(file.length())
+    protected byte[] readInputStreamToBytes(final BufferedInputStream bufferedInputStream) {
+        ByteArrayOutputStream byteArrayOutputStream = this.commonObjectFactory.newByteArrayOutputStream()
+        byte[] buffer = this.commonObjectFactory.newByteArray(1)
 
         try {
-            fileInputStream.read(bytes)
-        }catch(final IOException ioException) {
-            throw this.commonObjectFactory.newImage2CssException(ioException, Errors.errorReadingFile)
-        }finally {
-            try {
-                fileInputStream.close()
-            }catch(Exception exception) {
-                throw this.commonObjectFactory.newImage2CssException(exception, Errors.errorClosingFile)
+            int len
+            while((len = bufferedInputStream.read(buffer)) > 0) {
+                byteArrayOutputStream.write(buffer, 0, len)
             }
+            return byteArrayOutputStream.toByteArray()
+        }catch(IOException e) {
+            throw this.commonObjectFactory.newImage2CssException(e, errorOpeningStream)
         }
-
-        return bytes
     }
 
     protected Pair<String, String> validateFilenameAndExtension(final URL url) {
@@ -161,21 +154,6 @@ class DefaultImageConversionService implements ImageConversionService {
         }
 
         this.commonObjectFactory.newPair(imageFilename, fileExtension)
-    }
-
-    protected byte[] readInputStreamToBytes(final BufferedInputStream bufferedInputStream) {
-        ByteArrayOutputStream byteArrayOutputStream = this.commonObjectFactory.newByteArrayOutputStream()
-        byte[] buffer = this.commonObjectFactory.newByteArray(1)
-
-        try {
-            int len
-            while((len = bufferedInputStream.read(buffer)) > 0) {
-                byteArrayOutputStream.write(buffer, 0, len)
-            }
-            return byteArrayOutputStream.toByteArray()
-        }catch(IOException e) {
-            throw this.commonObjectFactory.newImage2CssException(e, errorOpeningStream)
-        }
     }
 
 }
