@@ -90,15 +90,12 @@ class DefaultImageConversionService implements ImageConversionService {
     }
 
     protected CssClass bytesToCssClass(final byte[] bytes, final String filename, final String extension) {
-        Pair<Integer, Integer> dimension = {
-            this.commonObjectFactory.newPair(it.iconWidth, it.iconHeight)
-        }(new ImageIcon(bytes))
-
+        ImageIcon icon = new ImageIcon(bytes)
         String cssClassName = this.determineCssClassName(filename)
         String b64Bytes = new String(encodeBase64(bytes, false)).replaceAll(NL, EMPTY)
-        String cssEntry = format(cssClassTemplate, cssClassName, extension, b64Bytes, dimension.left, dimension.right)
+        String cssEntry = format(cssClassTemplate, cssClassName, extension, b64Bytes, icon.iconWidth, icon.iconHeight)
 
-        return new CssClass(cssClassName, cssEntry)
+        new CssClass(cssClassName, cssEntry)
     }
 
     protected String determineCssClassName(final String fileName) {
