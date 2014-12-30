@@ -53,17 +53,14 @@ class DefaultImageConversionService implements ImageConversionService {
 
     @Override
     public CssClass convert(final URL url) {
-        if(!url) {
-            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
-        }
+        // TODO Get the filename from head request
+        Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(url)
 
         try {
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection()
-            httpURLConnection.setRequestMethod(GET)
+            httpURLConnection.requestMethod = GET
             // TODO define a better user agent
             httpURLConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
-            // TODO Get the filename from head request
-            Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(url)
             BufferedInputStream inputStream = this.commonObjectFactory.newBufferedInputStream(httpURLConnection)
             byte[] bytes = this.readInputStreamToBytes(inputStream)
             bytesToCssClass(bytes, validatedFilenameAndExtension.left, validatedFilenameAndExtension.right)
@@ -72,27 +69,14 @@ class DefaultImageConversionService implements ImageConversionService {
         }
     }
 
-    protected CssClass bytesToCssClass(final byte[] bytes, final String filename, final String extension) {
-        Pair<Integer, Integer> dimension = {
-            this.commonObjectFactory.newPair(it.iconWidth, it.iconHeight)
-        }(new ImageIcon(bytes))
-
-        String cssClassName = this.determineCssClassName(filename)
-        String b64Bytes = new String(encodeBase64(bytes, false)).replaceAll(NL, EMPTY)
-        String cssEntry =
-            format(cssClassTemplate, cssClassName, extension, b64Bytes(bytes), dimension.left, dimension.right)
-
-        return new CssClass(cssClassName, cssEntry)
-    }
-
     @Override
-    public CssClass convert(final String urlAsString) {
-        if(!urlAsString) {
+    public CssClass convert(final String urlValue) {
+        if(!urlValue) {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
         }
 
-        String urlStringWithProtocol = startsWith(urlAsString.toLowerCase(), http) ?
-            urlAsString : this.commonObjectFactory.newStringBuilder(http).append(urlAsString).toString()
+        String urlStringWithProtocol = startsWith(urlValue.toLowerCase(), http) ?
+                urlValue : this.commonObjectFactory.newStringBuilder(http).append(urlValue).toString()
 
         URL url = {
             try {
@@ -103,6 +87,18 @@ class DefaultImageConversionService implements ImageConversionService {
         }()
 
         return this.convert(url)
+    }
+
+    protected CssClass bytesToCssClass(final byte[] bytes, final String filename, final String extension) {
+        Pair<Integer, Integer> dimension = {
+            this.commonObjectFactory.newPair(it.iconWidth, it.iconHeight)
+        }(new ImageIcon(bytes))
+
+        String cssClassName = this.determineCssClassName(filename)
+        String b64Bytes = new String(encodeBase64(bytes, false)).replaceAll(NL, EMPTY)
+        String cssEntry = format(cssClassTemplate, cssClassName, extension, b64Bytes, dimension.left, dimension.right)
+
+        return new CssClass(cssClassName, cssEntry)
     }
 
     protected String determineCssClassName(final String fileName) {
@@ -127,13 +123,13 @@ class DefaultImageConversionService implements ImageConversionService {
     }
 
     protected Pair<String, String> validateFilenameAndExtension(final URL url) {
-        final String imageFilename = url.file
-
-        if(!imageFilename) {
+        if(!url) {
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
+        }else if(!url.file) {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterCannotDetermineFilenameFromUrl)
         }
 
-        final String fileExtension = getExtension(imageFilename)
+        String fileExtension = getExtension(url.file)
 
         if(!fileExtension) {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
@@ -143,7 +139,7 @@ class DefaultImageConversionService implements ImageConversionService {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType)
         }
 
-        this.commonObjectFactory.newPair(imageFilename, fileExtension)
+        this.commonObjectFactory.newPair(url.file, fileExtension)
     }
 
 }
