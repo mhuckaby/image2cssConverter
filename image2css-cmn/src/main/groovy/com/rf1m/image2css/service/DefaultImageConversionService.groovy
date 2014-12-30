@@ -61,9 +61,9 @@ class DefaultImageConversionService implements ImageConversionService {
             httpURLConnection.requestMethod = GET
             // TODO define a better user agent
             httpURLConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
-            BufferedInputStream inputStream = this.commonObjectFactory.newBufferedInputStream(httpURLConnection)
-            byte[] bytes = this.readInputStreamToBytes(inputStream)
-            bytesToCssClass(bytes, validatedFilenameAndExtension.left, validatedFilenameAndExtension.right)
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()
+            httpURLConnection.inputStream.eachByte { byteArrayOutputStream.write(it) }
+            bytesToCssClass(byteArrayOutputStream.toByteArray(), validatedFilenameAndExtension.left, validatedFilenameAndExtension.right)
         }catch(IOException e) {
             throw this.commonObjectFactory.newImage2CssException(e, errorRetrievingRemoteResource)
         }
@@ -105,21 +105,6 @@ class DefaultImageConversionService implements ImageConversionService {
         String candidate =
             fileName.replaceAll("\\.", UNDERSCORE).replaceAll("\\\\", UNDERSCORE).replaceAll("/", UNDERSCORE)
         return candidate ? candidate : randomAlphabetic(7)
-    }
-
-    protected byte[] readInputStreamToBytes(final BufferedInputStream bufferedInputStream) {
-        ByteArrayOutputStream byteArrayOutputStream = this.commonObjectFactory.newByteArrayOutputStream()
-        byte[] buffer = this.commonObjectFactory.newByteArray(1)
-
-        try {
-            int len
-            while((len = bufferedInputStream.read(buffer)) > 0) {
-                byteArrayOutputStream.write(buffer, 0, len)
-            }
-            return byteArrayOutputStream.toByteArray()
-        }catch(IOException e) {
-            throw this.commonObjectFactory.newImage2CssException(e, errorOpeningStream)
-        }
     }
 
     protected Pair<String, String> validateFilenameAndExtension(final URL url) {
