@@ -30,11 +30,11 @@ enum SupportedImageType {
         this.contentType = contentType
     }
 
-    public static boolean isUnsupportedImageType(final String value) {
+    static boolean isUnsupportedImageType(final String value) {
         return !isSupportedImageType(value)
     }
 
-    public static boolean isSupportedImageType(final String value) {
+    static boolean isSupportedImageType(final String value) {
         for(final SupportedImageType supportedImageType : values()) {
             if(supportedImageType.toString().equalsIgnoreCase(value)) {
                 return true
@@ -45,7 +45,7 @@ enum SupportedImageType {
         return false
     }
 
-    public static SupportedImageType byContentType(final String value) {
+    static SupportedImageType byContentType(final String value) {
         for(final SupportedImageType supportedImageType : values()) {
             if(supportedImageType.contentType.equalsIgnoreCase(value)) {
                 return supportedImageType

@@ -1,5 +1,6 @@
 package com.rf1m.image2css;
 
+import com.rf1m.image2css.config.Image2CssCommonContextConfiguration;
 import com.rf1m.image2css.ioc.WebObjectFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

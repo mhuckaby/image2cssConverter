@@ -24,7 +24,7 @@ enum Error {
         this.message = message
     }
 
-    public String getMessage() {
+    String getMessage() {
         return this.message
     }
 

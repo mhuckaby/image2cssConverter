@@ -20,7 +20,6 @@ package com.rf1m.image2css.service
 
 import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.domain.SupportedImageType
-import com.rf1m.image2css.exception.Error
 import com.rf1m.image2css.ioc.CommonObjectFactory
 
 import javax.net.ssl.HttpsURLConnection
