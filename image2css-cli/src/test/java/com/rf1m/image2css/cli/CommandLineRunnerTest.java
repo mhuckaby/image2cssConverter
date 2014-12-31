@@ -102,7 +102,7 @@ public class CommandLineRunnerTest {
         final File imageForConversion = mock(File.class);
         final File[] imagesForConversion = {imageForConversion};
         final List<CssClass> cssEntries = mock(List.class);
-        final CssClass cssClass = mock(CssClass.class);
+        final CssClass cssClass = new CssClass("name", "body");
 
         when(parameters.getImageFile())
             .thenReturn(targetImageFile);

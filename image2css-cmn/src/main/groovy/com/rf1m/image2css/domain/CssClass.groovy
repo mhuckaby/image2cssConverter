@@ -16,22 +16,11 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.domain;
+package com.rf1m.image2css.domain
 
-public class CssClass {
-	protected final String name;
-	protected final String body;
+import groovy.transform.Immutable;
 
-    public CssClass(final String name, final String body) {
-        this.name = name;
-        this.body = body;
-    }
-
-    public String getName() {
-		return name;
-	}
-
-	public String getBody() {
-		return body;
-	}
+@Immutable class CssClass {
+	String name
+	String body
 }
