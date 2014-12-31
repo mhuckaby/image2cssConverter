@@ -27,8 +27,4 @@ public class Image2CssValidationException extends Image2CssException {
         super(error);
     }
 
-    public Image2CssValidationException(Error error, final Object ... parameters) {
-        super(error, parameters);
-    }
-
 }
