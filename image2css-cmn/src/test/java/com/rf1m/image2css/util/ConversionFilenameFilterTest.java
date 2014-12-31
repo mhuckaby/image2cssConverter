@@ -50,7 +50,7 @@ public class ConversionFilenameFilterTest {
 
     @Before
     public void before(){
-        supportedTypes = spy(new HashSet<SupportedImageType>());
+        supportedTypes = spy(new HashSet());
         supportedTypes.add(SupportedImageType.gif);
         conversionFilenameFilter = spy(new ConversionFilenameFilter(supportedTypes));
     }
