@@ -70,7 +70,7 @@ class DefaultImageConversionService implements ImageConversionService {
         try {
             bytesToCssClass(imageFile.readBytes(), imageFile.name, extension)
         }catch(final IOException ioException) {
-            throw this.commonObjectFactory.newImage2CssException(ioException, Error.errorReadingFile)
+            throw this.commonObjectFactory.newImage2CssException(ioException, errorReadingFile)
         }
     }
 

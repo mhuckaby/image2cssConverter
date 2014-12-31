@@ -35,7 +35,7 @@ enum SupportedImageType {
     }
 
     public static boolean isSupportedImageType(final String value) {
-        for(final SupportedImageType supportedImageType : SupportedImageType.values()) {
+        for(final SupportedImageType supportedImageType : values()) {
             if(supportedImageType.toString().equalsIgnoreCase(value)) {
                 return true
             }else {
@@ -46,7 +46,7 @@ enum SupportedImageType {
     }
 
     public static SupportedImageType byContentType(final String value) {
-        for(final SupportedImageType supportedImageType : SupportedImageType.values()) {
+        for(final SupportedImageType supportedImageType : values()) {
             if(supportedImageType.contentType.equalsIgnoreCase(value)) {
                 return supportedImageType
             }else {
