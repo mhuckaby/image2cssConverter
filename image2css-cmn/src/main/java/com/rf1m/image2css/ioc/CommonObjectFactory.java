@@ -18,11 +18,9 @@
  */
 package com.rf1m.image2css.ioc;
 
-import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Error;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
-import com.rf1m.image2css.io.ConversionFilenameFilter;
 
 import java.io.File;
 import java.io.FileWriter;
