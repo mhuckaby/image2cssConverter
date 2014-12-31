@@ -14,7 +14,6 @@ import static com.rf1m.image2css.exception.Errors.*
 import static java.lang.String.format
 import static org.apache.commons.codec.binary.Base64.encodeBase64
 import static org.apache.commons.io.FilenameUtils.getExtension
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic
 import static org.apache.commons.lang3.StringUtils.startsWith
 
 class DefaultImageConversionService implements ImageConversionService {
@@ -24,8 +23,9 @@ class DefaultImageConversionService implements ImageConversionService {
     protected static final String EMPTY = ""
     protected static final String GET = "GET"
     protected static final String HEAD = "HEAD"
-    protected static final String USER_AGENT = "User-Agent"
+    protected static final String FILENAME_REPLACE_PATTERN = "\\.|:|/|\\\\|\\W"
     // TODO define a better user agent
+    protected static final String USER_AGENT = "User-Agent"
     protected static final String JAVA_CLIENT = "java-client"
 
 
@@ -116,17 +116,11 @@ class DefaultImageConversionService implements ImageConversionService {
 
     protected CssClass bytesToCssClass(final byte[] bytes, final String filename, final String extension) {
         ImageIcon icon = new ImageIcon(bytes)
-        String cssClassName = this.determineCssClassName(filename)
+        String cssClassName = filename.replaceAll(FILENAME_REPLACE_PATTERN, UNDERSCORE)
         String b64Bytes = new String(encodeBase64(bytes, false)).replaceAll(NL, EMPTY)
         String cssEntry = format(cssClassTemplate, cssClassName, extension, b64Bytes, icon.iconWidth, icon.iconHeight)
 
         new CssClass(cssClassName, cssEntry)
-    }
-
-    protected String determineCssClassName(final String fileName) {
-        String candidate =
-            fileName.replaceAll("\\.", UNDERSCORE).replaceAll("\\\\", UNDERSCORE).replaceAll("/", UNDERSCORE)
-        candidate ? candidate : randomAlphabetic(7)
     }
 
     protected Pair<String, String> validateFilenameAndExtension(final HeadResponse headResponse) {
