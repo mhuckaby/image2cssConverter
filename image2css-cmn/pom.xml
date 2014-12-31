@@ -65,6 +65,13 @@
             <artifactId>commons-io</artifactId>
         </dependency>
 
+        <!-- Google -->
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
         <!--Groovy Support -->
 
         <dependency>

@@ -7,6 +7,8 @@ import com.rf1m.image2css.ioc.CommonObjectFactory
 
 import javax.swing.ImageIcon
 
+import static com.google.common.net.HttpHeaders.CONTENT_LENGTH
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.rf1m.image2css.domain.SupportedImageType.byContentType
 import static com.rf1m.image2css.domain.SupportedImageType.isUnsupportedImageType
 import static com.rf1m.image2css.exception.Errors.*
@@ -91,8 +93,8 @@ class DefaultImageConversionService implements ImageConversionService {
         httpURLConnection.requestMethod = HEAD
         httpURLConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
 
-        String contentType = httpURLConnection.getHeaderField("Content-Type")
-        String contentLength = httpURLConnection.getHeaderField("Content-Length")
+        String contentType = httpURLConnection.getHeaderField(CONTENT_TYPE)
+        String contentLength = httpURLConnection.getHeaderField(CONTENT_LENGTH)
 
         new HeadResponse([urlFile: url.file, contentType: contentType, contentLength: contentLength ? contentLength.toInteger() : null])
     }
