@@ -5,6 +5,7 @@ import com.rf1m.image2css.domain.SupportedImageType
 import com.rf1m.image2css.exception.Errors
 import com.rf1m.image2css.ioc.CommonObjectFactory
 
+import javax.net.ssl.HttpsURLConnection
 import javax.swing.ImageIcon
 
 import static com.google.common.net.HttpHeaders.CONTENT_LENGTH
@@ -15,7 +16,6 @@ import static com.rf1m.image2css.exception.Errors.*
 import static java.lang.String.format
 import static org.apache.commons.codec.binary.Base64.encodeBase64
 import static org.apache.commons.io.FilenameUtils.getExtension
-import static org.apache.commons.lang3.StringUtils.startsWith
 
 class DefaultImageConversionService implements ImageConversionService {
     protected static final String UNDERSCORE = "_"
@@ -28,7 +28,6 @@ class DefaultImageConversionService implements ImageConversionService {
     // TODO define a better user agent
     protected static final String USER_AGENT = "User-Agent"
     protected static final String JAVA_CLIENT = "java-client"
-
 
     protected final CommonObjectFactory commonObjectFactory
     protected final String cssClassTemplate
@@ -59,7 +58,7 @@ class DefaultImageConversionService implements ImageConversionService {
 
     @Override
     public CssClass convert(final URL url) {
-        if(!url || !url.file) {
+        if(!url || !url.file || !(~/http[s]{0,1}/).matcher(url.protocol).matches()) {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
         }
         HeadResponse headResponse = head(url)
@@ -70,12 +69,12 @@ class DefaultImageConversionService implements ImageConversionService {
         }
 
         try {
-            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection()
-            httpURLConnection.requestMethod = GET
-
-            httpURLConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
+            def httpConnection = (~/http/).matcher(url.protocol) ?
+                (HttpURLConnection)url.openConnection() : (HttpsURLConnection)url.openConnection()
+            httpConnection.requestMethod = GET
+            httpConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()
-            httpURLConnection.inputStream.eachByte { byteArrayOutputStream.write(it) }
+            httpConnection.inputStream.eachByte { byteArrayOutputStream.write(it) }
             bytesToCssClass(byteArrayOutputStream.toByteArray(), headResponse.urlFile, supportedImageType.toString())
         }catch(IOException e) {
             throw this.commonObjectFactory.newImage2CssException(e, errorRetrievingRemoteResource)
@@ -89,12 +88,14 @@ class DefaultImageConversionService implements ImageConversionService {
     }
 
     public HeadResponse head(final URL url) {
-        HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection()
-        httpURLConnection.requestMethod = HEAD
-        httpURLConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
+        def httpConnection = (~/http/).matcher(url.protocol) ?
+                (HttpURLConnection)url.openConnection() : (HttpsURLConnection)url.openConnection()
 
-        String contentType = httpURLConnection.getHeaderField(CONTENT_TYPE)
-        String contentLength = httpURLConnection.getHeaderField(CONTENT_LENGTH)
+        httpConnection.requestMethod = HEAD
+        httpConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
+
+        String contentType = httpConnection.getHeaderField(CONTENT_TYPE)
+        String contentLength = httpConnection.getHeaderField(CONTENT_LENGTH)
 
         new HeadResponse([urlFile: url.file, contentType: contentType, contentLength: contentLength ? contentLength.toInteger() : null])
     }
@@ -105,12 +106,9 @@ class DefaultImageConversionService implements ImageConversionService {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
         }
 
-        String urlStringWithProtocol = startsWith(urlValue.toLowerCase(), http) ?
-                urlValue : this.commonObjectFactory.newStringBuilder(http).append(urlValue).toString()
-
         URL url = {
             try {
-                new URL(urlStringWithProtocol)
+                new URL(urlValue)
             }catch(MalformedURLException e) {
                 throw this.commonObjectFactory.newImage2CssValidationException(e, errorCreatingUrlFromStringValue)
             }

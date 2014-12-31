@@ -12,13 +12,10 @@ public enum Errors {
     parameterCssClassCollectionIsNull("parameters.css.class.collection.is.null"),
     parameterUnsupportedImageType("parameters.unsupported.imagetype"),
 
-    fileNotFound("file.not.found"),
-
     errorReadingFile("error.reading.file"),
     errorCreatingFileWriter("error.creating.file.writer"),
     errorParsingUrlParameter("error.parsing.url.parameter"),
     errorRetrievingRemoteResource("error.retrieving.remote.resource"),
-    errorOpeningStream("error.opening.stream"),
     errorCreatingUrlFromStringValue("error.creating.url.from.string.value");
 
     protected final String message;
