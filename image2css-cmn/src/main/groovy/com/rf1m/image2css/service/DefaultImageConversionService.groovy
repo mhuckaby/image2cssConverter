@@ -4,7 +4,6 @@ import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.domain.SupportedImageType
 import com.rf1m.image2css.exception.Errors
 import com.rf1m.image2css.ioc.CommonObjectFactory
-import org.apache.commons.lang3.tuple.Pair
 
 import javax.swing.ImageIcon
 
@@ -62,7 +61,11 @@ class DefaultImageConversionService implements ImageConversionService {
             throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
         }
         HeadResponse headResponse = head(url)
-        Pair<String, String> validatedFilenameAndExtension = this.validateFilenameAndExtension(headResponse)
+
+        SupportedImageType supportedImageType = byContentType(headResponse.contentType)
+        if(!supportedImageType){
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType)
+        }
 
         try {
             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection()
@@ -71,7 +74,7 @@ class DefaultImageConversionService implements ImageConversionService {
             httpURLConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()
             httpURLConnection.inputStream.eachByte { byteArrayOutputStream.write(it) }
-            bytesToCssClass(byteArrayOutputStream.toByteArray(), validatedFilenameAndExtension.left, validatedFilenameAndExtension.right)
+            bytesToCssClass(byteArrayOutputStream.toByteArray(), headResponse.urlFile, supportedImageType.toString())
         }catch(IOException e) {
             throw this.commonObjectFactory.newImage2CssException(e, errorRetrievingRemoteResource)
         }
@@ -121,14 +124,6 @@ class DefaultImageConversionService implements ImageConversionService {
         String cssEntry = format(cssClassTemplate, cssClassName, extension, b64Bytes, icon.iconWidth, icon.iconHeight)
 
         new CssClass(cssClassName, cssEntry)
-    }
-
-    protected Pair<String, String> validateFilenameAndExtension(final HeadResponse headResponse) {
-        SupportedImageType supportedImageType = byContentType(headResponse.contentType)
-        if(!supportedImageType){
-            throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType)
-        }
-        this.commonObjectFactory.newPair(headResponse.urlFile, supportedImageType.toString())
     }
 
 }
