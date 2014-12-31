@@ -62,10 +62,6 @@ public class CommonObjectFactory {
         return new StringBuffer();
     }
 
-    public StringBuilder newStringBuilder(final String initialValue) {
-        return new StringBuilder(initialValue);
-    }
-
     public Image2CssException newImage2CssValidationException(final Errors errors) {
         return new Image2CssValidationException(errors);
     }
