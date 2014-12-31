@@ -120,8 +120,7 @@ public class CommandLineRunner {
     public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
         if(imageFile.isDirectory()){
             final Set<SupportedImageType> supportedTypesToFilterFor = supportedTypes.isEmpty() ? this.defaultSupportedImageTypes : supportedTypes;
-            final ConversionFilenameFilter filter = this.objectFactory.newConversionFilenameFilter(supportedTypesToFilterFor);
-
+            final ConversionFilenameFilter filter = new ConversionFilenameFilter(supportedTypesToFilterFor);
             return imageFile.listFiles(filter);
         }else{
             return new File[] {imageFile};

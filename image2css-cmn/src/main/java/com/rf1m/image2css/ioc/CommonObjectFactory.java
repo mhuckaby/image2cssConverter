@@ -42,10 +42,6 @@ public class CommonObjectFactory {
         return new HashSet();
     }
 
-    public ConversionFilenameFilter newConversionFilenameFilter(final Set<SupportedImageType> supportedImageTypes) {
-        return new ConversionFilenameFilter(supportedImageTypes);
-    }
-
     public File newFile(final String filename) {
         return new File(filename);
     }
