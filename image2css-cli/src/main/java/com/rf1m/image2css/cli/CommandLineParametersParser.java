@@ -90,7 +90,7 @@ public class CommandLineParametersParser {
             this.optionHtmlFile.setRequired(false);
             this.optionCssFile.setRequired(false);
 
-            ((List<String>)this.options.getRequiredOptions()).removeIf(s -> this.equalsEitherHtmlOrCss(s));
+            ((List<String>)this.options.getRequiredOptions()).removeIf(this::equalsEitherHtmlOrCss);
         }
 
     }
