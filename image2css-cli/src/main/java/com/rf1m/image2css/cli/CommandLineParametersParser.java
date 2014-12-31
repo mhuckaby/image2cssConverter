@@ -19,7 +19,7 @@
 package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Error;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -146,7 +146,7 @@ public class CommandLineParametersParser {
             try {
                 return new URL(urlValue);
             }catch(final MalformedURLException e) {
-                throw this.objectFactory.newImage2CssException(e, Errors.errorParsingUrlParameter);
+                throw this.objectFactory.newImage2CssException(e, Error.errorParsingUrlParameter);
             }
         }
     }
@@ -179,7 +179,7 @@ public class CommandLineParametersParser {
         try {
             return SupportedImageType.valueOf(supportedImageTypeArg.toLowerCase());
         }catch(final IllegalArgumentException illegalArgumentException) {
-            throw this.objectFactory.newImage2CssValidationException(Errors.parameterUnsupportedImageType);
+            throw this.objectFactory.newImage2CssValidationException(Error.parameterUnsupportedImageType);
         }
     }
 

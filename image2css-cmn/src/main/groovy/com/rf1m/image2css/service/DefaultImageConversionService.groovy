@@ -2,7 +2,7 @@ package com.rf1m.image2css.service
 
 import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.domain.SupportedImageType
-import com.rf1m.image2css.exception.Errors
+import com.rf1m.image2css.exception.Error
 import com.rf1m.image2css.ioc.CommonObjectFactory
 
 import javax.net.ssl.HttpsURLConnection
@@ -12,7 +12,7 @@ import static com.google.common.net.HttpHeaders.CONTENT_LENGTH
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.rf1m.image2css.domain.SupportedImageType.byContentType
 import static com.rf1m.image2css.domain.SupportedImageType.isUnsupportedImageType
-import static com.rf1m.image2css.exception.Errors.*
+import static Error.*
 import static java.lang.String.format
 import static org.apache.commons.codec.binary.Base64.encodeBase64
 import static org.apache.commons.io.FilenameUtils.getExtension
@@ -52,7 +52,7 @@ class DefaultImageConversionService implements ImageConversionService {
         try {
             bytesToCssClass(imageFile.readBytes(), imageFile.name, extension)
         }catch(final IOException ioException) {
-            throw this.commonObjectFactory.newImage2CssException(ioException, Errors.errorReadingFile)
+            throw this.commonObjectFactory.newImage2CssException(ioException, Error.errorReadingFile)
         }
     }
 

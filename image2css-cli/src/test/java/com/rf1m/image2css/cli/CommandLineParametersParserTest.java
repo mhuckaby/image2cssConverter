@@ -19,7 +19,7 @@
 package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Error;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.BasicParser;
@@ -91,7 +91,7 @@ public class CommandLineParametersParserTest {
             spy(new CommandLineParametersParser(basicParser, optionCssFile, optionHtmlFile, optionImageFile, optionSupportedImageTypes,
                     optionSyso, options, objectFactory));
 
-        when(objectFactory.newImage2CssValidationException(any(Errors.class)))
+        when(objectFactory.newImage2CssValidationException(any(Error.class)))
             .thenReturn(image2CssValidationException);
 
         // Required to avoid NPE

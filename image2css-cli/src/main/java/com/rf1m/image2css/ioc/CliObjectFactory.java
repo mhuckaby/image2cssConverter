@@ -20,7 +20,7 @@ package com.rf1m.image2css.ioc;
 
 import com.rf1m.image2css.cli.ImmutableParameters;
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Error;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 
 import java.io.File;
@@ -42,8 +42,8 @@ public class CliObjectFactory extends CommonObjectFactory {
         return new ImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, outputToScreen, isLocalResource, url);
     }
 
-    public Image2CssValidationException newImage2CssValidationException(final Errors errors) {
-        return new Image2CssValidationException(errors);
+    public Image2CssValidationException newImage2CssValidationException(final Error error) {
+        return new Image2CssValidationException(error);
     }
 
 }

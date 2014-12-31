@@ -1,6 +1,6 @@
 package com.rf1m.image2css.exception;
 
-public enum Errors {
+public enum Error {
     parametersObjectCannotBeNull("parameters.object.cannot.be.null"),
     parametersObjectMustHaveValidImageInputFileOrDir("parameters.object.must.have.valid.image.input.file.or.dir"),
     parametersObjectOutputInvalid("parameters.object.output.invalid"),
@@ -20,7 +20,7 @@ public enum Errors {
 
     protected final String message;
 
-    Errors(final String message) {
+    Error(final String message) {
         this.message = message;
     }
 

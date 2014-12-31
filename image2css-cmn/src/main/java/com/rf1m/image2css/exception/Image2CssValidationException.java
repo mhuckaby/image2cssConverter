@@ -19,16 +19,16 @@
 package com.rf1m.image2css.exception;
 
 public class Image2CssValidationException extends Image2CssException {
-    public Image2CssValidationException(Throwable cause, Errors errors) {
-        super(cause, errors);
+    public Image2CssValidationException(Throwable cause, Error error) {
+        super(cause, error);
     }
 
-    public Image2CssValidationException(final Errors errors) {
-        super(errors);
+    public Image2CssValidationException(final Error error) {
+        super(error);
     }
 
-    public Image2CssValidationException(Errors errors, final Object ... parameters) {
-        super(errors, parameters);
+    public Image2CssValidationException(Error error, final Object ... parameters) {
+        super(error, parameters);
     }
 
 }

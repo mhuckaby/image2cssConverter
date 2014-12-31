@@ -20,7 +20,7 @@ package com.rf1m.image2css.out;
 
 import com.rf1m.image2css.cli.Parameters;
 import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Error;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
 public abstract class AbstractOutput implements Output{
     protected boolean validate(final List<CssClass> cssClasses) {
         if(null == cssClasses){
-            throw new Image2CssValidationException(Errors.parameterCssClassCollectionIsNull);
+            throw new Image2CssValidationException(Error.parameterCssClassCollectionIsNull);
         }else{
             return true;
         }
@@ -42,7 +42,7 @@ public abstract class AbstractOutput implements Output{
 
     protected boolean validate(final Parameters parameters) {
         if(null == parameters){
-            throw new Image2CssValidationException(Errors.parametersObjectCannotBeNull);
+            throw new Image2CssValidationException(Error.parametersObjectCannotBeNull);
         }else{
             return true;
         }

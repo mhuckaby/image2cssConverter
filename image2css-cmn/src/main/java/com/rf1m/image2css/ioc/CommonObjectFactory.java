@@ -19,7 +19,7 @@
 package com.rf1m.image2css.ioc;
 
 import com.rf1m.image2css.domain.SupportedImageType;
-import com.rf1m.image2css.exception.Errors;
+import com.rf1m.image2css.exception.Error;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.util.ConversionFilenameFilter;
@@ -54,7 +54,7 @@ public class CommonObjectFactory {
         try {
             return new FileWriter(file);
         }catch(final IOException ioException) {
-            throw this.newImage2CssException(ioException, Errors.errorCreatingFileWriter);
+            throw this.newImage2CssException(ioException, Error.errorCreatingFileWriter);
         }
     }
 
@@ -62,15 +62,15 @@ public class CommonObjectFactory {
         return new StringBuffer();
     }
 
-    public Image2CssException newImage2CssValidationException(final Errors errors) {
-        return new Image2CssValidationException(errors);
+    public Image2CssException newImage2CssValidationException(final Error error) {
+        return new Image2CssValidationException(error);
     }
 
-    public Image2CssException newImage2CssValidationException(final Throwable cause, final Errors errors) {
-        return new Image2CssValidationException(cause, errors);
+    public Image2CssException newImage2CssValidationException(final Throwable cause, final Error error) {
+        return new Image2CssValidationException(cause, error);
     }
 
-    public Image2CssException newImage2CssException(final Throwable cause, final Errors errors) {
-        return new Image2CssException(cause, errors);
+    public Image2CssException newImage2CssException(final Throwable cause, final Error error) {
+        return new Image2CssException(cause, error);
     }
 }
