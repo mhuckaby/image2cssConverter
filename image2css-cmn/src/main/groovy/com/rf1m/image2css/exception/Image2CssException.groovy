@@ -16,15 +16,18 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.exception;
+package com.rf1m.image2css.exception
 
-public class Image2CssValidationException extends Image2CssException {
-    public Image2CssValidationException(Throwable cause, Error error) {
-        super(cause, error);
+
+class Image2CssException extends RuntimeException {
+    protected static final ResourceBundle resourceBundle = ResourceBundle.getBundle("image2css-exception-messages")
+
+    public Image2CssException(final Error error) {
+        super(resourceBundle.getString(error.getMessage()))
     }
 
-    public Image2CssValidationException(final Error error) {
-        super(error);
+    public Image2CssException(final Throwable cause, final Error error) {
+        super(resourceBundle.getString(error.getMessage()), cause)
     }
 
 }

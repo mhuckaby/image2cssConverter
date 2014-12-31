@@ -1,6 +1,6 @@
-package com.rf1m.image2css.exception;
+package com.rf1m.image2css.exception
 
-public enum Error {
+enum Error {
     parametersObjectCannotBeNull("parameters.object.cannot.be.null"),
     parametersObjectMustHaveValidImageInputFileOrDir("parameters.object.must.have.valid.image.input.file.or.dir"),
     parametersObjectOutputInvalid("parameters.object.output.invalid"),
@@ -16,16 +16,16 @@ public enum Error {
     errorCreatingFileWriter("error.creating.file.writer"),
     errorParsingUrlParameter("error.parsing.url.parameter"),
     errorRetrievingRemoteResource("error.retrieving.remote.resource"),
-    errorCreatingUrlFromStringValue("error.creating.url.from.string.value");
+    errorCreatingUrlFromStringValue("error.creating.url.from.string.value")
 
-    protected final String message;
+    protected final String message
 
     Error(final String message) {
-        this.message = message;
+        this.message = message
     }
 
     public String getMessage() {
-        return this.message;
+        return this.message
     }
 
 }
