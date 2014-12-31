@@ -1,7 +1,6 @@
 package com.rf1m.image2css.config
 
 import com.rf1m.image2css.domain.SupportedImageType
-import com.rf1m.image2css.ioc.CommonObjectFactory
 import com.rf1m.image2css.service.DefaultImageConversionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -17,18 +16,13 @@ import static java.util.Collections.unmodifiableSet
 
 @Configuration()
 @PropertySource(value = ["classpath:/image2css-cmn.properties", "classpath:/image2css-exception-messages.properties"])
-class Image2CssCommonContextConfiguration {
+class CommonContextConfiguration {
 
     public static final Set<SupportedImageType> defaultSupportedImageTypes =
         unmodifiableSet(new HashSet([gif, jpg, png]))
 
     @Autowired
     Environment environment
-
-    @Bean
-    CommonObjectFactory commonObjectFactory() {
-        return new CommonObjectFactory()
-    }
 
     @Bean
     DefaultImageConversionService defaultImageConversionService() {

@@ -21,14 +21,20 @@ package com.rf1m.image2css.ioc;
 import com.rf1m.image2css.cli.ImmutableParameters;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Error;
+import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
-public class CliObjectFactory extends CommonObjectFactory {
+public class CliObjectFactory {
 
 
     public ImmutableParameters newImmutableParameters(final File imageFile,
@@ -40,6 +46,34 @@ public class CliObjectFactory extends CommonObjectFactory {
                                                       final URL url) {
 
         return new ImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, outputToScreen, isLocalResource, url);
+    }
+
+    public List newMutableList() {
+        return new ArrayList();
+    };
+
+    public Set newMutableSet() {
+        return new HashSet();
+    }
+
+    public File newFile(final String filename) {
+        return new File(filename);
+    }
+
+    public FileWriter newFileWriter(final File file) {
+        try {
+            return new FileWriter(file);
+        }catch(final IOException ioException) {
+            throw this.newImage2CssException(ioException, Error.errorCreatingFileWriter);
+        }
+    }
+
+    public StringBuffer newStringBuffer() {
+        return new StringBuffer();
+    }
+
+    public Image2CssException newImage2CssException(final Throwable cause, final Error error) {
+        return new Image2CssException(cause, error);
     }
 
     public Image2CssValidationException newImage2CssValidationException(final Error error) {
