@@ -16,42 +16,36 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.util;
+package com.rf1m.image2css.io
 
-import com.rf1m.image2css.domain.SupportedImageType;
-import org.apache.commons.io.FilenameUtils;
+import com.rf1m.image2css.domain.SupportedImageType
+import org.apache.commons.io.FilenameUtils
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Set;
-
-import static com.rf1m.image2css.domain.SupportedImageType.valueOf;
-import static java.util.Collections.unmodifiableSet;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static com.rf1m.image2css.domain.SupportedImageType.valueOf
+import static java.util.Collections.unmodifiableSet
 
 /**
  * Filename filter used to limit which image files are converted.
  *
  */
-public class ConversionFilenameFilter implements FilenameFilter{
-    protected final Set<SupportedImageType> supportedTypes;
+class ConversionFilenameFilter implements FilenameFilter{
+    protected final Set<SupportedImageType> supportedTypes
 
 	public ConversionFilenameFilter(final Set<SupportedImageType> supportedTypes){
-		this.supportedTypes = unmodifiableSet(supportedTypes);
+		this.supportedTypes = unmodifiableSet(supportedTypes)
 	}
-	
+
 	@Override
 	public boolean accept(final File fileDir, final String filename) {
-        final String extension = FilenameUtils.getExtension(filename);
-        return isNotBlank(extension) ? this.isSupported(extension) : false;
+        final String extension = FilenameUtils.getExtension(filename)
+        return extension ? this.isSupported(extension) : false
 	}
 
     protected boolean isSupported(final String extension) {
-        try{
-            final SupportedImageType supportedImageType = valueOf(extension);
-            return supportedTypes.contains(supportedImageType);
+        try {
+            return supportedTypes.contains(valueOf(extension))
         }catch(final IllegalArgumentException e){
-            return false;
+            return false
         }
     }
 

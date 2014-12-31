@@ -16,7 +16,7 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.util;
+package com.rf1m.image2css.io;
 
 import com.rf1m.image2css.domain.SupportedImageType;
 import org.junit.Before;

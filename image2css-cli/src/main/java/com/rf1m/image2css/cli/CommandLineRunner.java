@@ -23,7 +23,7 @@ import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import com.rf1m.image2css.service.ImageConversionService;
-import com.rf1m.image2css.util.ConversionFilenameFilter;
+import com.rf1m.image2css.io.ConversionFilenameFilter;
 import org.apache.commons.cli.ParseException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
