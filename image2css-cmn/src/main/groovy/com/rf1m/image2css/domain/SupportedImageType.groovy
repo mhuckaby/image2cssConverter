@@ -16,44 +16,44 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.domain;
+package com.rf1m.image2css.domain
 
-public enum SupportedImageType {
+enum SupportedImageType {
 	gif("image/gif"),
     jpg("image/jpg"),
     jpeg("image/jpeg"),
-    png("image/png");
+    png("image/png")
 
-    private final String contentType;
+    private final String contentType
 
     SupportedImageType(final String contentType) {
-        this.contentType = contentType;
+        this.contentType = contentType
     }
 
     public static boolean isUnsupportedImageType(final String value) {
-        return !isSupportedImageType(value);
+        return !isSupportedImageType(value)
     }
 
     public static boolean isSupportedImageType(final String value) {
         for(final SupportedImageType supportedImageType : SupportedImageType.values()) {
             if(supportedImageType.toString().equalsIgnoreCase(value)) {
-                return true;
+                return true
             }else {
-                continue;
+                continue
             }
         }
-        return false;
+        return false
     }
 
     public static SupportedImageType byContentType(final String value) {
         for(final SupportedImageType supportedImageType : SupportedImageType.values()) {
             if(supportedImageType.contentType.equalsIgnoreCase(value)) {
-                return supportedImageType;
+                return supportedImageType
             }else {
-                continue;
+                continue
             }
         }
-        return null;
+        return null
     }
 
 }
