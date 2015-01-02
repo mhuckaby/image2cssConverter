@@ -18,6 +18,8 @@
  */
 package com.rf1m.image2css.cli;
 
+import com.rf1m.image2css.Image2CssCliContextConfiguration;
+import com.rf1m.image2css.config.CommonContextConfiguration;
 import com.rf1m.image2css.domain.CssClass;
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Image2CssException;
@@ -25,6 +27,8 @@ import com.rf1m.image2css.ioc.CliObjectFactory;
 import com.rf1m.image2css.service.ImageConversionService;
 import com.rf1m.image2css.io.ConversionFilenameFilter;
 import org.apache.commons.cli.ParseException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
@@ -61,8 +65,8 @@ public class CommandLineRunner {
     }
 
     public static void main(final String[] arguments) throws Exception {
-        final ClassPathXmlApplicationContext applicationContext =
-            new ClassPathXmlApplicationContext("classpath:image2css-cli-context.xml");
+        final  ApplicationContext applicationContext =
+            new AnnotationConfigApplicationContext(Image2CssCliContextConfiguration.class);
         final CommandLineRunner commandLineRunner = (CommandLineRunner)applicationContext.getBean("commandLineRunner");
 
         commandLineRunner.run(arguments);
