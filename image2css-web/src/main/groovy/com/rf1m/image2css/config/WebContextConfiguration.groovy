@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc
 @ComponentScan("com.rf1m.image2css.web.controller")
 @EnableWebMvc
 @Import(CommonContextConfiguration.class)
-class Image2CssWebContextConfiguration {
+class WebContextConfiguration {
 
     @Bean
     public WebObjectFactory webObjectFactory() {
