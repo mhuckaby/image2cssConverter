@@ -13,7 +13,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>com.rf1m.image2css.Image2CssWebContextConfiguration</param-value>
+        <param-value>com.rf1m.image2css.config.Image2CssWebContextConfiguration</param-value>
     </context-param>
 
     <listener>

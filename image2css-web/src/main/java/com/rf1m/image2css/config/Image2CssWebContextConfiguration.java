@@ -1,4 +1,4 @@
-package com.rf1m.image2css;
+package com.rf1m.image2css.config;
 
 import com.rf1m.image2css.config.CommonContextConfiguration;
 import com.rf1m.image2css.ioc.WebObjectFactory;
