@@ -130,9 +130,6 @@ public class CommandLineRunnerTest {
 
         verify(imageConversionService, times(1))
             .convert(imageForConversion);
-
-        verify(cssEntries, times(1))
-            .add(cssClass);
     }
 
     @Test

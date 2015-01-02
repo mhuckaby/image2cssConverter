@@ -209,26 +209,6 @@ public class CommandLineParametersParserTest {
     }
 
     @Test
-    public void extractFileFromOptionsShouldPassUseFirstElementInValuesArrayAsFilename() {
-        final String option = "option";
-        final String optionValue = "optionValue";
-
-        final String[] optionValues = {optionValue};
-
-        final File file = mock(File.class);
-
-        when(commandLine.getOptionValues(option))
-            .thenReturn(optionValues);
-
-        final File result = commandLineParametersParser.extractFileFromOption(commandLine, option);
-
-        assertThat(result, is(file));
-
-        verify(commandLine, times(1))
-            .getOptionValues(option);
-    }
-
-    @Test
     public void extractFileFromOptionsShouldReturnNullWhenNoParameterValueIsSupplied() {
         final String option = "option";
         final String[] optionValues = {};
@@ -243,41 +223,6 @@ public class CommandLineParametersParserTest {
         verify(commandLine, times(1))
             .getOptionValues(option);
 
-    }
-
-    @Test
-    public void shouldPopulateResultingSetWithImageTypesFromCommandLineArgs() {
-        final String option = "option";
-        final String optionValueGif = "gif";
-
-        final String[] optionValues = {optionValueGif};
-
-        final Set<SupportedImageType> supportedImageTypes = mock(Set.class);
-
-        when(commandLine.getOptionValues(option))
-            .thenReturn(optionValues);
-
-        doReturn(optionValues)
-            .when(commandLineParametersParser)
-            .determineIncludedImageTypes(optionValues);
-
-        doReturn(SupportedImageType.gif)
-            .when(commandLineParametersParser)
-            .convertStringImageTypeArgumentToEnumType(option);
-
-        final Set<SupportedImageType> result =
-            commandLineParametersParser.extractImageTypesFromOption(commandLine, option);
-
-        assertThat(result, is(supportedImageTypes));
-
-        verify(commandLineParametersParser, times(1))
-            .determineIncludedImageTypes(optionValues);
-
-        verify(commandLine, times(1))
-            .getOptionValues(option);
-
-        verify(supportedImageTypes, times(1))
-            .add(SupportedImageType.gif);
     }
 
     @Test
