@@ -12,6 +12,7 @@ enum Error {
     parameterCssClassCollectionIsNull("parameters.css.class.collection.is.null"),
     parameterUnsupportedImageType("parameters.unsupported.imagetype"),
 
+    errorWritingFile("error.writing.file"),
     errorReadingFile("error.reading.file"),
     errorCreatingFileWriter("error.creating.file.writer"),
     errorParsingUrlParameter("error.parsing.url.parameter"),

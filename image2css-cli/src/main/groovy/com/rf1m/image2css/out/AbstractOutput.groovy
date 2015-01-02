@@ -16,13 +16,34 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.out;
+package com.rf1m.image2css.out
 
-import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.cli.Parameters
+import com.rf1m.image2css.domain.CssClass
+import com.rf1m.image2css.exception.Error
+import com.rf1m.image2css.exception.Image2CssValidationException
+import com.rf1m.image2css.io.Output
 
-import java.util.List;
+abstract class AbstractOutput implements Output{
 
-public interface ReportOutput {
-    void generateReportOutput(final Parameters parameters, final List<CssClass> cssClasses);
+    protected boolean validate(final List<CssClass> cssClasses) {
+        if(null == cssClasses){
+            throw new Image2CssValidationException(Error.parameterCssClassCollectionIsNull)
+        }else{
+            return true
+        }
+    }
+
+    protected boolean isValidParametersAndClasses(final Parameters parameters, final List<CssClass> cssClasses) {
+        return this.validate(parameters) && this.validate(cssClasses)
+    }
+
+    protected boolean validate(final Parameters parameters) {
+        if(null == parameters){
+            throw new Image2CssValidationException(Error.parametersObjectCannotBeNull)
+        }else{
+            return true
+        }
+    }
+
 }

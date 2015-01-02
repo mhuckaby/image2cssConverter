@@ -16,23 +16,18 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cli;
+package com.rf1m.image2css.cli
 
-import com.rf1m.image2css.domain.SupportedImageType;
+import com.rf1m.image2css.domain.SupportedImageType
 
-import java.io.File;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Set;
-
-public class ImmutableParameters implements Parameters {
-	protected final File imageFile;
-	protected final File cssFile;
-	protected final File htmlFile;
-	protected final Set<SupportedImageType> supportedTypes;
-	protected final boolean outputToScreen;
-	protected final boolean isLocalResource;
-	protected final URL url;
+class ImmutableParameters implements Parameters {
+	protected final File imageFile
+	protected final File cssFile
+	protected final File htmlFile
+	protected final Set<SupportedImageType> supportedTypes
+	protected final boolean outputToScreen
+	protected final boolean isLocalResource
+	protected final URL url
 
 	public ImmutableParameters(
             final File imageFile,
@@ -43,62 +38,62 @@ public class ImmutableParameters implements Parameters {
             final boolean isLocalResource,
             final URL url) {
 
-		this.imageFile = imageFile;
-		this.cssFile = cssFile;
-		this.htmlFile = htmlFile;
-		this.supportedTypes = null == supportedTypes ? null : Collections.unmodifiableSet(supportedTypes);
-		this.outputToScreen = outputToScreen;
-        this.isLocalResource = isLocalResource;
-        this.url = url;
+		this.imageFile = imageFile
+		this.cssFile = cssFile
+		this.htmlFile = htmlFile
+		this.supportedTypes = null == supportedTypes ? null : Collections.unmodifiableSet(supportedTypes)
+		this.outputToScreen = outputToScreen
+        this.isLocalResource = isLocalResource
+        this.url = url
 	}
 	
 	@Override
 	public boolean isOutputToConsoleDesired() {
-		return outputToScreen;
+		return outputToScreen
 	}
 
 	@Override
 	public File getImageFile() {
-		return imageFile;
+		return imageFile
 	}
 
 	@Override
 	public File getCssFile() {
-		return cssFile;
+		return cssFile
 	}
 
 	@Override
 	public File getHtmlFile() {
-		return htmlFile;
+		return htmlFile
 	}
 
 	@Override
 	public Set<SupportedImageType> getSupportedTypes() {
-		return supportedTypes;
+		return supportedTypes
 	}
 
     @Override
     public boolean isOutputValid() {
-        return !(null == this.cssFile && !outputToScreen);
+        return !(null == this.cssFile && !outputToScreen)
     }
 
     @Override
     public boolean isCssFileOutputDesired() {
-        return null != this.cssFile;
+        return null != this.cssFile
     }
 
     @Override
     public boolean isHtmlFileOutputDesired() {
-        return null != this.htmlFile;
+        return null != this.htmlFile
     }
 
     @Override
     public boolean isLocalResource() {
-        return this.isLocalResource;
+        return this.isLocalResource
     }
 
     @Override
     public URL getURL() {
-        return this.url;
+        return this.url
     }
 }

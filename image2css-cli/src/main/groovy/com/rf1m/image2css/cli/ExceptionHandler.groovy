@@ -16,54 +16,46 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cli;
+package com.rf1m.image2css.cli
 
-import com.rf1m.image2css.exception.Image2CssException;
-import org.apache.commons.cli.ParseException;
+import com.rf1m.image2css.exception.Image2CssException
+import org.apache.commons.cli.ParseException
 
-public class ExceptionHandler {
-    protected final Image2CssHelpFormatter image2CssHelpFormatter;
+import static java.lang.String.format
 
-    protected final String issueUrl;
-    protected final String abnormalExitTemplate;
-    protected final String exceptionMessageTemplate;
+
+class ExceptionHandler {
+    protected final Image2CssHelpFormatter image2CssHelpFormatter
+
+    protected final String issueUrl
+    protected final String abnormalExitTemplate
+    protected final String exceptionMessageTemplate
+
+    protected PrintStream defaultOut = System.out
 
     public ExceptionHandler(final Image2CssHelpFormatter image2CssHelpFormatter,
                             final String issueUrl,
                             final String abnormalExitTemplate,
                             final String exceptionMessageTemplate) {
 
-        this.image2CssHelpFormatter = image2CssHelpFormatter;
-        this.issueUrl = issueUrl;
-        this.abnormalExitTemplate = abnormalExitTemplate;
-        this.exceptionMessageTemplate = exceptionMessageTemplate;
+        this.image2CssHelpFormatter = image2CssHelpFormatter
+        this.issueUrl = issueUrl
+        this.abnormalExitTemplate = abnormalExitTemplate
+        this.exceptionMessageTemplate = exceptionMessageTemplate
     }
 
     protected void handleException(final Exception e) {
-        final String formattedMessage = this.format(abnormalExitTemplate, e.getMessage(), issueUrl);
-        this.println(formattedMessage);
-
-        e.printStackTrace();
+        defaultOut.println(format(abnormalExitTemplate, e.message, issueUrl))
+        e.printStackTrace()
     }
 
     protected void handleImage2CssException(final Image2CssException image2CssException) {
-        final String formattedExceptionMessage = this.format(exceptionMessageTemplate, image2CssException.getMessage());
-        this.println(formattedExceptionMessage);
+        defaultOut.println(format(exceptionMessageTemplate, image2CssException.message))
     }
 
     protected void handleParseException(final ParseException parseException) {
-        final String formattedExceptionMessage = this.format(exceptionMessageTemplate, parseException.getMessage());
-        this.println(formattedExceptionMessage);
-
-        image2CssHelpFormatter.showHelp();
-    }
-
-    protected String format(final String template, final String ... param) {
-        return String.format(template, param);
-    }
-
-    protected void println(final String out) {
-        System.out.println(out);
+        defaultOut.println(format(exceptionMessageTemplate, parseException.message))
+        image2CssHelpFormatter.showHelp()
     }
 
 }

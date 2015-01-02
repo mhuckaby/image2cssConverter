@@ -16,59 +16,53 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cli;
+package com.rf1m.image2css.cli
 
-import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.out.ConsoleOutput;
-import com.rf1m.image2css.out.Output;
+import com.rf1m.image2css.domain.CssClass
+import com.rf1m.image2css.out.ConsoleOutput
+import com.rf1m.image2css.io.Output
 
-import java.io.IOException;
-import java.util.List;
 
-public class CommandLineRunnerOutputManager {
-    protected final ConsoleOutput consoleOutput;
+class CommandLineRunnerOutputManager {
+    protected final ConsoleOutput consoleOutput
 
-    protected final Output cssOutput;
-    protected final Output htmlOutput;
+    protected final Output cssOutput
+    protected final Output htmlOutput
 
-    protected final String aboutProject;
+    protected final String aboutProject
+
+    protected PrintStream defaultOut = System.out
 
     public CommandLineRunnerOutputManager(final ConsoleOutput consoleOutput,
                                           final Output cssOutput,
                                           final Output htmlOutput,
                                           final String aboutProject) {
 
-        this.consoleOutput = consoleOutput;
-        this.cssOutput = cssOutput;
-        this.htmlOutput = htmlOutput;
-        this.aboutProject = aboutProject;
+        this.consoleOutput = consoleOutput
+        this.cssOutput = cssOutput
+        this.htmlOutput = htmlOutput
+        this.aboutProject = aboutProject
     }
 
     protected void doOutput(final Parameters parameters, final List<CssClass> cssClasses) throws IOException {
-        if(parameters.isOutputToConsoleDesired()) {
-            consoleOutput.out(parameters, cssClasses);
+        if(parameters.outputToConsoleDesired) {
+            consoleOutput.out(parameters, cssClasses)
         }
 
-        if(parameters.isCssFileOutputDesired()) {
-            cssOutput.out(parameters, cssClasses);
+        if(parameters.cssFileOutputDesired) {
+            cssOutput.out(parameters, cssClasses)
         }
 
-        if(parameters.isHtmlFileOutputDesired()) {
-            htmlOutput.out(parameters, cssClasses);
+        if(parameters.htmlFileOutputDesired) {
+            htmlOutput.out(parameters, cssClasses)
         }
 
-        if(parameters.isOutputToConsoleDesired()) {
-            consoleOutput.generateReportOutput(parameters, cssClasses);
+        if(parameters.outputToConsoleDesired) {
+            consoleOutput.generateReportOutput(parameters, cssClasses)
         }
     }
 
     protected void showAbout() {
-        this.println(aboutProject);
+        defaultOut.println(aboutProject)
     }
-
-    protected void println(final String out) {
-        System.out.println(out);
-    }
-
-
 }

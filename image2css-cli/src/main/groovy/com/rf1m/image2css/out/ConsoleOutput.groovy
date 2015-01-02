@@ -16,35 +16,36 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.out;
+package com.rf1m.image2css.out
 
-import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.cli.Parameters
+import com.rf1m.image2css.domain.CssClass
+import com.rf1m.image2css.exception.Image2CssException
+import com.rf1m.image2css.io.ReportOutput
 
-import java.io.IOException;
-import java.util.List;
+import static java.lang.String.format
 
-import static java.lang.String.format;
+class ConsoleOutput extends AbstractOutput implements ReportOutput{
+    protected final String reportCssTotalTemplate
+    protected final String reportCssFileTemplate
+    protected final String reportHtmlFileTemplate
 
-public class ConsoleOutput extends AbstractOutput implements ReportOutput{
-    protected final String reportCssTotalTemplate;
-    protected final String reportCssFileTemplate;
-    protected final String reportHtmlFileTemplate;
+    protected PrintStream defaultOut = System.out
 
     public ConsoleOutput(final String reportCssTotalTemplate,
                          final String reportCssFileTemplate,
                          final String reportHtmlFileTemplate) {
 
-        this.reportCssTotalTemplate = reportCssTotalTemplate;
-        this.reportCssFileTemplate = reportCssFileTemplate;
-        this.reportHtmlFileTemplate = reportHtmlFileTemplate;
+        this.reportCssTotalTemplate = reportCssTotalTemplate
+        this.reportCssFileTemplate = reportCssFileTemplate
+        this.reportHtmlFileTemplate = reportHtmlFileTemplate
     }
 
     @Override
-    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException {
+    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
         if(isValidParametersAndClassesWithConsoleOutput(parameters, cssClasses)){
-			for(final CssClass cssClass : cssClasses){
-				this.println(cssClass.getBody());
+			for(CssClass cssClass : cssClasses){
+                defaultOut.println(cssClass.body)
 			}
 		}
     }
@@ -52,26 +53,24 @@ public class ConsoleOutput extends AbstractOutput implements ReportOutput{
     @Override
     public void generateReportOutput(final Parameters parameters, final List<CssClass> cssClasses){
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            if(!parameters.isOutputToConsoleDesired()) {
-                this.println(format(reportCssTotalTemplate, cssClasses.size()));
+            if(!parameters.outputToConsoleDesired) {
+                this.println(format(reportCssTotalTemplate, cssClasses.size()))
             }
+
             if(null != parameters.getCssFile()){
-                this.println(format(reportCssFileTemplate, parameters.getCssFile().getName()));
+                defaultOut.println(format(reportCssFileTemplate, parameters.cssFile.name))
             }
 
             if(null != parameters.getHtmlFile()){
-
-                this.println(format(reportHtmlFileTemplate, parameters.getHtmlFile().getName()));
+                defaultOut.println(format(reportHtmlFileTemplate, parameters.htmlFile.name))
             }
         }
 	}
 
-    protected boolean isValidParametersAndClassesWithConsoleOutput(final Parameters parameters, final List<CssClass> cssClasses) {
-        return super.isValidParametersAndClasses(parameters, cssClasses) && parameters.isOutputToConsoleDesired();
-    }
+    protected boolean isValidParametersAndClassesWithConsoleOutput(final Parameters parameters,
+                                                                   final List<CssClass> cssClasses) {
 
-    protected void println(final String out) {
-        System.out.println(out);
+        return super.isValidParametersAndClasses(parameters, cssClasses) && parameters.outputToConsoleDesired
     }
 
 }

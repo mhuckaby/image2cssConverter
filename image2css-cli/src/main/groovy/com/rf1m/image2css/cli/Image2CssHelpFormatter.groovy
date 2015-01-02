@@ -16,36 +16,23 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.out;
+package com.rf1m.image2css.cli
 
-import com.rf1m.image2css.cli.Parameters;
-import com.rf1m.image2css.domain.CssClass;
-import com.rf1m.image2css.exception.Error;
-import com.rf1m.image2css.exception.Image2CssValidationException;
+import org.apache.commons.cli.HelpFormatter
+import org.apache.commons.cli.Options
 
-import java.util.List;
+class Image2CssHelpFormatter extends HelpFormatter {
+    protected final String helpText
+    protected final Options options
 
-public abstract class AbstractOutput implements Output{
-    protected boolean validate(final List<CssClass> cssClasses) {
-        if(null == cssClasses){
-            throw new Image2CssValidationException(Error.parameterCssClassCollectionIsNull);
-        }else{
-            return true;
-        }
+    public Image2CssHelpFormatter(final String helpText, final Options options, final int width) {
+        this.helpText = helpText
+        this.options = options
+        this.width = width
     }
 
-    protected boolean isValidParametersAndClasses(final Parameters parameters, final List<CssClass> cssClasses) {
-        return
-            this.validate(parameters) &&
-            this.validate(cssClasses);
-    }
-
-    protected boolean validate(final Parameters parameters) {
-        if(null == parameters){
-            throw new Image2CssValidationException(Error.parametersObjectCannotBeNull);
-        }else{
-            return true;
-        }
+    public void showHelp() {
+        printHelp(this.helpText, this.options)
     }
 
 }
