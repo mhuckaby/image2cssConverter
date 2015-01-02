@@ -20,8 +20,7 @@ package com.rf1m.image2css.service
 
 import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.domain.SupportedImageType
-import com.rf1m.image2css.exception.Image2CssException
-import com.rf1m.image2css.exception.Image2CssValidationException
+import com.rf1m.image2css.ioc.CommonObjectFactory
 
 import javax.net.ssl.HttpsURLConnection
 import javax.swing.ImageIcon
@@ -47,41 +46,43 @@ class DefaultImageConversionService implements ImageConversionService {
     protected static final String USER_AGENT = "User-Agent"
     protected static final String JAVA_CLIENT = "java-client"
 
+    protected final CommonObjectFactory commonObjectFactory
     protected final String cssClassTemplate
 
-    public DefaultImageConversionService(final String cssClassTemplate) {
+    public DefaultImageConversionService(final CommonObjectFactory commonObjectFactory, final String cssClassTemplate) {
+        this.commonObjectFactory = commonObjectFactory
         this.cssClassTemplate = cssClassTemplate
     }
 
     @Override
     public CssClass convert(final File imageFile) {
         if(!imageFile || !imageFile.exists() || imageFile.directory) {
-            throw new Image2CssValidationException(parameterFileMustBeNonNullAndNonDirectory)
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterFileMustBeNonNullAndNonDirectory)
         }
 
         String extension = getExtension(imageFile)
 
         if(isUnsupportedImageType(extension)){
-            throw new Image2CssValidationException(parameterUnsupportedImageType)
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType)
         }
 
         try {
             bytesToCssClass(imageFile.readBytes(), imageFile.name, extension)
         }catch(final IOException ioException) {
-            throw new Image2CssException(ioException, errorReadingFile)
+            throw this.commonObjectFactory.newImage2CssException(ioException, errorReadingFile)
         }
     }
 
     @Override
     public CssClass convert(final URL url) {
         if(!url || !url.file || !(~/http[s]{0,1}/).matcher(url.protocol).matches()) {
-            throw new Image2CssValidationException(parameterUrlCannotBeEmpty)
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
         }
         HeadResponse headResponse = head(url)
 
         SupportedImageType supportedImageType = byContentType(headResponse.contentType)
         if(!supportedImageType){
-            throw new Image2CssValidationException(parameterUnsupportedImageType)
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUnsupportedImageType)
         }
 
         try {
@@ -93,7 +94,7 @@ class DefaultImageConversionService implements ImageConversionService {
             httpConnection.inputStream.eachByte { byteArrayOutputStream.write(it) }
             bytesToCssClass(byteArrayOutputStream.toByteArray(), headResponse.urlFile, supportedImageType.toString())
         }catch(IOException e) {
-            throw new Image2CssException(e, errorRetrievingRemoteResource)
+            throw this.commonObjectFactory.newImage2CssException(e, errorRetrievingRemoteResource)
         }
     }
 
@@ -119,14 +120,14 @@ class DefaultImageConversionService implements ImageConversionService {
     @Override
     public CssClass convert(final String urlValue) {
         if(!urlValue) {
-            throw new Image2CssValidationException(parameterUrlCannotBeEmpty)
+            throw this.commonObjectFactory.newImage2CssValidationException(parameterUrlCannotBeEmpty)
         }
 
         URL url = {
             try {
                 new URL(urlValue)
             }catch(MalformedURLException e) {
-                throw new Image2CssValidationException(e, errorCreatingUrlFromStringValue)
+                throw this.commonObjectFactory.newImage2CssValidationException(e, errorCreatingUrlFromStringValue)
             }
         }()
 

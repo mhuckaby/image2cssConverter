@@ -18,32 +18,53 @@
  */
 package com.rf1m.image2css.ioc;
 
-import com.rf1m.image2css.cli.ImmutableParameters;
-import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Error;
+import com.rf1m.image2css.exception.Image2CssException;
 import com.rf1m.image2css.exception.Image2CssValidationException;
 
 import java.io.File;
-import java.net.URL;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+public class CommonObjectFactory {
 
-public class CliObjectFactory extends CommonObjectFactory {
+    public List newMutableList() {
+        return new ArrayList();
+    };
 
-
-    public ImmutableParameters newImmutableParameters(final File imageFile,
-                                                      final File cssFile,
-                                                      final File htmlFile,
-                                                      final Set<SupportedImageType> supportedImageTypes,
-                                                      final boolean outputToScreen,
-                                                      final boolean isLocalResource,
-                                                      final URL url) {
-
-        return new ImmutableParameters(imageFile, cssFile, htmlFile, supportedImageTypes, outputToScreen, isLocalResource, url);
+    public Set newMutableSet() {
+        return new HashSet();
     }
 
-    public Image2CssValidationException newImage2CssValidationException(final Error error) {
+    public File newFile(final String filename) {
+        return new File(filename);
+    }
+
+    public FileWriter newFileWriter(final File file) {
+        try {
+            return new FileWriter(file);
+        }catch(final IOException ioException) {
+            throw this.newImage2CssException(ioException, Error.errorCreatingFileWriter);
+        }
+    }
+
+    public StringBuffer newStringBuffer() {
+        return new StringBuffer();
+    }
+
+    public Image2CssException newImage2CssValidationException(final Error error) {
         return new Image2CssValidationException(error);
     }
 
+    public Image2CssException newImage2CssValidationException(final Throwable cause, final Error error) {
+        return new Image2CssValidationException(cause, error);
+    }
+
+    public Image2CssException newImage2CssException(final Throwable cause, final Error error) {
+        return new Image2CssException(cause, error);
+    }
 }
