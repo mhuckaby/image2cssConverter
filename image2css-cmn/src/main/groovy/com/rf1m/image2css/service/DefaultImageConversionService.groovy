@@ -60,7 +60,7 @@ class DefaultImageConversionService implements ImageConversionService {
             throw new Image2CssValidationException(parameterFileMustBeNonNullAndNonDirectory)
         }
 
-        String extension = getExtension(imageFile)
+        String extension = getExtension(imageFile.name)
 
         if(isUnsupportedImageType(extension)){
             throw new Image2CssValidationException(parameterUnsupportedImageType)
@@ -98,19 +98,6 @@ class DefaultImageConversionService implements ImageConversionService {
         }
     }
 
-    public HeadResponse head(final URL url) {
-        def httpConnection = (~/http/).matcher(url.protocol) ?
-                (HttpURLConnection)url.openConnection() : (HttpsURLConnection)url.openConnection()
-
-        httpConnection.requestMethod = HEAD
-        httpConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
-
-        String contentType = httpConnection.getHeaderField(CONTENT_TYPE)
-        String contentLength = httpConnection.getHeaderField(CONTENT_LENGTH)
-
-        new HeadResponse([urlFile: url.file, contentType: contentType, contentLength: contentLength ? contentLength.toInteger() : null])
-    }
-
     @Override
     public CssClass convert(final String urlValue) {
         if(!urlValue) {
@@ -126,6 +113,19 @@ class DefaultImageConversionService implements ImageConversionService {
         }()
 
         this.convert(url)
+    }
+
+    protected HeadResponse head(final URL url) {
+        def httpConnection = (~/http/).matcher(url.protocol) ?
+                (HttpURLConnection)url.openConnection() : (HttpsURLConnection)url.openConnection()
+
+        httpConnection.requestMethod = HEAD
+        httpConnection.addRequestProperty(USER_AGENT, JAVA_CLIENT)
+
+        String contentType = httpConnection.getHeaderField(CONTENT_TYPE)
+        String contentLength = httpConnection.getHeaderField(CONTENT_LENGTH)
+
+        new HeadResponse([urlFile: url.file, contentType: contentType, contentLength: contentLength ? contentLength.toInteger() : null])
     }
 
     protected CssClass bytesToCssClass(final byte[] bytes, final String filename, final String extension) {
