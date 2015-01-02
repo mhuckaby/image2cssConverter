@@ -89,15 +89,20 @@
             <version>1.2</version>
         </dependency>
 
-        <!-- Groovy Support -->
+        <!--Groovy Support -->
 
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>2.3.2</version>
         </dependency>
 
         <!-- Testing -->
+
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
