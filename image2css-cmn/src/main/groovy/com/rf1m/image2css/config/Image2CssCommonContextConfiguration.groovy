@@ -32,7 +32,7 @@ class Image2CssCommonContextConfiguration {
 
     @Bean
     DefaultImageConversionService defaultImageConversionService() {
-        return new DefaultImageConversionService(commonObjectFactory(), environment.getProperty("template.css.class.def"))
+        return new DefaultImageConversionService(environment.getProperty("template.css.class.def"))
     }
 }
 

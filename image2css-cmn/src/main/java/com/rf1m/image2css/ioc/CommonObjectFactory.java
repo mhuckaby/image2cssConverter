@@ -60,10 +60,6 @@ public class CommonObjectFactory {
         return new Image2CssValidationException(error);
     }
 
-    public Image2CssException newImage2CssValidationException(final Throwable cause, final Error error) {
-        return new Image2CssValidationException(cause, error);
-    }
-
     public Image2CssException newImage2CssException(final Throwable cause, final Error error) {
         return new Image2CssException(cause, error);
     }
