@@ -19,6 +19,7 @@
 package com.rf1m.image2css.service
 
 import com.rf1m.image2css.domain.CssClass
+import com.rf1m.image2css.domain.HeadResponse
 import com.rf1m.image2css.domain.SupportedImageType
 import com.rf1m.image2css.exception.Image2CssException
 import com.rf1m.image2css.exception.Image2CssValidationException
@@ -95,12 +96,6 @@ class DefaultImageConversionService implements ImageConversionService {
         }catch(IOException e) {
             throw new Image2CssException(e, errorRetrievingRemoteResource)
         }
-    }
-
-    class HeadResponse {
-        String urlFile
-        String contentType
-        Integer contentLength
     }
 
     public HeadResponse head(final URL url) {
