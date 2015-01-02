@@ -28,7 +28,7 @@ import java.net.URL;
 import java.util.Set;
 
 
-public class CliObjectFactory extends CommonObjectFactory {
+public class CliObjectFactory {
 
 
     public ImmutableParameters newImmutableParameters(final File imageFile,

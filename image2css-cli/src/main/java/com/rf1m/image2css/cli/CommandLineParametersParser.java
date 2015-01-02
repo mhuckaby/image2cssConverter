@@ -20,6 +20,8 @@ package com.rf1m.image2css.cli;
 
 import com.rf1m.image2css.domain.SupportedImageType;
 import com.rf1m.image2css.exception.Error;
+import com.rf1m.image2css.exception.Image2CssException;
+import com.rf1m.image2css.exception.Image2CssValidationException;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -30,6 +32,7 @@ import org.apache.commons.cli.ParseException;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -132,9 +135,7 @@ public class CommandLineParametersParser {
         }
 
         final String filename = optionValues[0];
-        final File file = this.objectFactory.newFile(filename);
-
-        return file;
+        return new File(filename);
     }
 
     protected URL extractURLFromOption(final CommandLine commandLine, final String option) {
@@ -146,7 +147,7 @@ public class CommandLineParametersParser {
             try {
                 return new URL(urlValue);
             }catch(final MalformedURLException e) {
-                throw this.objectFactory.newImage2CssException(e, Error.errorParsingUrlParameter);
+                throw new Image2CssException(e, Error.errorParsingUrlParameter);
             }
         }
     }
@@ -164,7 +165,7 @@ public class CommandLineParametersParser {
     }
 
     protected Set<SupportedImageType> extractImageTypesFromOption(final CommandLine commandLine, final String option) {
-        final Set<SupportedImageType> result = this.objectFactory.newMutableSet();
+        final Set<SupportedImageType> result = new HashSet();
         final String[] optionValues = this.determineIncludedImageTypes(commandLine.getOptionValues(option));
 
         for(final String optionValue : optionValues) {
@@ -179,7 +180,7 @@ public class CommandLineParametersParser {
         try {
             return SupportedImageType.valueOf(supportedImageTypeArg.toLowerCase());
         }catch(final IllegalArgumentException illegalArgumentException) {
-            throw this.objectFactory.newImage2CssValidationException(Error.parameterUnsupportedImageType);
+            throw new Image2CssValidationException(Error.parameterUnsupportedImageType);
         }
     }
 

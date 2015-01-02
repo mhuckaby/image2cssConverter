@@ -114,9 +114,6 @@ public class CommandLineRunnerTest {
             .when(commandLineRunner)
             .getImagesForConversion(targetImageFile, supportedImageTypes);
 
-        when(objectFactory.newMutableList())
-            .thenReturn(cssEntries);
-
         when(imageConversionService.convert(imageForConversion))
             .thenReturn(cssClass);
 
@@ -130,9 +127,6 @@ public class CommandLineRunnerTest {
 
         verify(commandLineRunner, times(1))
             .getImagesForConversion(targetImageFile, supportedImageTypes);
-
-        verify(objectFactory, times(1))
-            .newMutableList();
 
         verify(imageConversionService, times(1))
             .convert(imageForConversion);

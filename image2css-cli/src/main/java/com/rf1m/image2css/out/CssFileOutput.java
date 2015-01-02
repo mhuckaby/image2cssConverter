@@ -38,8 +38,8 @@ public class CssFileOutput extends AbstractOutput{
     @Override
     public void out(final Parameters parameters, final List<CssClass> cssClasses) throws IOException {
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            final FileWriter fileWriter = this.objectFactory.newFileWriter(parameters.getCssFile());
-            final StringBuffer stringBuffer = this.objectFactory.newStringBuffer();
+            final FileWriter fileWriter = new FileWriter(parameters.getCssFile());
+            final StringBuffer stringBuffer = new StringBuffer();
 
             for(final CssClass cssClass : cssClasses){
                 stringBuffer

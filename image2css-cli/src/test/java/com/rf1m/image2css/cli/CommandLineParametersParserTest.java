@@ -42,10 +42,8 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -222,18 +220,12 @@ public class CommandLineParametersParserTest {
         when(commandLine.getOptionValues(option))
             .thenReturn(optionValues);
 
-        when(objectFactory.newFile(optionValue))
-            .thenReturn(file);
-
         final File result = commandLineParametersParser.extractFileFromOption(commandLine, option);
 
         assertThat(result, is(file));
 
         verify(commandLine, times(1))
             .getOptionValues(option);
-
-        verify(objectFactory, times(1))
-            .newFile(optionValue);
     }
 
     @Test
@@ -251,8 +243,6 @@ public class CommandLineParametersParserTest {
         verify(commandLine, times(1))
             .getOptionValues(option);
 
-        verify(objectFactory, never())
-            .newFile(anyString());
     }
 
     @Test
@@ -263,9 +253,6 @@ public class CommandLineParametersParserTest {
         final String[] optionValues = {optionValueGif};
 
         final Set<SupportedImageType> supportedImageTypes = mock(Set.class);
-
-        when(objectFactory.newMutableSet())
-            .thenReturn(supportedImageTypes);
 
         when(commandLine.getOptionValues(option))
             .thenReturn(optionValues);
@@ -282,9 +269,6 @@ public class CommandLineParametersParserTest {
             commandLineParametersParser.extractImageTypesFromOption(commandLine, option);
 
         assertThat(result, is(supportedImageTypes));
-
-        verify(objectFactory, times(1))
-            .newMutableSet();
 
         verify(commandLineParametersParser, times(1))
             .determineIncludedImageTypes(optionValues);

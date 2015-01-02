@@ -29,6 +29,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -95,7 +97,7 @@ public class CommandLineRunner {
     }
 
     protected List<CssClass> handleRemote(final Parameters parameters) {
-        final List<CssClass> cssEntries = this.objectFactory.newMutableList();
+        final List<CssClass> cssEntries = new ArrayList(1);
         final CssClass cssClass = this.imageConversionService.convert(parameters.getURL());
 
         cssEntries.add(cssClass);
@@ -107,7 +109,7 @@ public class CommandLineRunner {
         final File targetImageFile = parameters.getImageFile();
         final Set<SupportedImageType> supportedImageTypes = parameters.getSupportedTypes();
         final File[] imageFiles = this.getImagesForConversion(targetImageFile, supportedImageTypes);
-        final List<CssClass> cssEntries = this.objectFactory.newMutableList();
+        final List<CssClass> cssEntries = new LinkedList();
 
         for(final File imageFile : imageFiles){
             final CssClass cssClass = this.imageConversionService.convert(imageFile);
