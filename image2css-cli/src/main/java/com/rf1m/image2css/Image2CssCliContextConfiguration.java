@@ -9,7 +9,7 @@ import com.rf1m.image2css.cli.Image2CssHelpFormatter;
 import com.rf1m.image2css.cli.Image2CssOption;
 import com.rf1m.image2css.cli.Image2CssOptions;
 import com.rf1m.image2css.cli.SystemWrapper;
-import com.rf1m.image2css.config.Image2CssCommonContextConfiguration;
+import com.rf1m.image2css.config.CommonContextConfiguration;
 import com.rf1m.image2css.ioc.CliObjectFactory;
 import com.rf1m.image2css.out.ConsoleOutput;
 import com.rf1m.image2css.out.CssFileOutput;
@@ -23,10 +23,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
-import static com.rf1m.image2css.config.Image2CssCommonContextConfiguration.defaultSupportedImageTypes;
+import static com.rf1m.image2css.config.CommonContextConfiguration.defaultSupportedImageTypes;
 
 @Configuration
-@Import(Image2CssCommonContextConfiguration.class)
+@Import(CommonContextConfiguration.class)
 @PropertySource(value = {"classpath:/image2css-cli.properties"})
 public class Image2CssCliContextConfiguration {
 

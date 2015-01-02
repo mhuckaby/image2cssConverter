@@ -16,7 +16,7 @@ import static java.util.Collections.unmodifiableSet
 
 @Configuration()
 @PropertySource(value = ["classpath:/image2css-cmn.properties", "classpath:/image2css-exception-messages.properties"])
-class Image2CssCommonContextConfiguration {
+class CommonContextConfiguration {
 
     public static final Set<SupportedImageType> defaultSupportedImageTypes =
         unmodifiableSet(new HashSet([gif, jpg, png]))
