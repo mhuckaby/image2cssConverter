@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2011 Matthew D Huckaby. All rights reservered.
+ * Copyright (c) 2011-2015 Matthew D Huckaby. All rights reservered.
  * ------------------------------------------------------------------------------------
  * Image2Css is licensed under Apache 2.0, please see LICENSE file.
  *
