@@ -16,17 +16,23 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.service;
+package com.rf1m.image2css.cli
 
-import com.rf1m.image2css.domain.CssClass;
+import org.apache.commons.cli.HelpFormatter
+import org.apache.commons.cli.Options
 
-import java.io.File;
-import java.net.URL;
+class Image2CssHelpFormatter extends HelpFormatter {
+    protected final String helpText
+    protected final Options options
 
-public interface ImageConversionService {
+    public Image2CssHelpFormatter(final String helpText, final Options options, final int width) {
+        this.helpText = helpText
+        this.options = options
+        this.width = width
+    }
 
-    CssClass convert(final File imageFile);
-    CssClass convert(final URL url);
-    CssClass convert(final String urlAsString);
+    public void showHelp() {
+        printHelp(this.helpText, this.options)
+    }
 
 }

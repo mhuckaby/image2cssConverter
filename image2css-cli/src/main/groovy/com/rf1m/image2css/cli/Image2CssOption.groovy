@@ -16,17 +16,25 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.service;
+package com.rf1m.image2css.cli
 
-import com.rf1m.image2css.domain.CssClass;
+import org.apache.commons.cli.Option
 
-import java.io.File;
-import java.net.URL;
+class Image2CssOption extends Option {
 
-public interface ImageConversionService {
+    public Image2CssOption(final String option, final String description, final boolean hasArg, final boolean required) {
+        super(option, hasArg, description)
+        this.required = required
+    }
 
-    CssClass convert(final File imageFile);
-    CssClass convert(final URL url);
-    CssClass convert(final String urlAsString);
+    public Image2CssOption(final String option,
+                           final String description,
+                           final boolean hasArg,
+                           final boolean required,
+                           final int argCount) {
+        this(option, description, hasArg, required)
+        this.valueSeparator = ' '
+        this.args = argCount
+    }
 
 }

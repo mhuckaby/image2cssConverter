@@ -16,17 +16,18 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.service;
+package com.rf1m.image2css.exception
 
-import com.rf1m.image2css.domain.CssClass;
 
-import java.io.File;
-import java.net.URL;
+class Image2CssException extends RuntimeException {
+    protected static final ResourceBundle resourceBundle = ResourceBundle.getBundle("image2css-exception-messages")
 
-public interface ImageConversionService {
+    Image2CssException(final Error error) {
+        super(resourceBundle.getString(error.getMessage()))
+    }
 
-    CssClass convert(final File imageFile);
-    CssClass convert(final URL url);
-    CssClass convert(final String urlAsString);
+    Image2CssException(final Throwable cause, final Error error) {
+        super(resourceBundle.getString(error.getMessage()), cause)
+    }
 
 }

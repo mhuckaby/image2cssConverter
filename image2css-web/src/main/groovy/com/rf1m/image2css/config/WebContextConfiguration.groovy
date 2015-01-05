@@ -16,17 +16,17 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.service;
+package com.rf1m.image2css.config
 
-import com.rf1m.image2css.domain.CssClass;
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
 
-import java.io.File;
-import java.net.URL;
-
-public interface ImageConversionService {
-
-    CssClass convert(final File imageFile);
-    CssClass convert(final URL url);
-    CssClass convert(final String urlAsString);
+@Configuration()
+@ComponentScan("com.rf1m.image2css.web.controller")
+@EnableWebMvc
+@Import(CommonContextConfiguration.class)
+class WebContextConfiguration {
 
 }

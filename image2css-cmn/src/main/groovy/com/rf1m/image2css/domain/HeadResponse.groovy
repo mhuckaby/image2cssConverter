@@ -16,17 +16,13 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.service;
+package com.rf1m.image2css.domain
 
-import com.rf1m.image2css.domain.CssClass;
+import groovy.transform.Immutable
 
-import java.io.File;
-import java.net.URL;
-
-public interface ImageConversionService {
-
-    CssClass convert(final File imageFile);
-    CssClass convert(final URL url);
-    CssClass convert(final String urlAsString);
+@Immutable class HeadResponse {
+    String urlFile
+    String contentType
+    Integer contentLength
 
 }

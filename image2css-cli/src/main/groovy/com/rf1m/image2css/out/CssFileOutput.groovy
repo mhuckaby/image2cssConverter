@@ -16,17 +16,31 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.service;
+package com.rf1m.image2css.out
 
-import com.rf1m.image2css.domain.CssClass;
+import com.rf1m.image2css.cli.Parameters
+import com.rf1m.image2css.domain.CssClass
+import com.rf1m.image2css.exception.Image2CssException
 
-import java.io.File;
-import java.net.URL;
+class CssFileOutput extends AbstractOutput{
+    protected static final String NL = "\n"
 
-public interface ImageConversionService {
+    @Override
+    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
+        if(isValidParametersAndClasses(parameters, cssClasses)){
+            StringBuffer stringBuffer = new StringBuffer()
+            for(CssClass cssClass : cssClasses){
+                stringBuffer.append(cssClass.body).append(NL)
+			}
+            try {
+                FileWriter fileWriter = new FileWriter(parameters.cssFile)
+                fileWriter.write(stringBuffer.toString())
+                fileWriter.close()
+            }catch(IOException e) {
+                throw new Image2CssException(e, Error.errorWritingFile)
+            }
 
-    CssClass convert(final File imageFile);
-    CssClass convert(final URL url);
-    CssClass convert(final String urlAsString);
+		}
+    }
 
 }
