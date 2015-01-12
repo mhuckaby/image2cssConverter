@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <name>image2css-web</name>
     <packaging>war</packaging>
-    <version>1.2.0</version>
+    <version>1.2.1-SNAPSHOT</version>
 
     <parent>
         <groupId>com.rf1m</groupId>
         <artifactId>image2css</artifactId>
-        <version>1.2.0</version>
+        <version>1.2.1-SNAPSHOT</version>
     </parent>
 
     <build>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.rf1m</groupId>
             <artifactId>image2css-cmn</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1-SNAPSHOT</version>
         </dependency>
 
         <!-- Spring -->
