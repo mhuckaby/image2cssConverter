@@ -1,8 +1,7 @@
-# Image2CSS generates data URI for use in CSS
-[Originally hosted at Google Code](http://code.google.com/p/image2css)
+## Image2CSS generates data URI for use in CSS
 
 
-## Copyright (c) 2011 Matthew D Huckaby. All rights reserved.
+### Copyright (c) 2011-2015 Matthew D Huckaby. All rights reserved.
 Image2CSS is licensed under Apache 2.0, please see LICENSE file.
 
 Use of this software indicates you agree to the following as well : 
@@ -17,7 +16,7 @@ THE SOFTWARE.
 This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
 
 
-## Build using Maven
+### Build using Maven
 
 Parent module, "image2css":
 
@@ -32,7 +31,7 @@ Sub-module, "image2css-cli":
     mvn clean install assembly:single
 
 
-## Features
+### Features
 1. Convert a single local or remote file or an entire local directory of images to data URI CSS
 2. Generate CSS file
 3. Generate HTML demonstrating generated CSS classes
@@ -41,7 +40,7 @@ Sub-module, "image2css-cli":
 6. Simple web interface
 
 
-## Example command line usage
+### Example command line usage
 
 Display the help screen:
 
