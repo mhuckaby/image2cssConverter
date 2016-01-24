@@ -1,0 +1,24 @@
+description = 'image2css-cli'
+
+apply plugin: 'application'
+
+mainClassName = 'com.rf1m.image2css.cli.CommandLineRunner'
+
+dependencies {
+    def appDependencies = rootProject.ext.appDependencies
+    def appTestDependencies = rootProject.ext.appTestDependencies
+
+    compile project(':image2css-cmn')
+
+    compile appDependencies.apacheCommonsLang
+    compile appDependencies.commonCli
+    compile appDependencies.groovy
+    compile appDependencies.slf4j
+    compile appDependencies.slf4jLog4j
+    compile appDependencies.springContext
+
+    testCompile appTestDependencies.hamcrest
+    testCompile appTestDependencies.junit
+    testCompile appTestDependencies.mockito
+    testCompile appTestDependencies.spock
+}

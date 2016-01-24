@@ -1,0 +1,50 @@
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+ext {
+    // Application
+    apacheCommonsLangVersion = "3.1"
+    commonCliVersion = "1.2"
+    commonCodecVersion = "1.7"
+    commonIoVersion = "2.4"
+    googleGuavaVersion = "18.0"
+    groovyVersion = "2.3.2"
+    jacksonVersion = "2.4.1"
+    orgSpringFrameworkVersion = "4.1.3.RELEASE"
+    servletVersion = "3.0.1"
+    slf4jVersion = "1.7.2"
+
+    // Testing
+    hamcrestVersion = "1.3"
+    junitVersion = "4.11"
+    mockitoVersion = "1.9.5"
+    spockVersion = "0.7-groovy-2.0"
+
+    appDependencies = [
+        apacheCommonsLang: "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}",
+        commonCli: "commons-cli:commons-cli:${commonCliVersion}",
+        commonCodec: "commons-codec:commons-codec:${commonCodecVersion}",
+        commonIo: "commons-io:commons-io:${commonIoVersion}",
+        googleGuava: "com.google.guava:guava:${googleGuavaVersion}",
+        groovy: "org.codehaus.groovy:groovy-all:${groovyVersion}",
+        jackson: "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}",
+        servlet: "javax.servlet:javax.servlet-api:${servletVersion}",
+        slf4j: "org.slf4j:slf4j-api:${slf4jVersion}",
+        slf4jLog4j: "org.slf4j:slf4j-log4j12:${slf4jVersion}",
+        springCore: "org.springframework:spring-core:${orgSpringFrameworkVersion}",
+        springContext: "org.springframework:spring-context:${orgSpringFrameworkVersion}",
+        springContextSupport: "org.springframework:spring-context-support:${orgSpringFrameworkVersion}",
+        springWeb: "org.springframework:spring-web:${orgSpringFrameworkVersion}",
+        springWebMvc: "org.springframework:spring-webmvc:${orgSpringFrameworkVersion}"
+    ]
+
+    appTestDependencies = [
+        hamcrest: "org.hamcrest:hamcrest-core:${hamcrestVersion}",
+        junit: "junit:junit-dep:${junitVersion}",
+        mockito: "org.mockito:mockito-all:${mockitoVersion}",
+        spock: "org.spockframework:spock-core:${spockVersion}",
+    ]
+}

@@ -1,0 +1,18 @@
+description = 'image2css-cmn'
+
+dependencies {
+    def appDependencies = rootProject.ext.appDependencies
+    def appTestDependencies = rootProject.ext.appTestDependencies
+
+    compile appDependencies.apacheCommonsLang
+    compile appDependencies.commonIo
+    compile appDependencies.commonCli
+    compile appDependencies.commonCodec
+    compile appDependencies.googleGuava
+    compile appDependencies.groovy
+    compile appDependencies.slf4j
+    compile appDependencies.slf4jLog4j
+    compile appDependencies.springContext
+
+    testCompile appTestDependencies.spock
+}

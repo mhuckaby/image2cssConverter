@@ -1,0 +1,4 @@
+rootProject.name = 'image2css'
+include ':image2css-cli'
+include ':image2css-cmn'
+include ':image2css-web'

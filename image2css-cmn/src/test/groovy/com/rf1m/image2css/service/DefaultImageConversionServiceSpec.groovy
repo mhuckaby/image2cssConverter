@@ -17,15 +17,6 @@ class DefaultImageConversionServiceSpec extends Specification {
         defaultImageConversionService = ctx.getBean(DefaultImageConversionService.class)
     }
 
-    def "should throw validation exception if file parameter is null"() {
-        setup:
-            File file = null
-        when:
-            defaultImageConversionService.convert(file)
-        then:
-            thrown(Image2CssValidationException.class)
-    }
-
     def "should throw validation exception if file parameter references file that does not exist"() {
         setup:
             File file = new File("/tmp/${System.currentTimeMillis()}")

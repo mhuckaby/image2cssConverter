@@ -16,73 +16,69 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cli;
+package com.rf1m.image2css.cli
 
-import com.rf1m.image2css.domain.SupportedImageType;
+import com.rf1m.image2css.domain.SupportedImageType
 
-import java.io.File;
-import java.net.URL;
-import java.util.Set;
-
-public interface Parameters{
+interface Parameters{
 
 	/**
 	 * Directory of image-files or single image file to be converted to a single CSS class file.
 	 * @return
 	 */
-	File getImageFile();
+	File getImageFile()
 	
 	/**
 	 * CSS file where the image data will be written as CSS classes.
 	 * @return
 	 */
-	File getCssFile();
+	File getCssFile()
 
 	/**
 	 * HTML file where the generated CSS classes are demonstrated.
 	 * @return
 	 */
-	File getHtmlFile();
+	File getHtmlFile()
 
 	/**
 	 * Image types that will be included in filter when image-file is a directory.
 	 * @return
 	 */
-	Set<SupportedImageType> getSupportedTypes();
+	Set<SupportedImageType> getSupportedTypes()
 
     /**
      * Valid if css file or console is specified.
      * @return
      */
-    boolean isOutputValid();
+    boolean isOutputValid()
 
     /**
      * True, if css file is supplied.
      * @return
      */
-    boolean isCssFileOutputDesired();
+    boolean isCssFileOutputDesired()
 
     /**
      * True, if html file is supplied.
      * @return
      */
-    boolean isHtmlFileOutputDesired();
+    boolean isHtmlFileOutputDesired()
 
     /**
      * True, if output to console is supplied.
      * @return boolean,
      */
-    boolean isOutputToConsoleDesired();
+    boolean isOutputToConsoleDesired()
 
     /**
      * @return True, if the resource to be converted is located on local file system, false if the resource is remote.
      */
-    boolean isLocalResource();
+    boolean isLocalResource()
 
     /**
      * Holds url for remote resource.
      * @return
      */
-    URL getURL();
+    URL getURL()
 
 }
