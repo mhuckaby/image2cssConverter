@@ -27,25 +27,22 @@ import static java.lang.String.format
 class ExceptionHandler {
     protected final Image2CssHelpFormatter image2CssHelpFormatter
 
-    protected final String issueUrl
     protected final String abnormalExitTemplate
     protected final String exceptionMessageTemplate
 
     protected PrintStream defaultOut = System.out
 
     public ExceptionHandler(final Image2CssHelpFormatter image2CssHelpFormatter,
-                            final String issueUrl,
                             final String abnormalExitTemplate,
                             final String exceptionMessageTemplate) {
 
         this.image2CssHelpFormatter = image2CssHelpFormatter
-        this.issueUrl = issueUrl
         this.abnormalExitTemplate = abnormalExitTemplate
         this.exceptionMessageTemplate = exceptionMessageTemplate
     }
 
     protected void handleException(final Exception e) {
-        defaultOut.println(format(abnormalExitTemplate, e.message, issueUrl))
+        defaultOut.println(format(abnormalExitTemplate, e.message))
         e.printStackTrace()
     }
 

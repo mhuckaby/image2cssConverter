@@ -1,3 +1,4 @@
+import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
     repositories {
@@ -7,6 +8,12 @@ buildscript {
 
 plugins {
     id 'net.researchgate.release' version '2.2.3'
+}
+
+ext {
+    tokens = [:]
+    tokens["version"] = version
+    tokens["issueUrl"] = "https://github.com/mhuckaby/image2cssConverter/issues"
 }
 
 apply from: 'dependencies.gradle'
@@ -26,6 +33,14 @@ allprojects {
     }
 
     group = GROUP
+
+    processResources {
+        filesMatching("**/*.properties") {
+            filter(ReplaceTokens,
+                    beginToken: "{", endToken: "}",
+                    tokens: tokens)
+        }
+    }
 }
 
 subprojects {

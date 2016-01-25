@@ -117,8 +117,7 @@ class CliContextConfiguration {
 
     @Bean
     public ExceptionHandler exceptionHandler() {
-        return new ExceptionHandler(helpFormatter(), environment.getProperty("issue.url"),
-                environment.getProperty("message.abnormal.exit"), environment.getProperty("format.exception"))
+        return new ExceptionHandler(helpFormatter(), environment.getProperty("message.abnormal.exit"), environment.getProperty("format.exception"))
     }
 
     // TODO verify about displays correctly
