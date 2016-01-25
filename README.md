@@ -1,7 +1,7 @@
 ## Image2CSS generates data URI for use in CSS
 
 
-### Copyright (c) 2011-2015 Matthew D Huckaby. All rights reserved.
+### Copyright (c) 2011-2016 Matthew D Huckaby. All rights reserved.
 Image2CSS is licensed under Apache 2.0, please see LICENSE file.
 
 Use of this software indicates you agree to the following as well : 
