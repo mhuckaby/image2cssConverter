@@ -16,19 +16,19 @@ THE SOFTWARE.
 This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
 
 
-### Build using Maven
+### Build using Gradle
 
-Parent module, "image2css":
+From root module, build the distribution:
 
-    mvn clean install
+    ./gradlew clean installDist
 
-Sub-module, "image2css-web":
+The installed distribution found in the image2css-cli module includes scripts for *nix and Windows: 
 
-    mvn jetty:run
-
-Sub-module, "image2css-cli":
-
-    mvn clean install assembly:single
+    ./image2css-cli/build/install/image2css-cli/bin/image2css-cli
+    
+    or 
+    
+    ./image2css-cli/build/install/image2css-cli/bin/image2css-cli.bat
 
 
 ### Features
@@ -37,66 +37,54 @@ Sub-module, "image2css-cli":
 3. Generate HTML demonstrating generated CSS classes
 4. Output data URI to console
 5. Shell and bat scripts included
-6. Simple web interface
 
 
 ### Example command line usage
 
 Display the help screen:
 
-	Linux
-	./image2css.sh
+	./image2css-cli/build/install/image2css-cli/bin/image2css-cli
 	
-	Windows
-	image2css.bat
-
 Convert remote PNG-image to data URI and output to CSS and HTML files:
 
-	Linux
-	./image2css.sh -f http://upload.wikimedia.org/wikipedia/commons/0/0f/Spotorno-IMG_1772.JPG -o result.css -h result.html
+    ./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
+    -f https://upload.wikimedia.org/wikipedia/commons/0/0f/Spotorno-IMG_1772.JPG \
+    -o result.css \
+    -h result.html
 	
-	Windows
-	image2css.bat -f http://upload.wikimedia.org/wikipedia/commons/0/0f/Spotorno-IMG_1772.JPG -o result.css -h result.html
-
 Convert PNG-image to data URI and output to CSS and HTML files:
 
-	Linux
-	./image2css.sh -f image.png -o result.css -h result.html
-
-	Windows
-	image2css.bat -f image.png -o result.css -h result.html
+    ./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
+    -f image.png \
+    -o result.css \
+    -h result.html
 
 Convert PNG-image to data URI and output to console:
 
-	Linux
-	./image2css.sh -f image.png -syso
-	
-	Windows
-	image2css.bat -f image.png -syso
+	./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
+	-f image.png \
+	-syso
 	
 Convert PNG-images in directory to data URI and output to CSS and HTML files:
 
-	Linux
-	./image2css.sh -f ./ -i png -o result.css -h result.html
-	
-	Windows
-	image2css.bat -f / -i png -o result.css -h result.html
+	./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
+	-f ./ \
+	-i png \
+	-o result.css \
+	-h result.html
 	
 Convert GIF & JPG images in directory to data URI and output to CSS and HTML files:
 
-	Linux
-	./image2css.sh -f ./ -i gif jpg -o result.css -h result.html
+	./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
+	-f ./ \
+	-i gif jpg \
+	-o result.css \
+	-h result.html
 	
-	Windows
-	image2css.bat -f / -i gif jpg -o result.css -h result.html
-
 Convert GIF & JPG images in directory to data URI and output to CSS and HTML files:
 	
-	Linux
-	./image2css.sh -f ./ -i gif jpg -o result.css -h result.html
-	
-	Windows
-	image2css.bat -f / -i gif jpg -o result.css -h result.html
-
-
-
+	./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
+	-f ./ \
+	-i gif jpg \
+	-o result.css \
+	-h result.html
