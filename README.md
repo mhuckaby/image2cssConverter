@@ -55,20 +55,20 @@ Convert remote PNG-image to data URI and output to CSS and HTML files:
 Convert PNG-image to data URI and output to CSS and HTML files:
 
     ./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
-    -f image.png \
+    -f ./image2css-cmn/src/test/resources/test.png \
     -o result.css \
     -h result.html
 
 Convert PNG-image to data URI and output to console:
 
 	./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
-	-f image.png \
+	-f ./image2css-cmn/src/test/resources/test.png \
 	-syso
 	
 Convert PNG-images in directory to data URI and output to CSS and HTML files:
 
 	./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
-	-f ./ \
+	-f ./image2css-cmn/src/test/resources/ \
 	-i png \
 	-o result.css \
 	-h result.html
@@ -76,7 +76,7 @@ Convert PNG-images in directory to data URI and output to CSS and HTML files:
 Convert GIF & JPG images in directory to data URI and output to CSS and HTML files:
 
 	./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
-	-f ./ \
+	-f ./image2css-cmn/src/test/resources/ \
 	-i gif jpg \
 	-o result.css \
 	-h result.html
@@ -84,7 +84,7 @@ Convert GIF & JPG images in directory to data URI and output to CSS and HTML fil
 Convert GIF & JPG images in directory to data URI and output to CSS and HTML files:
 	
 	./image2css-cli/build/install/image2css-cli/bin/image2css-cli \
-	-f ./ \
+	-f ./image2css-cmn/src/test/resources/ \
 	-i gif jpg \
 	-o result.css \
 	-h result.html
