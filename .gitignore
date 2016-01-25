@@ -7,3 +7,5 @@ image2css-cli/image2css.bat
 image2css-cli/image2css.sh
 */build
 .gradle
+result.css
+result.html
