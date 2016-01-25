@@ -1,6 +1,7 @@
 description = 'image2css-cli'
 
 apply plugin: 'application'
+apply plugin: 'distribution'
 
 mainClassName = 'com.rf1m.image2css.cli.CommandLineRunner'
 
