@@ -6,7 +6,6 @@ dependencies {
 
     compile appDependencies.apacheCommonsLang
     compile appDependencies.commonIo
-    compile appDependencies.commonCli
     compile appDependencies.commonCodec
     compile appDependencies.googleGuava
     compile appDependencies.groovy

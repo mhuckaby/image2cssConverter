@@ -7,7 +7,7 @@ allprojects {
 ext {
     // Application
     apacheCommonsLangVersion = "3.1"
-    commonCliVersion = "1.2"
+    args4jVersion = "2.32"
     commonCodecVersion = "1.7"
     commonIoVersion = "2.4"
     googleGuavaVersion = "18.0"
@@ -23,7 +23,7 @@ ext {
 
     appDependencies = [
         apacheCommonsLang: "org.apache.commons:commons-lang3:${apacheCommonsLangVersion}",
-        commonCli: "commons-cli:commons-cli:${commonCliVersion}",
+        args4j: "args4j:args4j:${args4jVersion}",
         commonCodec: "commons-codec:commons-codec:${commonCodecVersion}",
         commonIo: "commons-io:commons-io:${commonIoVersion}",
         googleGuava: "com.google.guava:guava:${googleGuavaVersion}",

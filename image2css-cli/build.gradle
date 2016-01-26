@@ -12,7 +12,7 @@ dependencies {
     compile project(':image2css-cmn')
 
     compile appDependencies.apacheCommonsLang
-    compile appDependencies.commonCli
+    compile appDependencies.args4j
     compile appDependencies.groovy
     compile appDependencies.slf4j
     compile appDependencies.slf4jLog4j
