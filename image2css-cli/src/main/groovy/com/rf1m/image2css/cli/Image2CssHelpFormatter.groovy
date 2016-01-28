@@ -18,21 +18,22 @@
  */
 package com.rf1m.image2css.cli
 
-import org.apache.commons.cli.HelpFormatter
-import org.apache.commons.cli.Options
+//import org.apache.commons.cli.HelpFormatter
+//import org.apache.commons.cli.Options
 
-class Image2CssHelpFormatter extends HelpFormatter {
-    protected final String helpText
-    protected final Options options
-
-    public Image2CssHelpFormatter(final String helpText, final Options options, final int width) {
-        this.helpText = helpText
-        this.options = options
-        this.width = width
-    }
-
-    public void showHelp() {
-        printHelp(this.helpText, this.options)
-    }
+//class Image2CssHelpFormatter extends HelpFormatter {
+class Image2CssHelpFormatter {
+//    protected final String helpText
+//    protected final Options options
+//
+//    public Image2CssHelpFormatter(final String helpText, final Options options, final int width) {
+//        this.helpText = helpText
+//        this.options = options
+//        this.width = width
+//    }
+//
+//    public void showHelp() {
+//        printHelp(this.helpText, this.options)
+//    }
 
 }

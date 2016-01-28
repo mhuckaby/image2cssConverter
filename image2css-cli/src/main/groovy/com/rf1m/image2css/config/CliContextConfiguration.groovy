@@ -30,7 +30,7 @@ import com.rf1m.image2css.out.ConsoleOutput
 import com.rf1m.image2css.out.CssFileOutput
 import com.rf1m.image2css.out.HtmlFileOutput
 import com.rf1m.image2css.service.DefaultImageConversionService
-import org.apache.commons.cli.BasicParser
+//import org.apache.commons.cli.BasicParser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -51,10 +51,10 @@ class CliContextConfiguration {
     @Autowired
     DefaultImageConversionService defaultImageConversionService
 
-    @Bean
-    public BasicParser basicParser() {
-        return new BasicParser()
-    }
+//    @Bean
+//    public BasicParser basicParser() {
+//        return new BasicParser()
+//    }
 
     @Bean
     public CommandLineParametersParser commandLineParametersParser() {

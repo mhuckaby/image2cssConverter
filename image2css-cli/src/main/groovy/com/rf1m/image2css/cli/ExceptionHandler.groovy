@@ -19,7 +19,7 @@
 package com.rf1m.image2css.cli
 
 import com.rf1m.image2css.exception.Image2CssException
-import org.apache.commons.cli.ParseException
+//import org.apache.commons.cli.ParseException
 
 import static java.lang.String.format
 
@@ -50,9 +50,9 @@ class ExceptionHandler {
         defaultOut.println(format(exceptionMessageTemplate, image2CssException.message))
     }
 
-    protected void handleParseException(final ParseException parseException) {
-        defaultOut.println(format(exceptionMessageTemplate, parseException.message))
-        image2CssHelpFormatter.showHelp()
-    }
+//    protected void handleParseException(final ParseException parseException) {
+//        defaultOut.println(format(exceptionMessageTemplate, parseException.message))
+//        image2CssHelpFormatter.showHelp()
+//    }
 
 }

@@ -18,9 +18,10 @@
  */
 package com.rf1m.image2css.cli
 
-import org.apache.commons.cli.Option
+//import org.apache.commons.cli.Option
 
-class Image2CssOption extends Option {
+//class Image2CssOption extends Option {
+class Image2CssOption {
 
     public Image2CssOption(final String option, final String description, final boolean hasArg, final boolean required) {
         super(option, hasArg, description)
