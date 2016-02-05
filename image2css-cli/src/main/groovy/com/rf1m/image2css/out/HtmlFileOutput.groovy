@@ -18,39 +18,32 @@
  */
 package com.rf1m.image2css.out
 
-import com.rf1m.image2css.cli.Parameters
+import com.rf1m.image2css.cli.CommandLineArgument
 import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.exception.Image2CssException
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 
 import static java.lang.String.format
 
-class HtmlFileOutput extends AbstractOutput {
+@Component("htmlOutput")
+class HtmlFileOutput extends BaseFileOutput implements Output {
+    @Value('${template.html.css.entry}')
+    String htmlCssEntryTemplate
 
-    protected final String htmlCssEntryTemplate
-    protected final String htmlIndexTemplate
-
-    public HtmlFileOutput(final String htmlCssEntryTemplate, final String htmlIndexTemplate) {
-        this.htmlCssEntryTemplate = htmlCssEntryTemplate
-        this.htmlIndexTemplate = htmlIndexTemplate
-    }
+    @Value('${template.html.index}')
+    String htmlIndexTemplate
 
     @Override
-    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
-        if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            StringBuffer stringBuffer = new StringBuffer()
+    public void out(final CommandLineArgument commandLineArgument, final List<CssClass> cssClasses) throws Image2CssException {
+        StringBuffer stringBuffer = new StringBuffer()
 
-            for(CssClass cssClass : cssClasses){
-                stringBuffer.append(format(htmlCssEntryTemplate, cssClass.name))
-            }
+        for(CssClass cssClass : cssClasses){
+            stringBuffer.append(format(htmlCssEntryTemplate, cssClass.name))
+        }
 
-            try {
-                FileWriter fileWriter = new FileWriter(parameters.htmlFile)
-                fileWriter.write(format(htmlIndexTemplate, parameters.cssFile.name, stringBuffer.toString()))
-                fileWriter.close()
-            }catch(IOException e) {
-                throw new Image2CssException(e, Error.errorWritingFile)
-            }
-		}
+        String html = format(htmlIndexTemplate, commandLineArgument.cssFile, stringBuffer.toString())
+        write(commandLineArgument.htmlFile, html)
     }
 
 }

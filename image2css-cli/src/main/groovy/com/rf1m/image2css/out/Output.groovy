@@ -16,24 +16,12 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cli
+package com.rf1m.image2css.out
 
-//import org.apache.commons.cli.HelpFormatter
-//import org.apache.commons.cli.Options
+import com.rf1m.image2css.cli.CommandLineArgument
+import com.rf1m.image2css.domain.CssClass
+import com.rf1m.image2css.exception.Image2CssException
 
-//class Image2CssHelpFormatter extends HelpFormatter {
-class Image2CssHelpFormatter {
-//    protected final String helpText
-//    protected final Options options
-//
-//    public Image2CssHelpFormatter(final String helpText, final Options options, final int width) {
-//        this.helpText = helpText
-//        this.options = options
-//        this.width = width
-//    }
-//
-//    public void showHelp() {
-//        printHelp(this.helpText, this.options)
-//    }
-
+interface Output {
+    void out(final CommandLineArgument commandLineArgument, final List<CssClass> cssClasses) throws Image2CssException
 }

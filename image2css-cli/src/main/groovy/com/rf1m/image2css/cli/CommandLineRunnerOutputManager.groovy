@@ -20,45 +20,47 @@ package com.rf1m.image2css.cli
 
 import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.out.ConsoleOutput
-import com.rf1m.image2css.io.Output
+import com.rf1m.image2css.out.Output
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 
 
+@Component
 class CommandLineRunnerOutputManager {
-    protected final ConsoleOutput consoleOutput
 
-    protected final Output cssOutput
-    protected final Output htmlOutput
+    @Autowired
+    private ConsoleOutput consoleOutput
 
-    protected final String aboutProject
+    @Autowired
+    @Qualifier("cssOutput")
+    private Output cssOutput
+
+    @Autowired
+    @Qualifier("htmlOutput")
+    private Output htmlOutput
+
+    @Value('${about.project}')
+    private String aboutProject
 
     protected PrintStream defaultOut = System.out
 
-    public CommandLineRunnerOutputManager(final ConsoleOutput consoleOutput,
-                                          final Output cssOutput,
-                                          final Output htmlOutput,
-                                          final String aboutProject) {
-
-        this.consoleOutput = consoleOutput
-        this.cssOutput = cssOutput
-        this.htmlOutput = htmlOutput
-        this.aboutProject = aboutProject
-    }
-
-    protected void doOutput(final Parameters parameters, final List<CssClass> cssClasses) throws IOException {
-        if(parameters.outputToConsoleDesired) {
-            consoleOutput.out(parameters, cssClasses)
+    protected void doOutput(final CommandLineArgument commandLineArgument, final List<CssClass> cssClasses) throws IOException {
+        if(!cssClasses) {
+            return
         }
 
-        if(parameters.cssFileOutputDesired) {
-            cssOutput.out(parameters, cssClasses)
+        if(commandLineArgument.syso) {
+            consoleOutput.out(commandLineArgument, cssClasses)
         }
 
-        if(parameters.htmlFileOutputDesired) {
-            htmlOutput.out(parameters, cssClasses)
+        if(commandLineArgument.cssFile) {
+            cssOutput.out(commandLineArgument, cssClasses)
         }
 
-        if(parameters.outputToConsoleDesired) {
-            consoleOutput.generateReportOutput(parameters, cssClasses)
+        if(commandLineArgument.htmlFile) {
+            htmlOutput.out(commandLineArgument, cssClasses)
         }
     }
 

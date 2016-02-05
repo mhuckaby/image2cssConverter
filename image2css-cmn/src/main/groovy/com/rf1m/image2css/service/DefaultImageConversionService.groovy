@@ -23,6 +23,9 @@ import com.rf1m.image2css.domain.HeadResponse
 import com.rf1m.image2css.domain.SupportedImageType
 import com.rf1m.image2css.exception.Image2CssException
 import com.rf1m.image2css.exception.Image2CssValidationException
+import com.rf1m.image2css.io.ConversionFilenameFilter
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
 
 import javax.net.ssl.HttpsURLConnection
 import javax.swing.ImageIcon
@@ -31,14 +34,14 @@ import static com.google.common.net.HttpHeaders.CONTENT_LENGTH
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.rf1m.image2css.domain.SupportedImageType.byContentType
 import static com.rf1m.image2css.domain.SupportedImageType.isUnsupportedImageType
-import static com.rf1m.image2css.exception.Error.*
+import static com.rf1m.image2css.exception.ServiceError.*
 import static java.lang.String.format
 import static org.apache.commons.codec.binary.Base64.encodeBase64
 import static org.apache.commons.io.FilenameUtils.getExtension
 
+@Service
 class DefaultImageConversionService implements ImageConversionService {
     protected static final String UNDERSCORE = "_"
-    protected static final String http = "http://"
     protected static final String NL = "\n"
     protected static final String EMPTY = ""
     protected static final String GET = "GET"
@@ -48,18 +51,31 @@ class DefaultImageConversionService implements ImageConversionService {
     protected static final String USER_AGENT = "User-Agent"
     protected static final String JAVA_CLIENT = "java-client"
 
+    @Value('${template.css.class.def}')
     protected final String cssClassTemplate
 
-    public DefaultImageConversionService(final String cssClassTemplate) {
-        this.cssClassTemplate = cssClassTemplate
-    }
 
     @Override
-    public CssClass convert(final File imageFile) {
-        if(!imageFile || !imageFile.exists() || imageFile.directory) {
+    public List<CssClass> convert(final Collection<SupportedImageType> include, final File imageFile) {
+        List<CssClass> result = []
+        if(!imageFile || !imageFile.exists()) {
             throw new Image2CssValidationException(parameterFileMustBeNonNullAndNonDirectory)
         }
 
+        if(imageFile.directory) {
+            ConversionFilenameFilter conversionFilenameFilter = new ConversionFilenameFilter(include ? include : SupportedImageType.values())
+            List<File> files = imageFile.listFiles(conversionFilenameFilter) as List
+            result.addAll(files.collect({
+                processImageFile(it)
+            }))
+        }else {
+            result.add(processImageFile(imageFile))
+        }
+
+        result
+    }
+
+    protected CssClass processImageFile(final File imageFile) {
         String extension = getExtension(imageFile.name)
 
         if(isUnsupportedImageType(extension)){

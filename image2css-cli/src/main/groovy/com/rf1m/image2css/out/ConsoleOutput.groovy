@@ -18,59 +18,26 @@
  */
 package com.rf1m.image2css.out
 
-import com.rf1m.image2css.cli.Parameters
+import com.rf1m.image2css.cli.CommandLineArgument
 import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.exception.Image2CssException
-import com.rf1m.image2css.io.ReportOutput
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 
-import static java.lang.String.format
+@Component
+class ConsoleOutput implements Output {
+    protected final PrintStream defaultOut = System.out
 
-class ConsoleOutput extends AbstractOutput implements ReportOutput{
-    protected final String reportCssTotalTemplate
-    protected final String reportCssFileTemplate
-    protected final String reportHtmlFileTemplate
-
-    protected PrintStream defaultOut = System.out
-
-    public ConsoleOutput(final String reportCssTotalTemplate,
-                         final String reportCssFileTemplate,
-                         final String reportHtmlFileTemplate) {
-
-        this.reportCssTotalTemplate = reportCssTotalTemplate
-        this.reportCssFileTemplate = reportCssFileTemplate
-        this.reportHtmlFileTemplate = reportHtmlFileTemplate
-    }
+    @Value('${message.generated.entry.count}')
+    String reportCssTotalTemplate
 
     @Override
-    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
-        if(isValidParametersAndClassesWithConsoleOutput(parameters, cssClasses)){
-			for(CssClass cssClass : cssClasses){
-                defaultOut.println(cssClass.body)
-			}
-		}
-    }
+    public void out(final CommandLineArgument commandLineArgument, final List<CssClass> cssClasses) throws Image2CssException {
+        defaultOut.println(String.format(reportCssTotalTemplate, cssClasses.size()))
 
-    @Override
-    public void generateReportOutput(final Parameters parameters, final List<CssClass> cssClasses){
-        if(super.isValidParametersAndClasses(parameters, cssClasses)){
-            if(!parameters.outputToConsoleDesired) {
-                this.println(format(reportCssTotalTemplate, cssClasses.size()))
-            }
-
-            if(null != parameters.getCssFile()){
-                defaultOut.println(format(reportCssFileTemplate, parameters.cssFile.name))
-            }
-
-            if(null != parameters.getHtmlFile()){
-                defaultOut.println(format(reportHtmlFileTemplate, parameters.htmlFile.name))
-            }
+        for(CssClass cssClass : cssClasses){
+            defaultOut.println(cssClass.body)
         }
-	}
-
-    protected boolean isValidParametersAndClassesWithConsoleOutput(final Parameters parameters,
-                                                                   final List<CssClass> cssClasses) {
-
-        return super.isValidParametersAndClasses(parameters, cssClasses) && parameters.outputToConsoleDesired
     }
 
 }

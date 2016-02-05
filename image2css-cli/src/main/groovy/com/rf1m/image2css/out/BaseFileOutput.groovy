@@ -16,16 +16,23 @@
  * This product includes software developed by The Apache Software Foundation (http://www.apache.org/).
  * ------------------------------------------------------------------------------------
  */
-package com.rf1m.image2css.cli
+package com.rf1m.image2css.out
 
-//import org.apache.commons.cli.Options
+import com.rf1m.image2css.exception.Image2CssException
+import com.rf1m.image2css.exception.ServiceError
 
-//class Image2CssOptions extends Options {
-class Image2CssOptions {
+abstract class BaseFileOutput {
 
-    public Image2CssOptions(final Image2CssOption ... image2CssOption) {
-        for(Image2CssOption option : image2CssOption) {
-            this.addOption(option)
+    void write(String filename, String content) {
+        File file = new File(filename)
+
+        try {
+            file.withWriter { w ->
+                w.write(content)
+            }
+        }catch(Exception e) {
+            throw new Image2CssException(e, ServiceError.errorWritingFile)
         }
     }
+
 }

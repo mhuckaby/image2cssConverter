@@ -22,11 +22,11 @@ package com.rf1m.image2css.exception
 class Image2CssException extends RuntimeException {
     protected static final ResourceBundle resourceBundle = ResourceBundle.getBundle("image2css-exception-messages")
 
-    Image2CssException(final Error error) {
+    Image2CssException(final ServiceError error) {
         super(resourceBundle.getString(error.getMessage()))
     }
 
-    Image2CssException(final Throwable cause, final Error error) {
+    Image2CssException(final Throwable cause, final ServiceError error) {
         super(resourceBundle.getString(error.getMessage()), cause)
     }
 

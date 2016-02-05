@@ -1,2 +1,0 @@
-#java -cp target/${project.artifact}-${project.version}-jar-with-dependencies.jar -jar target/${project.artifact}-${project.version}-jar-with-dependencies.jar $@
-java -cp target/image2css-cli-${project.version}-jar-with-dependencies.jar -jar target/image2css-cli-${project.version}-jar-with-dependencies.jar $@

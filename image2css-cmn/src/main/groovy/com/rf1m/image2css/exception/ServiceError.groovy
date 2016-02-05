@@ -18,7 +18,7 @@
  */
 package com.rf1m.image2css.exception
 
-enum Error {
+enum ServiceError {
     parametersObjectCannotBeNull("parameters.object.cannot.be.null"),
     parametersObjectMustHaveValidImageInputFileOrDir("parameters.object.must.have.valid.image.input.file.or.dir"),
     parametersObjectOutputInvalid("parameters.object.output.invalid"),
@@ -27,7 +27,6 @@ enum Error {
     parameterFileMustBeNonNullAndNonDirectory("parameter.file.must.be.nn.ndir"),
     parameterHtmlIndexWithNoCssFile("parameters.html.index.with.no.css.file"),
     parameterUrlCannotBeEmpty("parameters.url.cannot.be.empty"),
-    parameterCssClassCollectionIsNull("parameters.css.class.collection.is.null"),
     parameterUnsupportedImageType("parameters.unsupported.imagetype"),
 
     errorWritingFile("error.writing.file"),
@@ -39,7 +38,7 @@ enum Error {
 
     protected final String message
 
-    Error(final String message) {
+    ServiceError(final String message) {
         this.message = message
     }
 

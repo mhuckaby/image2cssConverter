@@ -18,10 +18,34 @@
  */
 package com.rf1m.image2css.io
 
-import com.rf1m.image2css.cli.Parameters
-import com.rf1m.image2css.domain.CssClass
+import com.rf1m.image2css.domain.SupportedImageType
+import org.apache.commons.io.FilenameUtils
 
+import static com.rf1m.image2css.domain.SupportedImageType.valueOf
 
-public interface ReportOutput {
-    void generateReportOutput(Parameters parameters, List<CssClass> cssClasses)
+/**
+ * Filename filter used to limit which image files are converted.
+ *
+ */
+class ConversionFilenameFilter implements FilenameFilter{
+    protected final Collection<SupportedImageType> supportedTypes
+
+	public ConversionFilenameFilter(final Collection<SupportedImageType> supportedTypes){
+		this.supportedTypes = supportedTypes
+	}
+
+	@Override
+	public boolean accept(final File fileDir, final String filename) {
+        final String extension = FilenameUtils.getExtension(filename)
+        return extension ? this.isSupported(extension) : false
+	}
+
+    protected boolean isSupported(final String extension) {
+        try {
+            return supportedTypes.contains(valueOf(extension))
+        }catch(final IllegalArgumentException e){
+            return false
+        }
+    }
+
 }

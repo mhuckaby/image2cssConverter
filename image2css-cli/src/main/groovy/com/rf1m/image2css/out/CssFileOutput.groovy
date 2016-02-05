@@ -18,29 +18,24 @@
  */
 package com.rf1m.image2css.out
 
-import com.rf1m.image2css.cli.Parameters
+import com.rf1m.image2css.cli.CommandLineArgument
 import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.exception.Image2CssException
+import org.springframework.stereotype.Component
 
-class CssFileOutput extends AbstractOutput{
+@Component("cssOutput")
+class CssFileOutput extends BaseFileOutput implements Output {
     protected static final String NL = "\n"
 
     @Override
-    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
-        if(isValidParametersAndClasses(parameters, cssClasses)){
-            StringBuffer stringBuffer = new StringBuffer()
-            for(CssClass cssClass : cssClasses){
-                stringBuffer.append(cssClass.body).append(NL)
-			}
-            try {
-                FileWriter fileWriter = new FileWriter(parameters.cssFile)
-                fileWriter.write(stringBuffer.toString())
-                fileWriter.close()
-            }catch(IOException e) {
-                throw new Image2CssException(e, Error.errorWritingFile)
-            }
+    public void out(final CommandLineArgument commandLineArgument, final List<CssClass> cssClasses) throws Image2CssException {
+        StringBuffer stringBuffer = new StringBuffer()
 
-		}
+        for(CssClass cssClass : cssClasses){
+            stringBuffer.append(cssClass.body).append(NL)
+        }
+
+        write(commandLineArgument.cssFile, stringBuffer.toString())
     }
 
 }

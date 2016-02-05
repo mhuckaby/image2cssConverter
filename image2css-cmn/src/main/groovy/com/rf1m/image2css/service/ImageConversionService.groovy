@@ -19,10 +19,11 @@
 package com.rf1m.image2css.service
 
 import com.rf1m.image2css.domain.CssClass
+import com.rf1m.image2css.domain.SupportedImageType
 
 interface ImageConversionService {
 
-    CssClass convert(File imageFile)
+    List<CssClass> convert(Collection<SupportedImageType> include, File imageFile)
     CssClass convert(URL url)
     CssClass convert(String urlAsString)
 

@@ -21,100 +21,72 @@ package com.rf1m.image2css.cli
 import com.rf1m.image2css.config.CliContextConfiguration
 import com.rf1m.image2css.domain.CssClass
 import com.rf1m.image2css.domain.SupportedImageType
-import com.rf1m.image2css.exception.Image2CssException
 import com.rf1m.image2css.service.ImageConversionService
-import com.rf1m.image2css.io.ConversionFilenameFilter
-//import org.apache.commons.cli.ParseException
+import org.kohsuke.args4j.CmdLineException
+import org.kohsuke.args4j.CmdLineParser
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
-
 class CommandLineRunner {
-//    protected final CommandLineRunnerValidator commandLineRunnerValidator
-//    protected final CommandLineParametersParser commandLineParametersParser
-//    protected final ExceptionHandler exceptionHandler
-//    protected final ImageConversionService imageConversionService
-//    protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager
-//    protected final Set<SupportedImageType> defaultSupportedImageTypes
-//
-//    public CommandLineRunner(final CommandLineRunnerValidator commandLineRunnerValidator,
-//                             final CommandLineParametersParser commandLineParametersParser,
-//                             final ExceptionHandler exceptionHandler,
-//                             final ImageConversionService imageConversionService,
-//                             final CommandLineRunnerOutputManager commandLineRunnerOutputManager,
-//                             final Set<SupportedImageType> defaultSupportImageTypes) {
-//
-//        this.commandLineRunnerValidator = commandLineRunnerValidator
-//        this.commandLineParametersParser = commandLineParametersParser
-//        this.exceptionHandler = exceptionHandler
-//        this.imageConversionService = imageConversionService
-//        this.commandLineRunnerOutputManager = commandLineRunnerOutputManager
-//        this.defaultSupportedImageTypes = defaultSupportImageTypes
-//    }
-//
-//    public static void main(final String[] arguments) throws Exception {
-//        ApplicationContext applicationContext =
-//            new AnnotationConfigApplicationContext(CliContextConfiguration.class)
-//        CommandLineRunner commandLineRunner = (CommandLineRunner)applicationContext.getBean("commandLineRunner")
-//
-//        commandLineRunner.run(arguments)
-//    }
-//
-//    protected void run(final String[] arguments) {
-//        try {
-//            execute(initialize(arguments))
-//        }catch(ParseException parseException) {
-//            exceptionHandler.handleParseException(parseException)
-//        }catch(Image2CssException image2CssException) {
-//            exceptionHandler.handleImage2CssException(image2CssException)
-//        }catch(Exception e) {
-//            exceptionHandler.handleException(e)
-//        }
-//    }
-//
-//    protected Parameters initialize(final String[] arguments) throws ParseException {
-//        commandLineRunnerValidator.argumentLengthCheck(arguments)
-//        Parameters parameters = commandLineParametersParser.parse(arguments)
-//        commandLineRunnerValidator.validateParameters(parameters)
-//
-//        parameters
-//    }
-//
-//    protected void execute(final Parameters parameters) throws IOException {
-//        List<CssClass> cssEntries = parameters.isLocalResource() ?
-//            handleLocal(parameters) : handleRemote(parameters)
-//        commandLineRunnerOutputManager.doOutput(parameters, cssEntries)
-//    }
-//
-//    protected List<CssClass> handleRemote(final Parameters parameters) {
-//        List<CssClass> cssEntries = new ArrayList(1)
-//        CssClass cssClass = imageConversionService.convert(parameters.getURL())
-//
-//        cssEntries.add(cssClass)
-//
-//        cssEntries
-//    }
-//
-//    protected List<CssClass> handleLocal(final Parameters parameters) throws IOException {
-//        Set<SupportedImageType> supportedImageTypes = parameters.supportedTypes
-//        File[] imageFiles = getImagesForConversion(parameters.imageFile, supportedImageTypes)
-//        List<CssClass> cssEntries = new LinkedList()
-//
-//        for(File imageFile : imageFiles){
-//            cssEntries.add(imageConversionService.convert(imageFile))
-//        }
-//
-//        cssEntries
-//    }
-//
-//    public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
-//        if(imageFile.directory){
-//            Set<SupportedImageType> filterFor =
-//                supportedTypes.empty ? defaultSupportedImageTypes : supportedTypes
-//            imageFile.listFiles(new ConversionFilenameFilter(filterFor))
-//        }else{
-//            [imageFile]
-//        }
-//    }
+
+    public static void main(final String[] args) {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("image2css-cli")
+        int exit = 0
+
+        try {
+            CommandLineRunner.init(args).execute()
+        }catch(CmdLineException cmdLineException) {
+            println cmdLineException.message
+            exit = -1
+        }catch(Exception e) {
+            // TODO Print full stacktrace to a tmp file for submission
+            e.printStackTrace()
+            String message = resourceBundle.getString("message.abnormal.exit")
+            println String.format(message, e.message)
+            exit = -1
+        }
+
+        System.exit(exit)
+    }
+
+    private static CommandLineRunner init(final String[] args) {
+        CommandLineArgument commandLineArgument = new CommandLineArgument(originalArgs: args)
+        commandLineArgument.cmdLineParser = new CmdLineParser(commandLineArgument)
+        commandLineArgument.cmdLineParser.parseArgument(args)
+
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(CliContextConfiguration.class)
+        ImageConversionService conversionService = applicationContext.getBean(ImageConversionService.class)
+        CommandLineRunnerOutputManager commandLineRunnerOutputManager = applicationContext.getBean(CommandLineRunnerOutputManager.class)
+
+        new CommandLineRunner(commandLineArgument: commandLineArgument, conversionService: conversionService, commandLineRunnerOutputManager: commandLineRunnerOutputManager)
+    }
+
+    CommandLineArgument commandLineArgument
+    ImageConversionService conversionService
+    CommandLineRunnerOutputManager commandLineRunnerOutputManager
+
+    private void execute() {
+        if(commandLineArgument.version) {
+            commandLineRunnerOutputManager.showAbout()
+            return
+        }else if(commandLineArgument.help) {
+            commandLineArgument.cmdLineParser.printUsage(System.out)
+            return
+        }
+
+        List<CssClass> cssClasses = []
+
+        if(commandLineArgument.filename ==~ '^http[s]?://.*?') {
+            cssClasses.add(conversionService.convert(commandLineArgument.filename))
+        }else {
+            Collection<SupportedImageType> include = (commandLineArgument.includes as List).collect({
+                SupportedImageType.valueOf(it)
+            })
+            File file = new File(commandLineArgument.filename)
+            cssClasses.addAll(conversionService.convert(include, file))
+        }
+
+        commandLineRunnerOutputManager.doOutput(commandLineArgument, cssClasses)
+    }
 
 }
