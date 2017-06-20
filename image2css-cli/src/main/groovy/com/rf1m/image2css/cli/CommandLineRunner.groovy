@@ -37,7 +37,7 @@ class CommandLineRunner {
     protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager
     protected final Set<SupportedImageType> defaultSupportedImageTypes
 
-    public CommandLineRunner(final CommandLineRunnerValidator commandLineRunnerValidator,
+    CommandLineRunner(final CommandLineRunnerValidator commandLineRunnerValidator,
                              final CommandLineParametersParser commandLineParametersParser,
                              final ExceptionHandler exceptionHandler,
                              final ImageConversionService imageConversionService,
@@ -52,7 +52,7 @@ class CommandLineRunner {
         this.defaultSupportedImageTypes = defaultSupportImageTypes
     }
 
-    public static void main(final String[] arguments) throws Exception {
+    static void main(final String[] arguments) throws Exception {
         ApplicationContext applicationContext =
             new AnnotationConfigApplicationContext(CliContextConfiguration.class)
         CommandLineRunner commandLineRunner = (CommandLineRunner)applicationContext.getBean("commandLineRunner")
@@ -107,7 +107,7 @@ class CommandLineRunner {
         cssEntries
     }
 
-    public File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
+    File[] getImagesForConversion(final File imageFile, final Set<SupportedImageType> supportedTypes) throws Image2CssException {
         if(imageFile.directory){
             Set<SupportedImageType> filterFor =
                 supportedTypes.empty ? defaultSupportedImageTypes : supportedTypes

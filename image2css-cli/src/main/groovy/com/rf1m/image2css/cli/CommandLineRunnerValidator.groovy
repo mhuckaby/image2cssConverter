@@ -33,7 +33,7 @@ class CommandLineRunnerValidator {
     protected final Image2CssHelpFormatter image2CssHelpFormatter
     protected final CommandLineRunnerOutputManager commandLineRunnerOutputManager
 
-    public CommandLineRunnerValidator(final Image2CssHelpFormatter image2CssHelpFormatter,
+    CommandLineRunnerValidator(final Image2CssHelpFormatter image2CssHelpFormatter,
                                       final CommandLineRunnerOutputManager commandLineRunnerOutputManager) {
 
         this.image2CssHelpFormatter = image2CssHelpFormatter
@@ -48,7 +48,7 @@ class CommandLineRunnerValidator {
         }
     }
 
-    public void validateParameters(final Parameters parameters) throws Image2CssException {
+    void validateParameters(final Parameters parameters) throws Image2CssException {
         if(null == parameters){
             throw new Image2CssValidationException(parametersObjectCannotBeNull) 
         }else if(parameters.localResource && null == parameters.imageFile){

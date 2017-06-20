@@ -52,88 +52,88 @@ class CliContextConfiguration {
     DefaultImageConversionService defaultImageConversionService
 
     @Bean
-    public BasicParser basicParser() {
+    BasicParser basicParser() {
         return new BasicParser()
     }
 
     @Bean
-    public CommandLineParametersParser commandLineParametersParser() {
+    CommandLineParametersParser commandLineParametersParser() {
         return new CommandLineParametersParser(basicParser(), optionCssFile(), optionHtmlFile(), optionImageFile(),
                 optionImageTypes(), optionSyso(), image2cssOptions())
     }
 
     @Bean
-    public Image2CssOption optionCssFile() {
+    Image2CssOption optionCssFile() {
         return new Image2CssOption("o", "CSS output filename", true, true)
     }
 
     @Bean
-    public Image2CssOption optionHtmlFile() {
+    Image2CssOption optionHtmlFile() {
         return new Image2CssOption("h", "HTML output filename", true, false)
     }
 
     @Bean
-    public Image2CssOption optionImageFile() {
+    Image2CssOption optionImageFile() {
         return new Image2CssOption("f", "Target image path, directory path, or URL", true, false)
     }
 
     @Bean
-    public Image2CssOption optionImageTypes() {
+    Image2CssOption optionImageTypes() {
         return new Image2CssOption("i", "Space separated image types to include: png gif jpg", true, false, 3)
     }
 
     @Bean
-    public Image2CssOption optionSyso() {
+    Image2CssOption optionSyso() {
         return new Image2CssOption("syso", "Output to screen", false, false)
     }
 
     @Bean
-    public Image2CssOptions image2cssOptions() {
+    Image2CssOptions image2cssOptions() {
         return new Image2CssOptions(optionCssFile(), optionHtmlFile(), optionImageFile(), optionImageTypes(), optionSyso())
     }
 
     @Bean
-    public Image2CssHelpFormatter helpFormatter() {
+    Image2CssHelpFormatter helpFormatter() {
         return new Image2CssHelpFormatter(environment.getProperty("command.line.help.text"), image2cssOptions(), 85)
     }
 
     @Bean
-    public HtmlFileOutput htmlFileOutput() {
+    HtmlFileOutput htmlFileOutput() {
         return new HtmlFileOutput(environment.getProperty("template.html.css.entry"),
                 environment.getProperty("template.html.index"))
     }
 
     @Bean
-    public CssFileOutput cssFileOutput() {
+    CssFileOutput cssFileOutput() {
         return new CssFileOutput()
     }
 
     @Bean
-    public ConsoleOutput consoleOutput() {
+    ConsoleOutput consoleOutput() {
         return new ConsoleOutput(environment.getProperty("message.generated.entry.count"),
                 environment.getProperty("message.created.css.file"),
                 environment.getProperty("message.created.html.file"))
     }
 
     @Bean
-    public ExceptionHandler exceptionHandler() {
+    ExceptionHandler exceptionHandler() {
         return new ExceptionHandler(helpFormatter(), environment.getProperty("message.abnormal.exit"), environment.getProperty("format.exception"))
     }
 
     // TODO verify about displays correctly
     @Bean
-    public CommandLineRunnerOutputManager commandLineRunnerOutputManager() {
+    CommandLineRunnerOutputManager commandLineRunnerOutputManager() {
         return new CommandLineRunnerOutputManager(consoleOutput(), cssFileOutput(), htmlFileOutput(),
                 environment.getProperty("about.project"))
     }
 
     @Bean
-    public CommandLineRunnerValidator commandLineRunnerValidator() {
+    CommandLineRunnerValidator commandLineRunnerValidator() {
         return new CommandLineRunnerValidator(helpFormatter(), commandLineRunnerOutputManager())
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner() {
+    CommandLineRunner commandLineRunner() {
         return new CommandLineRunner(commandLineRunnerValidator(), commandLineParametersParser(),
                 exceptionHandler(), defaultImageConversionService, commandLineRunnerOutputManager(),
                 defaultSupportedImageTypes)

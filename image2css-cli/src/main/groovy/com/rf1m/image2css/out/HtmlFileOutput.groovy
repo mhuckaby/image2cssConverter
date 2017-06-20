@@ -29,13 +29,13 @@ class HtmlFileOutput extends AbstractOutput {
     protected final String htmlCssEntryTemplate
     protected final String htmlIndexTemplate
 
-    public HtmlFileOutput(final String htmlCssEntryTemplate, final String htmlIndexTemplate) {
+    HtmlFileOutput(final String htmlCssEntryTemplate, final String htmlIndexTemplate) {
         this.htmlCssEntryTemplate = htmlCssEntryTemplate
         this.htmlIndexTemplate = htmlIndexTemplate
     }
 
     @Override
-    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
+    void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
             StringBuffer stringBuffer = new StringBuffer()
 

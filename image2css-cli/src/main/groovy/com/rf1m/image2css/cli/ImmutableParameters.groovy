@@ -29,7 +29,7 @@ class ImmutableParameters implements Parameters {
 	protected final boolean isLocalResource
 	protected final URL url
 
-	public ImmutableParameters(
+	ImmutableParameters(
             final File imageFile,
             final File cssFile,
             final File htmlFile,
@@ -48,52 +48,52 @@ class ImmutableParameters implements Parameters {
 	}
 	
 	@Override
-	public boolean isOutputToConsoleDesired() {
+	boolean isOutputToConsoleDesired() {
 		return outputToScreen
 	}
 
 	@Override
-	public File getImageFile() {
+	File getImageFile() {
 		return imageFile
 	}
 
 	@Override
-	public File getCssFile() {
+	File getCssFile() {
 		return cssFile
 	}
 
 	@Override
-	public File getHtmlFile() {
+	File getHtmlFile() {
 		return htmlFile
 	}
 
 	@Override
-	public Set<SupportedImageType> getSupportedTypes() {
+	Set<SupportedImageType> getSupportedTypes() {
 		return supportedTypes
 	}
 
     @Override
-    public boolean isOutputValid() {
+    boolean isOutputValid() {
         return !(null == this.cssFile && !outputToScreen)
     }
 
     @Override
-    public boolean isCssFileOutputDesired() {
+    boolean isCssFileOutputDesired() {
         return null != this.cssFile
     }
 
     @Override
-    public boolean isHtmlFileOutputDesired() {
+    boolean isHtmlFileOutputDesired() {
         return null != this.htmlFile
     }
 
     @Override
-    public boolean isLocalResource() {
+    boolean isLocalResource() {
         return this.isLocalResource
     }
 
     @Override
-    public URL getURL() {
+    URL getURL() {
         return this.url
     }
 }

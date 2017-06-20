@@ -31,12 +31,12 @@ import static java.util.Collections.unmodifiableSet
 class ConversionFilenameFilter implements FilenameFilter{
     protected final Set<SupportedImageType> supportedTypes
 
-	public ConversionFilenameFilter(final Set<SupportedImageType> supportedTypes){
+	ConversionFilenameFilter(final Set<SupportedImageType> supportedTypes){
 		this.supportedTypes = unmodifiableSet(supportedTypes)
 	}
 
 	@Override
-	public boolean accept(final File fileDir, final String filename) {
+	boolean accept(final File fileDir, final String filename) {
         final String extension = FilenameUtils.getExtension(filename)
         return extension ? this.isSupported(extension) : false
 	}

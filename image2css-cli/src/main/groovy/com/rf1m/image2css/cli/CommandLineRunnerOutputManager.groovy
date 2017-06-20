@@ -33,7 +33,7 @@ class CommandLineRunnerOutputManager {
 
     protected PrintStream defaultOut = System.out
 
-    public CommandLineRunnerOutputManager(final ConsoleOutput consoleOutput,
+    CommandLineRunnerOutputManager(final ConsoleOutput consoleOutput,
                                           final Output cssOutput,
                                           final Output htmlOutput,
                                           final String aboutProject) {

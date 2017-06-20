@@ -50,12 +50,12 @@ class DefaultImageConversionService implements ImageConversionService {
 
     protected final String cssClassTemplate
 
-    public DefaultImageConversionService(final String cssClassTemplate) {
+    DefaultImageConversionService(final String cssClassTemplate) {
         this.cssClassTemplate = cssClassTemplate
     }
 
     @Override
-    public CssClass convert(final File imageFile) {
+    CssClass convert(final File imageFile) {
         if(!imageFile || !imageFile.exists() || imageFile.directory) {
             throw new Image2CssValidationException(parameterFileMustBeNonNullAndNonDirectory)
         }
@@ -74,7 +74,7 @@ class DefaultImageConversionService implements ImageConversionService {
     }
 
     @Override
-    public CssClass convert(final URL url) {
+    CssClass convert(final URL url) {
         if(!url || !url.file || !(~/http[s]{0,1}/).matcher(url.protocol).matches()) {
             throw new Image2CssValidationException(parameterUrlCannotBeEmpty)
         }
@@ -99,7 +99,7 @@ class DefaultImageConversionService implements ImageConversionService {
     }
 
     @Override
-    public CssClass convert(final String urlValue) {
+    CssClass convert(final String urlValue) {
         if(!urlValue) {
             throw new Image2CssValidationException(parameterUrlCannotBeEmpty)
         }

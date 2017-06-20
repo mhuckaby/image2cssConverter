@@ -50,7 +50,7 @@ class CommandLineParametersParser {
 
     protected final Options options
 
-    public CommandLineParametersParser(final BasicParser basicParser,
+    CommandLineParametersParser(final BasicParser basicParser,
                                        final Option optionCssFile,
                                        final Option optionHtmlFile,
                                        final Option optionImageFile,
@@ -67,7 +67,7 @@ class CommandLineParametersParser {
         this.options = options
     }
 
-    public Parameters parse(final String[] args) throws ParseException {
+    Parameters parse(final String[] args) throws ParseException {
         boolean isSysoSpecified = this.isSysoSpecified(args)
         correctOptionRequirementsForSyso(isSysoSpecified)
 

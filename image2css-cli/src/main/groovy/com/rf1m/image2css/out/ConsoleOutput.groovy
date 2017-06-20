@@ -32,7 +32,7 @@ class ConsoleOutput extends AbstractOutput implements ReportOutput{
 
     protected PrintStream defaultOut = System.out
 
-    public ConsoleOutput(final String reportCssTotalTemplate,
+    ConsoleOutput(final String reportCssTotalTemplate,
                          final String reportCssFileTemplate,
                          final String reportHtmlFileTemplate) {
 
@@ -42,7 +42,7 @@ class ConsoleOutput extends AbstractOutput implements ReportOutput{
     }
 
     @Override
-    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
+    void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
         if(isValidParametersAndClassesWithConsoleOutput(parameters, cssClasses)){
 			for(CssClass cssClass : cssClasses){
                 defaultOut.println(cssClass.body)
@@ -51,7 +51,7 @@ class ConsoleOutput extends AbstractOutput implements ReportOutput{
     }
 
     @Override
-    public void generateReportOutput(final Parameters parameters, final List<CssClass> cssClasses){
+    void generateReportOutput(final Parameters parameters, final List<CssClass> cssClasses){
         if(super.isValidParametersAndClasses(parameters, cssClasses)){
             if(!parameters.outputToConsoleDesired) {
                 this.println(format(reportCssTotalTemplate, cssClasses.size()))

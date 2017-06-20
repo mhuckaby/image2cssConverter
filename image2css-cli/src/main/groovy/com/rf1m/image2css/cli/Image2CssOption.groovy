@@ -22,12 +22,12 @@ import org.apache.commons.cli.Option
 
 class Image2CssOption extends Option {
 
-    public Image2CssOption(final String option, final String description, final boolean hasArg, final boolean required) {
+    Image2CssOption(final String option, final String description, final boolean hasArg, final boolean required) {
         super(option, hasArg, description)
         this.required = required
     }
 
-    public Image2CssOption(final String option,
+    Image2CssOption(final String option,
                            final String description,
                            final boolean hasArg,
                            final boolean required,

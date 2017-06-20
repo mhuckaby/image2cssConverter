@@ -26,7 +26,7 @@ class CssFileOutput extends AbstractOutput{
     protected static final String NL = "\n"
 
     @Override
-    public void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
+    void out(final Parameters parameters, final List<CssClass> cssClasses) throws Image2CssException {
         if(isValidParametersAndClasses(parameters, cssClasses)){
             StringBuffer stringBuffer = new StringBuffer()
             for(CssClass cssClass : cssClasses){

@@ -22,6 +22,6 @@ import com.rf1m.image2css.cli.Parameters
 import com.rf1m.image2css.domain.CssClass
 
 
-public interface ReportOutput {
+interface ReportOutput {
     void generateReportOutput(Parameters parameters, List<CssClass> cssClasses)
 }

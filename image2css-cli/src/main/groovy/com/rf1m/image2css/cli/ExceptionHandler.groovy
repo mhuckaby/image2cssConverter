@@ -32,7 +32,7 @@ class ExceptionHandler {
 
     protected PrintStream defaultOut = System.out
 
-    public ExceptionHandler(final Image2CssHelpFormatter image2CssHelpFormatter,
+    ExceptionHandler(final Image2CssHelpFormatter image2CssHelpFormatter,
                             final String abnormalExitTemplate,
                             final String exceptionMessageTemplate) {
 
